@@ -126,6 +126,6 @@ document.querySelectorAll('[data-aue-type]').forEach((el) => {
 });
 
 document.addEventListener('aue:content-remove', (event) => {
-  event.stopPropagation
+  event.stopPropagation()
   console.log("Content remove event detected:", event);
 });
