@@ -131,6 +131,7 @@ if (!window.location.href.includes('/master/')) {
       el.removeAttribute('data-aue-type');
       el.removeAttribute('data-aue-model');
       el.removeAttribute('data-aue-filter');
+      el.removeAttribute('data-aue-behavior');
     }
   });
 }
