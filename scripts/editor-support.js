@@ -120,25 +120,20 @@ observer.observe(document, { attributeFilter: ['data-richtext-prop'], subtree: t
 
 
 if (!window.location.href.includes('/master/')) {
-  document.querySelectorAll('[data-aue-type]').forEach((el) => {
+  const meta = document.createElement('meta');
+  meta.name = 'urn:adobe:aue:config:disable';
+  meta.content = 'add,delete,duplicate';
+  document.getElementsByTagName('head')[0].appendChild(meta); 
+
+  /*document.querySelectorAll('[data-aue-type]').forEach((el) => {
     if (el.getAttribute('data-aue-type') === 'container' || el.getAttribute('data-aue-type') === 'column') {
       el.removeAttribute('data-aue-resource');
       el.setAttribute('data-aue-filter', '');
     } 
-  });
+  });*/
 }
-// listen aue:ui-select events to set data-aue-filter on containers and columns
-document.addEventListener('aue:ui-select', (event) => {
-  const element = document.querySelector(
-        `[data-aue-resource="${event.detail.resource}"]`
-    );
-  element.dataset.protected = 'true';
-});
 
-const meta = document.createElement('meta');
-meta.name = 'urn:adobe:aue:config:disable';
-meta.content = 'delete';
-document.getElementsByTagName('head')[0].appendChild(meta); 
+
 
 
 
