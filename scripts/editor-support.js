@@ -121,6 +121,6 @@ observer.observe(document, { attributeFilter: ['data-richtext-prop'], subtree: t
 // remove only when value is equal to container or column to avoid removing possible custom data attributes
 document.querySelectorAll('[data-aue-type]').forEach((el) => {
   if (el.getAttribute('data-aue-type') === 'container' || el.getAttribute('data-aue-type') === 'column') {
-    //el.removeAttribute('data-aue-resource');
+    el.removeAttribute('data-aue-resource');
   } 
 });
