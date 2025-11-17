@@ -122,7 +122,7 @@ observer.observe(document, { attributeFilter: ['data-richtext-prop'], subtree: t
 if (!window.location.href.includes('/master/')) {
   const meta = document.createElement('meta');
   meta.name = 'urn:adobe:aue:config:disable';
-  meta.content = 'duplicate,copy';
+  meta.content = 'duplicate,copy,move';
   document.getElementsByTagName('head')[0].appendChild(meta);
 
   document.querySelectorAll('[data-aue-type]').forEach((el) => {
