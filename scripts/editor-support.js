@@ -119,7 +119,7 @@ const observer = new MutationObserver(() => decorateRichtext());
 observer.observe(document, { attributeFilter: ['data-richtext-prop'], subtree: true });
 
 
-if (!window.location.href.includes('master'))
+if (!window.location.href.includes('master')) {
   document.querySelectorAll('[data-aue-type]').forEach((el) => {
     if (el.getAttribute('data-aue-type') === 'container' || el.getAttribute('data-aue-type') === 'column') {
       el.removeAttribute('data-aue-resource');
