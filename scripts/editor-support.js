@@ -74,9 +74,7 @@ async function applyChanges(event) {
           decorateButtons(newSection);
           decorateIcons(newSection);
           decorateRichtext(newSection);
-          decorateSections(parentElement);
-          
-          await loadSections(parentElement);
+
           element.remove();
           newSection.style.display = null;
         } else {
