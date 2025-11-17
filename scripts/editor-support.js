@@ -124,8 +124,3 @@ document.querySelectorAll('[data-aue-type]').forEach((el) => {
     //el.removeAttribute('data-aue-resource');
   } 
 });
-
-document.addEventListener('aue:content-remove', (event) => {
-  event.stopPropagation()
-  alert("Content remove event detected:", event);
-});
