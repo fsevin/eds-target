@@ -118,6 +118,9 @@ decorateRichtext();
 const observer = new MutationObserver(() => decorateRichtext());
 observer.observe(document, { attributeFilter: ['data-richtext-prop'], subtree: true });
 
+console.log('Editor support loaded');
+
+// Prevent editing of this file's content in the editor
 document.addEventListener('aue:content-patch', (event) => {
 
     event.preventDefault();
