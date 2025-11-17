@@ -74,7 +74,9 @@ async function applyChanges(event) {
           decorateButtons(newSection);
           decorateIcons(newSection);
           decorateRichtext(newSection);
-
+          decorateSections(parentElement);
+          decorateBlocks(parentElement);
+          await loadSections(parentElement);
           element.remove();
           newSection.style.display = null;
         } else {
@@ -116,15 +118,3 @@ decorateRichtext();
 const observer = new MutationObserver(() => decorateRichtext());
 observer.observe(document, { attributeFilter: ['data-richtext-prop'], subtree: true });
 
-console.log('Editor support loaded');
-
-// Prevent editing of this file's content in the editor
-document.addEventListener('aue:content-patch', (event) => {
-
-    event.preventDefault();
-    event.stopPropagation();
-    
-    // Optionally show a message to the user
-    alert('This component cannot be modified');
-
-}, true); // Use capture phase
