@@ -120,4 +120,4 @@ observer.observe(document, { attributeFilter: ['data-richtext-prop'], subtree: t
 
 document.querySelectorAll('[data-aue-resource]').forEach((el) => {
   el.removeAttribute('data-aue-resource');
-}
+});
