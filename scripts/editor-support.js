@@ -118,10 +118,12 @@ decorateRichtext();
 const observer = new MutationObserver(() => decorateRichtext());
 observer.observe(document, { attributeFilter: ['data-richtext-prop'], subtree: true });
 
-// Client-side warning
 document.addEventListener('aue:content-patch', (event) => {
-    if (isLocked(event.detail.resource)) {
-        event.preventDefault();
-        alert('Component is locked');
-    }
-}, true);
+
+    event.preventDefault();
+    event.stopPropagation();
+    
+    // Optionally show a message to the user
+    alert('This component cannot be modified');
+
+}, true); // Use capture phase
