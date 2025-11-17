@@ -129,6 +129,8 @@ if (!window.location.href.includes('/master/')) {
 }
 // listen aue:ui-select events to set data-aue-filter on containers and columns
 document.addEventListener('aue:ui-select', (event) => {
-  const { detail } = event;
-  console.log('aue:ui-select', detail);
+  const element = document.querySelector(
+        `[data-aue-resource="${event.detail.resource}"]`
+    );
+  element.dataset.protected = 'true';
 });
