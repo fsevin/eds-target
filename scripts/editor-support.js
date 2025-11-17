@@ -118,7 +118,9 @@ decorateRichtext();
 const observer = new MutationObserver(() => decorateRichtext());
 observer.observe(document, { attributeFilter: ['data-richtext-prop'], subtree: true });
 
-// remove only when value is equal to 
+// remove only when value is equal to container or column to avoid removing possible custom data attributes
 document.querySelectorAll('[data-aue-type]').forEach((el) => {
-  //el.removeAttribute('data-aue-type');
+  if (el.getAttribute('data-aue-type') === 'container' || el.getAttribute('data-aue-type') === 'column') {
+    el.removeAttribute('data-aue-type');
+  }
 });
