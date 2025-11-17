@@ -3,3 +3,15 @@
 <script src="/scripts/aem.js" type="module"></script>
 <script src="/scripts/scripts.js" type="module"></script>
 <link rel="stylesheet" href="/styles/styles.css"/>
+
+<script>
+    document.addEventListener('aue:content-patch', (event) => {
+
+        event.preventDefault();
+        event.stopPropagation();
+        
+        // Optionally show a message to the user
+        alert('This component cannot be modified');
+
+    }, true); // Use capture phase
+</script>
