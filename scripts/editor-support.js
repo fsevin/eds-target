@@ -122,5 +122,10 @@ observer.observe(document, { attributeFilter: ['data-richtext-prop'], subtree: t
 document.querySelectorAll('[data-aue-type]').forEach((el) => {
   if (el.getAttribute('data-aue-type') === 'container' || el.getAttribute('data-aue-type') === 'column') {
     el.removeAttribute('data-aue-resource');
-  }
+  } 
+});
+
+document.addEventListener('aue:content-remove', (event) => {
+  event.stopPropagation
+  console.log("Content remove event detected:", event);
 });
