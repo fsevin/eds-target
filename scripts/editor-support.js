@@ -129,6 +129,7 @@ if (!window.location.href.includes('/master/')) {
     if (el.getAttribute('data-aue-type') === 'container' || el.getAttribute('data-aue-type') === 'column') {
       el.removeAttribute('data-aue-resource');
       el.removeAttribute('data-aue-filter');
+    }
   });
 }
 
