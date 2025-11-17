@@ -134,3 +134,11 @@ document.addEventListener('aue:ui-select', (event) => {
     );
   element.dataset.protected = 'true';
 });
+
+const meta = document.createElement('meta');
+meta.name = 'urn:adobe:aue:config:disable';
+meta.content = 'delete';
+document.getElementsByTagName('head')[0].appendChild(meta); 
+
+
+
