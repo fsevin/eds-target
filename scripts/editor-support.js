@@ -126,3 +126,6 @@ if (!window.location.href.includes('/master/')) {
     } 
   });
 }
+
+// delete all button elements with aria-label="Delete"
+document.querySelectorAll('button[aria-label="Delete"]').forEach((btn) => btn.remove()); 
