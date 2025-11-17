@@ -123,7 +123,7 @@ if (!window.location.href.includes('/master/')) {
   document.querySelectorAll('[data-aue-type]').forEach((el) => {
     if (el.getAttribute('data-aue-type') === 'container' || el.getAttribute('data-aue-type') === 'column') {
       el.removeAttribute('data-aue-resource');
-      el.setAttribute('data-aue-filter', 'none');
+      el.setAttribute('data-aue-filter', '');
     } 
   });
 }
