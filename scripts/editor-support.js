@@ -118,6 +118,6 @@ decorateRichtext();
 const observer = new MutationObserver(() => decorateRichtext());
 observer.observe(document, { attributeFilter: ['data-richtext-prop'], subtree: true });
 
-document.querySelectorAll('[data-aue-resource]').forEach((el) => {
-  el.removeAttribute('data-aue-resource');
+document.querySelectorAll('[data-aue-filter]').forEach((el) => {
+  el.removeAttribute('data-aue-filter');
 });
