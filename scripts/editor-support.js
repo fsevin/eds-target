@@ -131,7 +131,7 @@ if (!window.location.href.includes('/master/')) {
     }
     // get body element
     const body = document.querySelector('body');
-    body.setAttribute('data-aue-type', 'text');
+    body.removeAttribute('data-aue-type');
   });
 }
 
