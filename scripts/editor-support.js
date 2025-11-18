@@ -129,9 +129,8 @@ if (!window.location.href.includes('/master/')) {
     if (/*el.tagName.toLowerCase() === 'body' || */el.getAttribute('data-aue-type') === 'container' || el.getAttribute('data-aue-type') === 'column') {
       el.removeAttribute('data-aue-resource');
     }
-    // get body element
     const body = document.querySelector('body');
-    body.setAttribute('data-aue-type', 'container');
+    body.setAttribute('data-aue-type', 'component');
   });
 }
 
