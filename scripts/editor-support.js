@@ -120,10 +120,10 @@ observer.observe(document, { attributeFilter: ['data-richtext-prop'], subtree: t
 
 
 if (!window.location.href.includes('/master/')) {
-  const meta = document.createElement('meta');
+  /*const meta = document.createElement('meta');
   meta.name = 'urn:adobe:aue:config:disable';
   meta.content = 'duplicate,copy';
-  document.getElementsByTagName('head')[0].appendChild(meta);
+  document.getElementsByTagName('head')[0].appendChild(meta);*/
 
   document.querySelectorAll('[data-aue-type]').forEach((el) => {
     if (el.getAttribute('component') === 'body' || el.getAttribute('data-aue-type') === 'container' || el.getAttribute('data-aue-type') === 'column') {
