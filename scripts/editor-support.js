@@ -126,9 +126,7 @@ if (!window.location.href.includes('/master/')) {
   document.getElementsByTagName('head')[0].appendChild(meta);
 
   document.querySelectorAll('[data-aue-type]').forEach((el) => {
-    console.log('Checking AUE element', el.tagName);
-    if (el.tagName.toLowerCase() === 'body' || el.getAttribute('data-aue-type') === 'container' || el.getAttribute('data-aue-type') === 'column') {
-      console.log('Removing AUE resource attribute from', el.tagName);
+    if (el.getAttribute('data-aue-type') === 'container' || el.getAttribute('data-aue-type') === 'column') {
       el.removeAttribute('data-aue-resource');
     }
   });
