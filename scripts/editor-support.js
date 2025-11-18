@@ -126,12 +126,10 @@ if (!window.location.href.includes('/master/')) {
   document.getElementsByTagName('head')[0].appendChild(meta);
 
   document.querySelectorAll('[data-aue-type]').forEach((el) => {
-    if (/*el.tagName.toLowerCase() === 'body' || */el.getAttribute('data-aue-type') === 'container' || el.getAttribute('data-aue-type') === 'column') {
+    if (el.tagName.toLowerCase() === 'body' || el.getAttribute('data-aue-type') === 'container' || el.getAttribute('data-aue-type') === 'column') {
       //el.removeAttribute('data-aue-resource');
-      el.removeAttribute('data-aue-model');
+      el.removeAttribute('data-aue-type');
     }
-    const body = document.querySelector('body');
-    body.removeAttribute('data-aue-model');
   });
 }
 
