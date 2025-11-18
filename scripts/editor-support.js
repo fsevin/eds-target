@@ -128,7 +128,7 @@ if (!window.location.href.includes('/master/')) {
   document.querySelectorAll('[data-aue-type]').forEach((el) => {
     if (/*el.tagName.toLowerCase() === 'body' || */el.getAttribute('data-aue-type') === 'container' || el.getAttribute('data-aue-type') === 'column') {
       //el.removeAttribute('data-aue-resource');
-      body.removeAttribute('data-aue-type');
+      el.removeAttribute('data-aue-type');
     }
     const body = document.querySelector('body');
     body.removeAttribute('data-aue-type');
