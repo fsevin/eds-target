@@ -127,7 +127,7 @@ if (!window.location.href.includes('/master/')) {
 
   document.querySelectorAll('[data-aue-type]').forEach((el) => {
     console.log('Checking AUE element', el.tagName);
-    if (el.tagName === 'body' || el.getAttribute('data-aue-type') === 'container' || el.getAttribute('data-aue-type') === 'column') {
+    if (el.tagName.toLowerCase() === 'body' || el.getAttribute('data-aue-type') === 'container' || el.getAttribute('data-aue-type') === 'column') {
       console.log('Removing AUE resource attribute from', el.tagName);
       el.removeAttribute('data-aue-resource');
     }
