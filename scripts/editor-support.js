@@ -130,7 +130,7 @@ if (!window.location.href.includes('/master/')) {
       el.removeAttribute('data-aue-resource');
     }
     const body = document.querySelector('body');
-    body.setAttribute('data-aue-type', 'component');
+    body.setAttribute('data-aue-type', 'container');
   });
 }
 
