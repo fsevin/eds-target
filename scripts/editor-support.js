@@ -119,7 +119,8 @@ const observer = new MutationObserver(() => decorateRichtext());
 observer.observe(document, { attributeFilter: ['data-richtext-prop'], subtree: true });
 
 
-if (!window.location.href.includes('/master/')) {
+const url = new URL(window.location.href); 
+if (!url.includes('/master/')) {
   const meta = document.createElement('meta');
   meta.name = 'urn:adobe:aue:config:disable';
   meta.content = 'duplicate,copy';
@@ -127,7 +128,8 @@ if (!window.location.href.includes('/master/')) {
 
   const metaPreview = document.createElement('meta');
   metaPreview.name = 'urn:adobe:aue:config:preview';
-  metaPreview.content = 'http://main--3ds--fornacif.aem.live/';
+  const path = url.pathname.replace('/content/3ds', '');
+  metaPreview.content = `http://main--3ds--fornacif.aem.page${path}`;
   document.getElementsByTagName('head')[0].appendChild(metaPreview);
 
   document.querySelectorAll('[data-aue-type]').forEach((el) => {
