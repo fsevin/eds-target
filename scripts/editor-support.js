@@ -128,7 +128,7 @@ if (!url.includes('/master/')) {
 
   const metaPreview = document.createElement('meta');
   metaPreview.name = 'urn:adobe:aue:config:preview';
-  const path = url.replace('/content/3ds', '').replace('.html', '');
+  const path = url.replace('/content/3ds', '').replace('/templates/', '/products/').replace('.html', '');
   metaPreview.content = `http://main--3ds--fornacif.aem.page${path}`;
   document.getElementsByTagName('head')[0].appendChild(metaPreview);
 
