@@ -128,9 +128,16 @@ if (!url.includes('/master/')) {
 
   const metaPreview = document.createElement('meta');
   metaPreview.name = 'urn:adobe:aue:config:preview';
-  const path = url.replace('/content/3ds', '').replace('/templates/', '/pages/').replace('.html', '');
-  metaPreview.content = `http://main--3ds--fornacif.aem.page${path}`;
-  document.getElementsByTagName('head')[0].appendChild(metaPreview);
+
+  const siteName = url.match(/\/content\/([^\/]+)/)[1];
+
+  const path = url
+    .replace(/\/content\/[^\/]+/, '')
+    .replace('/templates/', '/pages/')
+    .replace('.html', '');
+
+  metaPreview.content = `http://main--${siteName}--fornacif.aem.page${path}`;
+  document.head.appendChild(metaPreview);
 
   document.querySelectorAll('[data-aue-type]').forEach((el) => {
     if (el.tagName.toLowerCase() === 'body' || el.getAttribute('data-aue-type') === 'container' || el.getAttribute('data-aue-type') === 'column') {
