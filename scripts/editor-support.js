@@ -121,10 +121,10 @@ observer.observe(document, { attributeFilter: ['data-richtext-prop'], subtree: t
 
 const url = new URL(window.location.href).pathname; 
 if (!url.includes('/master/')) {
-  const meta = document.createElement('meta');
+  /*const meta = document.createElement('meta');
   meta.name = 'urn:adobe:aue:config:disable';
   meta.content = 'duplicate,copy';
-  document.getElementsByTagName('head')[0].appendChild(meta);
+  document.getElementsByTagName('head')[0].appendChild(meta);*/
 
   const metaPreview = document.createElement('meta');
   metaPreview.name = 'urn:adobe:aue:config:preview';
