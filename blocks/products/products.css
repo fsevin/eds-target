@@ -7,12 +7,28 @@
   font-size: 1.125rem;
 }
 
+/* Results counter */
+.products-results-count {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #000000;
+  padding: 0.5rem 1rem;
+  margin: 1.5rem 0 0.75rem;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 0.5px solid var(--primary-color);
+  border-radius: 10px;
+  display: inline-block;
+  background-color: transparent;
+}
+
 /* Grid container */
 .products-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
-  padding: 2rem 0;
+  padding: 0.5rem 0 2rem;
 }
 
 /* Product card */

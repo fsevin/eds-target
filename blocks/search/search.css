@@ -100,7 +100,6 @@
 .search-filter-btn:hover {
   background-color: rgba(0, 0, 0, 0.05);
   border-color: var(--dark-gray);
-  transform: translateY(-2px);
 }
 
 .search-filter-btn.active {

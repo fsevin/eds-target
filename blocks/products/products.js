@@ -70,6 +70,7 @@ export default async function decorate(block) {
   const productsHTML = products.map(product => buildProductCard(product)).join('');
 
   const content = document.createRange().createContextualFragment(`
+    <div class="products-results-count"></div>
     <div class="products-grid">
       ${productsHTML}
     </div>
@@ -77,4 +78,49 @@ export default async function decorate(block) {
 
   block.textContent = '';
   block.append(content);
+
+  // Get reference to product cards and results counter
+  const productsGrid = block.querySelector('.products-grid');
+  const allProductCards = [...productsGrid.children];
+  const resultsCount = block.querySelector('.products-results-count');
+
+  // Function to update results count
+  function updateResultsCount(count) {
+    resultsCount.textContent = `${count} result${count !== 1 ? 's' : ''}`;
+  }
+
+  // Initialize with total count
+  updateResultsCount(allProductCards.length);
+
+  // Function to filter products (only by search term, no category filtering)
+  function filterProducts(searchTerm) {
+    const lowerSearchTerm = searchTerm.toLowerCase();
+    let visibleCount = 0;
+
+    allProductCards.forEach(card => {
+      const cardTitle = card.querySelector('.product-title')?.textContent.toLowerCase() || '';
+      const cardDescription = card.querySelector('.product-description')?.textContent.toLowerCase() || '';
+      const cardPrice = card.querySelector('.product-price')?.textContent.toLowerCase() || '';
+
+      const matchesSearch = !lowerSearchTerm ||
+        cardTitle.includes(lowerSearchTerm) ||
+        cardDescription.includes(lowerSearchTerm) ||
+        cardPrice.includes(lowerSearchTerm);
+
+      if (matchesSearch) {
+        card.style.display = '';
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    updateResultsCount(visibleCount);
+  }
+
+  // Listen for search events from search block
+  document.addEventListener('search-filter-change', (event) => {
+    const { searchTerm } = event.detail;
+    filterProducts(searchTerm);
+  });
 }

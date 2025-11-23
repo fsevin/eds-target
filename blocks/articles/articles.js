@@ -57,6 +57,7 @@ export default async function decorate(block) {
   const articlesHTML = articles.map(article => buildArticleCard(article)).join('');
 
   const content = document.createRange().createContextualFragment(`
+    <div class="articles-results-count"></div>
     <div class="articles-grid">
       ${articlesHTML}
     </div>
@@ -65,14 +66,24 @@ export default async function decorate(block) {
   block.textContent = '';
   block.append(content);
 
-  // Get reference to article cards
+  // Get reference to article cards and results counter
   const articlesGrid = block.querySelector('.articles-grid');
   const allArticleCards = [...articlesGrid.children];
+  const resultsCount = block.querySelector('.articles-results-count');
+
+  // Function to update results count
+  function updateResultsCount(count) {
+    resultsCount.textContent = `${count} result${count !== 1 ? 's' : ''}`;
+  }
+
+  // Initialize with total count
+  updateResultsCount(allArticleCards.length);
 
   // Function to filter articles
   function filterArticles(searchTerm, category) {
     const lowerSearchTerm = searchTerm.toLowerCase();
     const lowerCategory = category.toLowerCase();
+    let visibleCount = 0;
 
     allArticleCards.forEach(card => {
       const cardCategory = card.querySelector('.article-category')?.textContent.toLowerCase() || '';
@@ -87,10 +98,13 @@ export default async function decorate(block) {
 
       if (matchesCategory && matchesSearch) {
         card.style.display = '';
+        visibleCount++;
       } else {
         card.style.display = 'none';
       }
     });
+
+    updateResultsCount(visibleCount);
   }
 
   // Listen for search/filter events from search block
