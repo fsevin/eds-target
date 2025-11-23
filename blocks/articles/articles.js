@@ -1,3 +1,5 @@
+import { getTranslation, getLanguageFromUrl } from '../../scripts/utils.js';
+
 function extractArticlesFromBlock(block) {
   const articles = [];
   const articleDivs = block.querySelectorAll(':scope > div');
@@ -54,6 +56,10 @@ export default async function decorate(block) {
     return;
   }
 
+  // Fetch translation for "Results"
+  const lang = getLanguageFromUrl();
+  const resultsText = await getTranslation('Results', lang);
+
   const articlesHTML = articles.map(article => buildArticleCard(article)).join('');
 
   const content = document.createRange().createContextualFragment(`
@@ -73,7 +79,7 @@ export default async function decorate(block) {
 
   // Function to update results count
   function updateResultsCount(count) {
-    resultsCount.textContent = `${count} result${count !== 1 ? 's' : ''}`;
+    resultsCount.textContent = `${count} ${resultsText}`;
   }
 
   // Initialize with total count
