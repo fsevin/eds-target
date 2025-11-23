@@ -42,7 +42,25 @@ export default async function decorate(block) {
   block.append(content);
 
   const searchForm = block.querySelector('.search-form');
+  const searchInput = block.querySelector('.search-input');
   const filterBtns = block.querySelectorAll('.search-filter-btn');
+
+  // Function to dispatch search event
+  function dispatchSearchEvent() {
+    const activeFilter = block.querySelector('.search-filter-btn.active');
+    const searchTerm = searchInput.value;
+    const filterText = activeFilter ? activeFilter.textContent : '';
+    const category = filterText.toUpperCase() === 'ALL' ? '' : filterText;
+
+    const event = new CustomEvent('search-filter-change', {
+      detail: {
+        searchTerm,
+        category
+      },
+      bubbles: true
+    });
+    block.dispatchEvent(event);
+  }
 
   // Handle filter selection only if filters exist
   if (filterBtns.length > 0) {
@@ -50,14 +68,14 @@ export default async function decorate(block) {
       btn.addEventListener('click', () => {
         filterBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        // Placeholder for filter logic
-        console.log('Selected filter:', btn.textContent);
+        dispatchSearchEvent();
       });
     });
   }
 
-  searchForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    // Placeholder for search implementation
+  // Handle search input
+  searchInput.addEventListener('input', () => {
+    dispatchSearchEvent();
   });
+
 }

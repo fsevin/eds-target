@@ -64,4 +64,38 @@ export default async function decorate(block) {
 
   block.textContent = '';
   block.append(content);
+
+  // Get reference to article cards
+  const articlesGrid = block.querySelector('.articles-grid');
+  const allArticleCards = [...articlesGrid.children];
+
+  // Function to filter articles
+  function filterArticles(searchTerm, category) {
+    const lowerSearchTerm = searchTerm.toLowerCase();
+    const lowerCategory = category.toLowerCase();
+
+    allArticleCards.forEach(card => {
+      const cardCategory = card.querySelector('.article-category')?.textContent.toLowerCase() || '';
+      const cardTitle = card.querySelector('.article-title')?.textContent.toLowerCase() || '';
+      const cardDescription = card.querySelector('.article-description')?.textContent.toLowerCase() || '';
+
+      const matchesCategory = !lowerCategory || cardCategory.includes(lowerCategory);
+      const matchesSearch = !lowerSearchTerm ||
+        cardTitle.includes(lowerSearchTerm) ||
+        cardDescription.includes(lowerSearchTerm) ||
+        cardCategory.includes(lowerSearchTerm);
+
+      if (matchesCategory && matchesSearch) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  // Listen for search/filter events from search block
+  document.addEventListener('search-filter-change', (event) => {
+    const { searchTerm, category } = event.detail;
+    filterArticles(searchTerm, category);
+  });
 }
