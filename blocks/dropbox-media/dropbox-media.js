@@ -11,9 +11,6 @@ export default async function decorate(block) {
         src="${dropboxMedia}"
         alt="Dropbox Media"
         class="dropbox-media-image"
-        data-aue-label="Dropbox Media URL"
-        data-aue-prop="dropboxMedia"
-        data-aue-type="text"
       />
     </div>
   `);
