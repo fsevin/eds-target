@@ -5,13 +5,13 @@ export default async function decorate(block) {
   const dropboxMedia = config.dropboxmedia;
 
   const content = document.createRange().createContextualFragment(`
-    ${dropboxMedia} ? 
+    ${dropboxMedia ? `
       <img
         src="${dropboxMedia}"
         alt="Dropbox Media"
         class="dropbox-media-image"
-      /> :
-      <div>No Dropbox media provided.</div>
+      />` : `
+      <div>No Dropbox media provided.</div>`}
   `);
 
   block.textContent = '';
