@@ -124,6 +124,7 @@ export default function decorate(block) {
 
   // Initialize the automatic slideshow only if not in author mode
   if (!isAuthorMode) {
+    console.log('Starting carousel auto-advance');
     startInterval();
   }
 }
