@@ -3,16 +3,7 @@ import { readBlockConfig } from '../../scripts/aem.js';
 export default async function decorate(block) {
   const config = readBlockConfig(block);
 
-  const dropboxMedia = config.dropboxMedia || '';
-
-  if (!dropboxMedia) {
-    const emptyContent = document.createRange().createContextualFragment(`
-      <div class="dropbox-media-empty">No media URL provided.</div>
-    `);
-    block.textContent = '';
-    block.append(emptyContent);
-    return;
-  }
+  const dropboxMedia = config.dropboxMedia;
 
   const content = document.createRange().createContextualFragment(`
     <div class="dropbox-media-container">
