@@ -112,9 +112,7 @@ export default function decorate(block) {
   });
   
   function startInterval() {
-    if (!isAuthorMode) {
       slideInterval = setInterval(nextSlide, 5000);
-    }
   }
 
   function resetInterval() {
