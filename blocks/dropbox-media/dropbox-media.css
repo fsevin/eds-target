@@ -7,15 +7,3 @@
   height: auto;
   display: block;
 }
-
-@media (max-width: 768px) {
-  .dropbox-media-container {
-    padding: 1.5rem 0;
-  }
-}
-
-@media (max-width: 480px) {
-  .dropbox-media-container {
-    padding: 1rem 0;
-  }
-}
