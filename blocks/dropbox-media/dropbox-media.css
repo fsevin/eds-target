@@ -49,7 +49,7 @@ div.dropbox-media{
 
 /* Tablet */
 @media (max-width: 1024px) {
-  .dropbox-media-container {
+  div.dropbox-media {
     gap: 2rem;
   }
 
@@ -64,13 +64,18 @@ div.dropbox-media{
 
 /* Mobile */
 @media (max-width: 768px) {
-  .dropbox-media-container {
+  div.dropbox-media {
     flex-direction: column;
     gap: 2rem;
   }
 
   .dropbox-media-content {
+    flex: 1;
     gap: 1rem;
+  }
+
+  .dropbox-media-image-wrapper {
+    flex: 1;
   }
 
   .dropbox-media-title {
@@ -85,10 +90,6 @@ div.dropbox-media{
 /* Small mobile */
 @media (max-width: 480px) {
   div.dropbox-media {
-    margin: 1.5rem 0;
-  }
-
-  .dropbox-media-container {
     gap: 1.5rem;
   }
 
