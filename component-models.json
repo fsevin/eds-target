@@ -396,9 +396,22 @@
     "id": "dropbox-media",
     "fields": [
       {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "description",
+        "label": "Description"
+      },
+      {
         "component": "dropbox-media",
         "valueType": "string",
-        "name": "dropboxMedia"
+        "name": "dropboxMedia",
+        "label": "Dropbox Media URL"
       }
     ]
   }
