@@ -112,9 +112,10 @@ export default function decorate(block) {
       });
   });
   
-  // Auto-advance slides
   function startInterval() {
+    if (!isAuthorMode) {
       slideInterval = setInterval(nextSlide, 5000);
+    }
   }
 
   function resetInterval() {
@@ -122,9 +123,5 @@ export default function decorate(block) {
       startInterval();
   }
 
-  // Initialize the automatic slideshow only if not in author mode
-  if (!isAuthorMode) {
-    console.log('Starting carousel auto-advance');
-    startInterval();
-  }
+  startInterval();
 }
