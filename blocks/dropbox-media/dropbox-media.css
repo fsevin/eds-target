@@ -1,0 +1,38 @@
+/* Empty state */
+.dropbox-media-empty {
+  text-align: center;
+  padding: 3rem;
+  color: #6C757D;
+  font-size: 1.125rem;
+}
+
+/* Container */
+.dropbox-media-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 0;
+}
+
+/* Image */
+.dropbox-media-image {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dropbox-media-container {
+    padding: 1.5rem 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .dropbox-media-container {
+    padding: 1rem 0;
+  }
+}

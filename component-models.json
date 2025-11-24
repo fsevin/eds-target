@@ -246,11 +246,6 @@
         "multi": false
       },
       {
-        "component": "dropbox-media",
-        "valueType": "string",
-        "name": "dropboxMedia"
-      },
-      {
         "component": "text",
         "valueType": "string",
         "name": "imageDescription", 
@@ -396,5 +391,15 @@
   {
     "id": "services",
     "fields": []
+  },
+  {
+    "id": "dropbox-media",
+    "fields": [
+      {
+        "component": "dropbox-media",
+        "valueType": "string",
+        "name": "dropboxMedia"
+      }
+    ]
   }
 ]
