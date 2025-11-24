@@ -5,6 +5,13 @@ div.dropbox-media{
   gap: 3rem;
   align-items: flex-start;
   width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Inverted layout (image on right, text on left) */
+div.dropbox-media.inverted {
+  flex-direction: row;
 }
 
 .dropbox-media-content {
@@ -24,7 +31,6 @@ div.dropbox-media{
 
 /* Image wrapper (left side - 66%) */
 .dropbox-media-image-wrapper {
-  flex: 0 0 66%;
   display: flex;
   justify-content: center;
   align-items: center;

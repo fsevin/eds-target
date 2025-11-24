@@ -412,6 +412,12 @@
         "valueType": "string",
         "name": "dropboxMedia",
         "label": "Dropbox Media URL"
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "inverted",
+        "label": "Invert Layout"
       }
     ]
   }
