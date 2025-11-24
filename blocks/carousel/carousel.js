@@ -1,5 +1,5 @@
 import { moveInstrumentation } from '../../scripts/scripts.js';
-import { getDeliveryUrl } from '../../scripts/utils.js';
+import { getDeliveryUrl, isAuthorMode } from '../../scripts/utils.js';
 
 export default function decorate(block) {
   const slideElements = [];
@@ -116,12 +116,14 @@ export default function decorate(block) {
   function startInterval() {
       slideInterval = setInterval(nextSlide, 5000);
   }
-  
+
   function resetInterval() {
       clearInterval(slideInterval);
       startInterval();
   }
-  
-  // Initialize the automatic slideshow
-  startInterval();
+
+  // Initialize the automatic slideshow only if not in author mode
+  if (!isAuthorMode) {
+    startInterval();
+  }
 }
