@@ -1,9 +1,7 @@
-/* Container */
-.dropbox-media-container {
+.dropbox-media .block {
   width: 100%;
 }
 
-/* Image */
 .dropbox-media-image {
   max-width: 100%;
   height: auto;
@@ -12,7 +10,6 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .dropbox-media-container {
     padding: 1.5rem 0;
