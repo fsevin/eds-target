@@ -19,9 +19,9 @@ export default function decorate(block) {
       <img class="slide-image" src="${image}&width=1795" alt="Carousel Image ${i}"></img>
       <div class="slide-overlay"></div>
       <div class="slide-content">
-          <h1 data-aue-label="Title" data-aue-prop="title" data-aue-type="text">${title}</h1>
-          <p data-aue-label="Description" data-aue-prop="description" data-aue-type="text">${description}</p>
-          <button data-aue-label="Call to Action" data-aue-prop="buttonText" data-aue-type="text" class="cta-button">${buttonText}</button>
+          <h1>${title}</h1>
+          <p>${description}</p>
+          <button class="cta-button">${buttonText}</button>
       </div>
     `;
     moveInstrumentation(row, slideElement); 
