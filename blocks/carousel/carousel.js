@@ -14,7 +14,6 @@ export default function decorate(block) {
 
     var slideElement = document.createElement('div');
     slideElement.className = `slide ${i === 0 ? 'active' : ''}`;
-    slideElement.setAttribute('data-aue-prop', 'slide');
     slideElement.innerHTML = `   
       <img class="slide-image" src="${image}&width=1795" alt="Carousel Image ${i}"></img>
       <div class="slide-overlay"></div>
