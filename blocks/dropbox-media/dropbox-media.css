@@ -1,10 +1,6 @@
 /* Container */
 .dropbox-media-container {
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem 0;
 }
 
 /* Image */
