@@ -420,5 +420,17 @@
         "label": "Invert Layout"
       }
     ]
+  },
+  {
+    "id": "generic",
+    "fields": [
+      {
+        "component": "text",
+        "description": "Insert HTML between simple quotes",
+        "valueType": "string",
+        "name": "content",
+        "label": "Content"
+      }
+    ]
   }
 ]
