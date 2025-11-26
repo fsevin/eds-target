@@ -215,8 +215,8 @@
     "fields": [
       {
         "component": "tab",
-        "label": "Default",
-        "name": "default"
+        "label": "Core",
+        "name": "core"
       },
       {
         "component": "reference",
@@ -255,8 +255,8 @@
       },
       {
         "component": "tab",
-        "label": "Offer",
-        "name": "offer"
+        "label": "Targeting",
+        "name": "targeting"
       },
       {
         "component": "select",
