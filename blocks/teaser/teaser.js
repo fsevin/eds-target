@@ -10,7 +10,7 @@ export default function decorate(block) {
   const content = document.createRange().createContextualFragment(`
     <section class="py-20 bg-gray-50">
       <div class="container mx-auto px-4">
-        <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
           <!-- Image Section -->
           <div id="${blockId}-image" class="relative rounded-2xl overflow-hidden shadow-2xl">
             ${picture.outerHTML}

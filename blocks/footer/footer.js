@@ -31,43 +31,43 @@ export default async function decorate(block) {
 
           <!-- Quick Links -->
           <div>
-            <h4 class="text-white font-semibold mb-4">Quick Links</h4>
+            <h4 class="text-white font-semibold mb-4">Lorem Ipsum</h4>
             <ul class="space-y-2">
-              <li><a href="#" class="hover:text-brand-500 transition">Home</a></li>
-              <li><a href="#" class="hover:text-brand-500 transition">About</a></li>
-              <li><a href="#" class="hover:text-brand-500 transition">Features</a></li>
-              <li><a href="#" class="hover:text-brand-500 transition">Pricing</a></li>
+              <li><a href="#" class="hover:text-brand-500 transition">Dolor Sit</a></li>
+              <li><a href="#" class="hover:text-brand-500 transition">Consectetur</a></li>
+              <li><a href="#" class="hover:text-brand-500 transition">Adipiscing</a></li>
+              <li><a href="#" class="hover:text-brand-500 transition">Tempor</a></li>
             </ul>
           </div>
 
           <!-- Support -->
           <div>
-            <h4 class="text-white font-semibold mb-4">Support</h4>
+            <h4 class="text-white font-semibold mb-4">Labore Magna</h4>
             <ul class="space-y-2">
-              <li><a href="#" class="hover:text-brand-500 transition">Documentation</a></li>
-              <li><a href="#" class="hover:text-brand-500 transition">Support</a></li>
-              <li><a href="#" class="hover:text-brand-500 transition">Contact</a></li>
-              <li><a href="#" class="hover:text-brand-500 transition">FAQ</a></li>
+              <li><a href="#" class="hover:text-brand-500 transition">Veniam Quis</a></li>
+              <li><a href="#" class="hover:text-brand-500 transition">Nostrud</a></li>
+              <li><a href="#" class="hover:text-brand-500 transition">Exercitation</a></li>
+              <li><a href="#" class="hover:text-brand-500 transition">Ullamco</a></li>
             </ul>
           </div>
 
           <!-- Newsletter -->
           <div>
-            <h4 class="text-white font-semibold mb-4">Newsletter</h4>
+            <h4 class="text-white font-semibold mb-4">Aliqua Enim</h4>
             <p class="mb-4 text-sm">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit.
             </p>
             <form class="flex">
               <input
                 type="email"
-                placeholder="Enter your email"
+                placeholder="Lorem ipsum email"
                 class="flex-1 px-4 py-2 rounded-l-md bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-brand-500"
               />
               <button
                 type="submit"
                 class="px-6 py-2 text-white bg-brand-600 rounded-r-md hover:bg-brand-700 transition"
               >
-                Subscribe
+                Lorem
               </button>
             </form>
           </div>
