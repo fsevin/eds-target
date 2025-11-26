@@ -104,38 +104,38 @@
     ]
   },
   {
-    "id": "menu",
+    "id": "login-modal",
     "fields": [
       {
         "component": "text",
         "valueType": "string",
-        "name": "loginModalTitle",
-        "label": "Login Modal Title"
+        "name": "title",
+        "label": "Title"
       },
       {
         "component": "text",
         "valueType": "string",
-        "name": "loginModalUsernameLabel",
-        "label": "Login Modal Username Label"
+        "name": "usernameLabel",
+        "label": "Username Label"
       },
       {
         "component": "text",
         "valueType": "string",
-        "name": "loginModalProfileTypeLabel",
-        "label": "Login Modal Profile Type Label"
+        "name": "profileTypeLabel",
+        "label": "Profile Type Label"
       },
       {
         "component": "text",
         "valueType": "string[]",
-        "name": "loginModalProfileTypeOptions",
-        "label": "Login Modal Profile Type Options",
+        "name": "profile TypeOptions",
+        "label": "Profile Type Options",
         "multi": true
       },
       {
         "component": "text",
         "valueType": "string",
-        "name": "loginModalCancelButtonLabel",
-        "label": "Login Modal Cancel Button Label"
+        "name": "cancelButtonLabel",
+        "label": "Cancel Button Label"
       }
     ]
   },
