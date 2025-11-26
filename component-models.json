@@ -176,7 +176,7 @@
         "label": "Image Alt Text"
       },
       {
-        "component": "richtext",
+        "component": "text",
         "name": "title",
         "label": "Title",
         "valueType": "string"
