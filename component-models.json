@@ -339,8 +339,21 @@
     ]
   },
   {
-    "id": "features",
-    "fields": []
+    "id": "services",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description",
+        "valueType": "string"
+      }
+    ]
   },
   {
     "id": "dropbox-media",
