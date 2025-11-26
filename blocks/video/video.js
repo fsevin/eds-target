@@ -79,7 +79,6 @@ export default function decorate(block) {
               ${config.description}
             </p>
           </div>
-
           ${videoContainerHTML}
         </div>
       </div>
