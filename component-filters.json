@@ -9,57 +9,22 @@
     "id": "section",
     "components": [
       "text",
-      "image",
-      "button",
       "title",
       "hero",
-      "cards",
       "menu",
-      "login-modal",
-      "columns",
-      "fragment",
-      "carousel",
-      "teaser",
-      "articles",
-      "products",
-      "dropbox-media",
-      "3d-viewer",
-      "search",
-      "services",
-      "generic"
+      "teaser"
     ]
   },
   {
-    "id": "cards",
+    "id": "faq",
     "components": [
-      "card"
+      "faq-item"
     ]
   },
   {
     "id": "menu",
     "components": [
-      "menuItem"
-    ]
-  },
-  {
-    "id": "carousel",
-    "components": [
-      "teaser"
-    ]
-  },
-  {
-    "id": "columns",
-    "components": [
-      "column"
-    ]
-  },
-  {
-    "id": "column",
-    "components": [
-      "text",
-      "image",
-      "button",
-      "title"
+      "menu-item"
     ]
   }
 ]

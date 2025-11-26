@@ -24,22 +24,6 @@
     ]
   },
   {
-    "id": "image",
-    "fields": [
-      {
-        "component": "reference",
-        "name": "image",
-        "label": "Image",
-        "multi": false
-      },
-      {
-        "component": "text",
-        "name": "imageAlt",
-        "label": "Alt Text"
-      }
-    ]
-  },
-  {
     "id": "title",
     "fields": [
       {
@@ -81,45 +65,6 @@
     ]
   },
   {
-    "id": "button",
-    "fields": [
-      {
-        "component": "aem-content",
-        "name": "link",
-        "label": "Link"
-      },
-      {
-        "component": "text",
-        "name": "linkText",
-        "label": "Text"
-      },
-      {
-        "component": "text",
-        "name": "linkTitle",
-        "label": "Title"
-      },
-      {
-        "component": "select",
-        "name": "linkType",
-        "label": "Type",
-        "options": [
-          {
-            "name": "default",
-            "value": ""
-          },
-          {
-            "name": "primary",
-            "value": "primary"
-          },
-          {
-            "name": "secondary",
-            "value": "secondary"
-          }
-        ]
-      }
-    ]
-  },
-  {
     "id": "section",
     "fields": [
       {
@@ -142,26 +87,35 @@
     ]
   },
   {
-    "id": "card",
+    "id": "faq-item",
     "fields": [
       {
-        "component": "reference",
+        "component": "text",
         "valueType": "string",
-        "name": "image",
-        "label": "Image",
-        "multi": false
+        "name": "question",
+        "label": "Question"
       },
       {
         "component": "richtext",
-        "name": "text",
-        "value": "",
-        "label": "Text",
+        "name": "answer",
+        "label": "Answer",
         "valueType": "string"
       }
     ]
   },
   {
-    "id": "menuItem",
+    "id": "menu",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title"
+      }
+    ]
+  },
+  {
+    "id": "menu-item",
     "fields": [
       {
         "component": "text",
@@ -176,37 +130,13 @@
     ]
   },
   {
-    "id": "columns",
-    "fields": [
-      {
-        "component": "text",
-        "valueType": "number",
-        "name": "columns",
-        "value": "",
-        "label": "Columns"
-      },
-      {
-        "component": "text",
-        "valueType": "number",
-        "name": "rows",
-        "value": "",
-        "label": "Rows"
-      }
-    ]
-  },
-  {
-    "id": "fragment",
-    "fields": [
-      {
-        "component": "aem-content",
-        "name": "reference",
-        "label": "Reference"
-      }
-    ]
-  },
-  {
     "id": "hero",
     "fields": [
+      {
+        "component": "tab",
+        "label": "Default",
+        "name": "default"
+      },
       {
         "component": "reference",
         "valueType": "string",
@@ -217,16 +147,41 @@
       {
         "component": "text",
         "valueType": "string",
-        "name": "imageAlt",
-        "label": "Alt",
-        "value": ""
+        "name": "imageAltText",
+        "label": "Image Alt Text"
       },
       {
         "component": "richtext",
-        "name": "text",
-        "value": "",
-        "label": "Text",
+        "name": "title",
+        "label": "Title",
         "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description",
+        "valueType": "string"
+      },
+      {
+        "component": "tab",
+        "label": "Offer",
+        "name": "offer"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "offerZone",
+        "label": "Zone",
+        "options": [
+          {
+            "name": "Teaser",
+            "value": "teaser-zone"
+          },
+          {
+            "name": "Hero",
+            "value": "hero-zone"
+          }
+        ]
       }
     ]
   },
@@ -242,13 +197,12 @@
         "component": "reference",
         "valueType": "string",
         "name": "image",
-        "label": "Background Image",
-        "multi": false
+        "label": "Background Image"
       },
       {
         "component": "text",
         "valueType": "string",
-        "name": "imageDescription", 
+        "name": "imageAltText", 
         "label": "Image Alt Text"
       },
       {
@@ -290,12 +244,8 @@
             "value": "teaser-zone"
           },
           {
-            "name": "Carousel",
-            "value": "carousel-zone"
-          },
-          {
-            "name": "Navigation",
-            "value": "navigation-zone"
+            "name": "Hero",
+            "value": "hero-zone"
           }
         ]
       }
@@ -389,7 +339,7 @@
     ]
   },
   {
-    "id": "services",
+    "id": "features",
     "fields": []
   },
   {
@@ -418,18 +368,6 @@
         "valueType": "boolean",
         "name": "inverted",
         "label": "Invert Layout"
-      }
-    ]
-  },
-  {
-    "id": "generic",
-    "fields": [
-      {
-        "component": "text",
-        "description": "Insert HTML between simple quotes",
-        "valueType": "string",
-        "name": "content",
-        "label": "Content"
       }
     ]
   }

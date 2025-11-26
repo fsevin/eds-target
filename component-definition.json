@@ -30,32 +30,6 @@
               }
             }
           }
-        },
-        {
-          "title": "Image",
-          "id": "image",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/image/v1/image",
-                "template": {}
-              }
-            }
-          }
-        },
-        {
-          "title": "Button",
-          "id": "button",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/button/v1/button",
-                "template": {
-                  "model": "button"
-                }
-              }
-            }
-          }
         }
       ]
     },
@@ -84,30 +58,15 @@
       "id": "blocks",
       "components": [
         {
-          "title": "Cards",
-          "id": "cards",
+          "title": "FAQ",
+          "id": "faq",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
-                  "name": "Cards",
-                  "filter": "cards"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Card",
-          "id": "card",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block/item",
-                "template": {
-                  "name": "Card",
-                  "model": "card"
+                  "name": "FAQ",
+                  "filter": "faq"
                 }
               }
             }
@@ -122,6 +81,7 @@
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
                   "name": "Menu",
+                  "model": "menu",
                   "filter": "menu"
                 }
               }
@@ -130,44 +90,14 @@
         },
         {
           "title": "Menu Item",
-          "id": "menuItem",
+          "id": "menu-item",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
                   "name": "Menu Item",
-                  "model": "menuItem"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Columns",
-          "id": "columns",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/columns/v1/columns",
-                "template": {
-                  "columns": "2",
-                  "rows": "1"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Fragment",
-          "id": "fragment",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Fragment",
-                  "model": "fragment"
+                  "model": "menu-item"
                 }
               }
             }
@@ -182,22 +112,8 @@
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
                   "name": "Hero",
-                  "model": "hero"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Carousel",
-          "id": "carousel",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Carousel",
-                  "filter": "carousel"
+                  "model": "hero",
+                  "key-value": true
                 }
               }
             }
@@ -214,21 +130,6 @@
                   "name": "Teaser",
                   "model": "teaser",
                   "key-value": true
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Login Modal",
-          "id": "login-modal",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Login Modal",
-                  "model": "login-modal"
                 }
               }
             }
@@ -283,31 +184,15 @@
           }
         },
         {
-          "title": "Search",
-          "id": "search",
+          "title": "Features",
+          "id": "features",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
-                  "name": "Search",
-                  "model": "search",
-                  "key-value": true
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Services",
-          "id": "services",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Services",
-                  "model": "services",
+                  "name": "Features",
+                  "model": "features",
                   "key-value": true
                 }
               }
@@ -324,22 +209,6 @@
                 "template": {
                   "name": "Dropbox Media",
                   "model": "dropbox-media",
-                  "key-value": true
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Generic",
-          "id": "generic",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Generic",
-                  "model": "generic",
                   "key-value": true
                 }
               }
