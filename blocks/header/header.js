@@ -38,7 +38,7 @@ function extractMenuItems(fragment) {
 
 function buildNavigationHTML(menuItems) {
   return menuItems.map(item => `
-    <a href="${item.path}" class="text-gray-700 hover:text-blue-600 transition">
+    <a href="${item.path}" class="text-gray-700 hover:text-brand-600 transition">
       ${item.label}
     </a>
   `).join('');
@@ -97,13 +97,13 @@ export default async function decorate(block) {
 
         <!-- Right Section -->
         <div class="hidden md:flex items-center space-x-4">
-          <select class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 text-sm focus:outline-none focus:border-blue-600" id="localeSelect" aria-label="Select language">
+          <select class="px-4 py-2 h-10 border border-gray-300 rounded-md text-gray-700 text-sm focus:outline-none focus:border-brand-600 appearance-none" id="localeSelect" aria-label="Select language">
             <option value="us/en" ${currentLocale === 'us/en' ? 'selected' : ''}>🇺🇸 EN</option>
             <option value="fr/fr" ${currentLocale === 'fr/fr' ? 'selected' : ''}>🇫🇷 FR</option>
             <option value="es/es" ${currentLocale === 'es/es' ? 'selected' : ''}>🇪🇸 ES</option>
           </select>
-          <button class="px-6 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 transition flex items-center gap-2" id="loginBtn">
-            <img src="${getIconPath('not-logged.svg')}" alt="Login" class="w-4 h-4">
+          <button class="px-6 py-2 h-10 text-white bg-brand-600 rounded-md hover:bg-brand-700 transition flex items-center gap-2" id="loginBtn">
+            Login
           </button>
         </div>
 
@@ -146,7 +146,7 @@ export default async function decorate(block) {
               <input
                 type="text"
                 id="username"
-                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition"
+                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-100 transition"
                 required
               >
             </div>
@@ -154,7 +154,7 @@ export default async function decorate(block) {
               <label for="profileType" class="block text-sm font-semibold text-gray-700 mb-2">${loginModalData.profileTypeLabel}</label>
               <select
                 id="profileType"
-                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition"
+                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-100 transition"
                 required
               >
                 ${loginModalData.profileOptions.map(opt => `<option value="${opt.value}">${opt.label}</option>`).join('')}
@@ -166,7 +166,7 @@ export default async function decorate(block) {
         <!-- Modal Footer -->
         <div class="flex gap-3 p-6 border-t border-gray-200 justify-end">
           <button type="button" class="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition font-semibold" id="cancelBtn">${loginModalData.cancelButtonLabel}</button>
-          <button type="submit" form="loginForm" class="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold">${loginModalData.title}</button>
+          <button type="submit" form="loginForm" class="px-5 py-2.5 bg-brand-600 text-white rounded-lg hover:bg-brand-700 transition font-semibold">${loginModalData.title}</button>
         </div>
       </div>
     </div>
@@ -186,7 +186,7 @@ export default async function decorate(block) {
 
   const username = localStorage.getItem('username');
   if (username) {
-      loginBtn.innerHTML = `<img src="${getIconPath('logged.svg')}" alt="User logged" class="w-4 h-4"><span>${username}</span>`;
+      loginBtn.innerHTML = `<span>${username}</span>`;
   }
 
   // Open modal
@@ -195,7 +195,7 @@ export default async function decorate(block) {
         localStorage.removeItem('logged');
         localStorage.removeItem('username');
         localStorage.removeItem('profileType');
-        loginBtn.innerHTML = `<img src="${getIconPath('not-logged.svg')}" alt="User not logged" class="w-4 h-4">`;
+        loginBtn.innerHTML = `<span>Login</span>`;
     } else {
       loginModal.classList.remove('hidden');
       loginModal.classList.add('flex');
@@ -232,7 +232,7 @@ export default async function decorate(block) {
     localStorage.setItem('logged', true);
     localStorage.setItem('username', username);
     localStorage.setItem('profileType', profileType);
-    loginBtn.innerHTML = `<img src="${getIconPath('logged.svg')}" alt="User logged" class="w-4 h-4"><span>${username}</span>`;
+    loginBtn.innerHTML = `<span>${username}</span>`;
     closeLoginModal();
   });
 
