@@ -1,5 +1,10 @@
+import { readBlockConfig } from '../../scripts/aem.js';
+import { extractFieldFromBlock } from '../../scripts/utils.js';
 
 export default async function decorate(block) {
+  const config = readBlockConfig(block);
+  const descriptionHTML = extractFieldFromBlock(block, 'description');
+
   const services = [
     {
       icon: `<svg class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -67,8 +72,8 @@ export default async function decorate(block) {
       <div class="container mx-auto px-4">
         <!-- Section Header -->
         <div class="text-center mb-16">
-          <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Lorem ipsum dolor sit amet</h2>
-          <p class="text-xl text-gray-600 max-w-3xl mx-auto">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">${config.title}</h2>
+          <div class="text-xl text-gray-600 max-w-3xl mx-auto">${descriptionHTML}</div>
         </div>
 
         <!-- Services Grid -->

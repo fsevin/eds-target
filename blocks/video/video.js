@@ -1,5 +1,5 @@
 import { readBlockConfig } from '../../scripts/aem.js';
-import { getSiteNameFromDAM } from '../../scripts/utils.js';
+import { extractFieldFromBlock } from '../../scripts/utils.js';
 
 export default function decorate(block) {
   const config = readBlockConfig(block);
@@ -10,6 +10,8 @@ export default function decorate(block) {
   const shouldAutoplay = config.autoplay === 'true';
   const autoplayParams = shouldAutoplay ? '?autoplay=1&muted=1' : '';
   const finalVideoURL = `${videoURL}${autoplayParams}`;
+
+  const descriptionHTML = extractFieldFromBlock(block, 'description');
 
   const videoContainerHTML = shouldAutoplay ? `
     <!-- Video Container with Autoplay -->
@@ -76,7 +78,7 @@ export default function decorate(block) {
               ${config.title}
             </h2>
             <p data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext" class="text-lg text-gray-600 max-w-2xl mx-auto">
-              ${config.description}
+              ${descriptionHTML}
             </p>
           </div>
           ${videoContainerHTML}
