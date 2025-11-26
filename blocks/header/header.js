@@ -37,11 +37,18 @@ function extractMenuItems(fragment) {
 }
 
 function buildNavigationHTML(menuItems) {
-  return menuItems.map(item => `
-    <a href="${item.path}" class="text-gray-700 hover:text-brand-600 transition">
-      ${item.label}
-    </a>
-  `).join('');
+  const currentPath = window.location.pathname;
+
+  return menuItems.map(item => {
+    const isActive = currentPath === item.path || currentPath.startsWith(item.path + '/');
+    const activeClass = isActive ? 'text-brand-600 font-semibold' : 'text-gray-700 hover:text-brand-600';
+
+    return `
+      <a href="${item.path}" class="${activeClass} transition">
+        ${item.label}
+      </a>
+    `;
+  }).join('');
 }
 
 function extractLoginModalData(fragment) {
