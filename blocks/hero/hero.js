@@ -9,7 +9,7 @@ export default function decorate(block) {
   const blockId = `hero-${Math.random().toString(36).substr(2, 9)}`;
 
   const content = document.createRange().createContextualFragment(`
-    <section class="relative py-20 md:py-32 bg-cover bg-center bg-no-repeat min-h-[500px] md:min-h-[600px]">
+    <section class="relative py-12 md:py-20 bg-cover bg-center bg-no-repeat">
       <!-- Background Image -->
       <div id="${blockId}-image" class="absolute inset-0 z-0">
         ${picture.outerHTML}

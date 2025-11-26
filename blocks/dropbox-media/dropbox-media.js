@@ -9,7 +9,7 @@ export default async function decorate(block) {
 
   const imageSection = `
     <!-- Image Section (60% width) -->
-    <div class="relative rounded-2xl overflow-hidden shadow-2xl lg:col-span-3 min-h-[500px]" data-aue-label="Image" data-aue-prop="dropboxmedia" data-aue-type="text">
+    <div class="relative rounded-2xl overflow-hidden shadow-2xl lg:col-span-3 h-[500px]" data-aue-label="Image" data-aue-prop="dropboxmedia" data-aue-type="text">
       ${dropboxMedia ? `
         <img
           src="${dropboxMedia}"
