@@ -215,8 +215,8 @@
     "fields": [
       {
         "component": "tab",
-        "label": "Properties",
-        "name": "properties"
+        "label": "Fields",
+        "name": "fields"
       },
       {
         "component": "reference",
