@@ -24,17 +24,17 @@ export default async function decorate(block) {
       <div data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext" class="text-lg text-gray-600 leading-relaxed space-y-8">
         <div>
           <h3 class="text-2xl font-bold text-black mb-3">Lorem Ipsum Dolor</h3>
-          <p class="text-gray-400">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <p class="text-gray-400">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris.</p>
         </div>
 
         <div>
           <h3 class="text-2xl font-bold text-black mb-3">Consectetur Adipiscing</h3>
-          <p class="text-gray-400">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
+          <p class="text-gray-400">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.</p>
         </div>
 
         <div>
           <h3 class="text-2xl font-bold text-black mb-3">Tempor Incididunt</h3>
-          <p class="text-gray-400">Lorem ipsum dolor sit amet, sed do eiusmod tempor incididunt consectetur adipiscing elit setim.</p>
+          <p class="text-gray-400">Lorem ipsum dolor sit amet, sed do eiusmod tempor incididunt consectetur adipiscing elit setim. Excepteur sint occaecat cupidatat non proident sunt in culpa qui officia.</p>
         </div>
       </div>
     </div>
