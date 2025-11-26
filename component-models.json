@@ -388,12 +388,6 @@
     "id": "dropbox-media",
     "fields": [
       {
-        "component": "richtext",
-        "valueType": "string",
-        "name": "description",
-        "label": "Description"
-      },
-      {
         "component": "dropbox-media",
         "valueType": "string",
         "name": "dropboxMedia",
