@@ -12,6 +12,8 @@ export default function decorate(block) {
   const finalVideoURL = `${videoURL}${autoplayParams}`;
 
   const descriptionHTML = extractFieldFromBlock(block, 'description');
+  const style = config.style || '';
+  const sectionClasses = style.includes('highlight') ? 'py-20 bg-gray-50' : 'py-20';
 
   const videoContainerHTML = shouldAutoplay ? `
     <!-- Video Container with Autoplay -->
@@ -69,7 +71,7 @@ export default function decorate(block) {
   `;
 
   const content = document.createRange().createContextualFragment(`
-    <section class="py-20 bg-gray-50">
+    <section class="${sectionClasses}">
       <div class="container mx-auto px-4">
         <div class="max-w-5xl mx-auto">
           <div class="text-center mb-16">

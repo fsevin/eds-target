@@ -4,6 +4,8 @@ export default async function decorate(block) {
   const config = readBlockConfig(block);
   const dropboxMedia = config.dropboxmedia || '';
   const inverted = config.inverted === 'true' || config.inverted === true;
+  const style = config.style || '';
+  const sectionClasses = style.includes('highlight') ? 'py-20 bg-gray-50' : 'py-20';
 
   const imageSection = `
     <!-- Image Section (60% width) -->
@@ -41,7 +43,7 @@ export default async function decorate(block) {
   `;
 
   const content = document.createRange().createContextualFragment(`
-    <section class="py-20 bg-gray-50">
+    <section class="${sectionClasses}">
       <div class="container mx-auto px-4">
         <div class="grid lg:grid-cols-5 gap-12 items-start">
           ${inverted ? contentSection + imageSection : imageSection + contentSection}

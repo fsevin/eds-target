@@ -347,6 +347,11 @@
     "id": "services",
     "fields": [
       {
+        "component": "tab",
+        "label": "Fields",
+        "name": "fields"
+      },
+      {
         "component": "text",
         "valueType": "string",
         "name": "title",
@@ -357,12 +362,33 @@
         "name": "description",
         "label": "Description",
         "valueType": "string"
+      },
+      {
+        "component": "tab",
+        "label": "Layout",
+        "name": "layout"
+      },
+      {
+        "component": "multiselect",
+        "name": "style",
+        "label": "Style",
+        "options": [
+          {
+            "name": "Highlight",
+            "value": "highlight"
+          }
+        ]
       }
     ]
   },
   {
     "id": "video",
     "fields": [
+      {
+        "component": "tab",
+        "label": "Fields",
+        "name": "fields"
+      },
       {
         "component": "text",
         "valueType": "string",
@@ -386,12 +412,33 @@
         "valueType": "boolean",
         "name": "autoplay",
         "label": "Autoplay"
+      },
+      {
+        "component": "tab",
+        "label": "Layout",
+        "name": "layout"
+      },
+      {
+        "component": "multiselect",
+        "name": "style",
+        "label": "Style",
+        "options": [
+          {
+            "name": "Highlight",
+            "value": "highlight"
+          }
+        ]
       }
     ]
   },
   {
     "id": "dropbox-media",
     "fields": [
+      {
+        "component": "tab",
+        "label": "Fields",
+        "name": "fields"
+      },
       {
         "component": "dropbox-media",
         "valueType": "string",
@@ -403,6 +450,22 @@
         "valueType": "boolean",
         "name": "inverted",
         "label": "Invert Layout"
+      },
+      {
+        "component": "tab",
+        "label": "Layout",
+        "name": "layout"
+      },
+      {
+        "component": "multiselect",
+        "name": "style",
+        "label": "Style",
+        "options": [
+          {
+            "name": "Highlight",
+            "value": "highlight"
+          }
+        ]
       }
     ]
   }

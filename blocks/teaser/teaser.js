@@ -3,14 +3,16 @@ import { getSiteNameFromDAM, extractFieldFromBlock } from '../../scripts/utils.j
 
 export default function decorate(block) {
   const config = readBlockConfig(block);
+  const style = config.style || '';
   const picture = createOptimizedPicture(config.image, config.imagedescription);
 
   const descriptionHTML = extractFieldFromBlock(block, 'description');
 
   const blockId = `teaser-${Math.random().toString(36).substr(2, 9)}`;
+  const sectionClasses = style.includes('highlight') ? 'py-20 bg-gray-50' : 'py-20';
 
   const content = document.createRange().createContextualFragment(`
-    <section class="py-20 bg-gray-50">
+    <section class="${sectionClasses}">
       <div class="container mx-auto px-4">
         <div class="grid lg:grid-cols-5 gap-12 items-center">
           <!-- Image Section (60% width) -->
