@@ -1,4 +1,3 @@
-import { readBlockConfig } from '../../scripts/aem.js';
 import { getTranslation, getLanguageFromUrl } from '../../scripts/utils.js';
 
 function extractProductsFromBlock(block) {
@@ -59,15 +58,11 @@ function buildProductCard(product) {
 }
 
 export default async function decorate(block) {
-  const config = readBlockConfig(block);
-  const style = config.style || '';
-  const sectionClasses = style.includes('highlight') ? 'py-20 bg-gray-50' : 'py-20 bg-white';
-
   const products = extractProductsFromBlock(block);
 
   if (products.length === 0) {
     const emptyContent = document.createRange().createContextualFragment(`
-      <section class="${sectionClasses}">
+      <section class="py-20 bg-white">
         <div class="container mx-auto px-4">
           <div class="text-center text-xl text-gray-600">No products found.</div>
         </div>
@@ -85,7 +80,7 @@ export default async function decorate(block) {
   const productsHTML = products.map(product => buildProductCard(product)).join('');
 
   const content = document.createRange().createContextualFragment(`
-    <section class="${sectionClasses}">
+    <section class="py-20 bg-white">
       <div class="container mx-auto px-4">
         <div class="mb-6 text-lg font-semibold text-gray-700" data-results-count></div>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" data-products-grid>

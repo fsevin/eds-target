@@ -306,54 +306,16 @@
   },
   {
     "id": "articles",
-    "fields": [
-      {
-        "component": "tab",
-        "label": "Layout",
-        "name": "layout"
-      },
-      {
-        "component": "multiselect",
-        "name": "style",
-        "label": "Style",
-        "options": [
-          {
-            "name": "Highlight",
-            "value": "highlight"
-          }
-        ]
-      }
-    ]
+    "fields": []
   },
   {
     "id": "products",
     "fields": [
       {
-        "component": "tab",
-        "label": "Fields",
-        "name": "fields"
-      },
-      {
         "component": "commerce-category",
         "name": "commerce-category",
         "label": "Commerce Category",
         "valueType": "string"
-      },
-      {
-        "component": "tab",
-        "label": "Layout",
-        "name": "layout"
-      },
-      {
-        "component": "multiselect",
-        "name": "style",
-        "label": "Style",
-        "options": [
-          {
-            "name": "Highlight",
-            "value": "highlight"
-          }
-        ]
       }
     ]
   },
