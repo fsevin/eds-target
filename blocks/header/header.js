@@ -97,7 +97,7 @@ export default async function decorate(block) {
 
         <!-- Right Section -->
         <div class="hidden md:flex items-center space-x-4">
-          <select class="px-4 py-2 h-10 border border-gray-300 rounded-md text-gray-700 text-sm focus:outline-none focus:border-brand-600 appearance-none" id="localeSelect" aria-label="Select language">
+          <select class="px-4 py-2 h-10 border border-gray-300 rounded-md text-gray-700 text-sm focus:outline-none focus:border-brand-600 appearance-none cursor-pointer" id="localeSelect" aria-label="Select language">
             <option value="us/en" ${currentLocale === 'us/en' ? 'selected' : ''}>🇺🇸 EN</option>
             <option value="fr/fr" ${currentLocale === 'fr/fr' ? 'selected' : ''}>🇫🇷 FR</option>
             <option value="es/es" ${currentLocale === 'es/es' ? 'selected' : ''}>🇪🇸 ES</option>
@@ -119,7 +119,7 @@ export default async function decorate(block) {
       <div class="hidden md:hidden mt-4 pb-4" id="mobileMenu">
         <div class="flex flex-col space-y-4">
           ${navigationHTML}
-          <select class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 text-sm" id="localeSelectMobile" aria-label="Select language">
+          <select class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 text-sm cursor-pointer" id="localeSelectMobile" aria-label="Select language">
             <option value="us/en" ${currentLocale === 'us/en' ? 'selected' : ''}>🇺🇸 EN</option>
             <option value="fr/fr" ${currentLocale === 'fr/fr' ? 'selected' : ''}>🇫🇷 FR</option>
             <option value="es/es" ${currentLocale === 'es/es' ? 'selected' : ''}>🇪🇸 ES</option>
