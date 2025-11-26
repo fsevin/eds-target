@@ -8,22 +8,39 @@ export default async function decorate(block) {
   const description = config.description || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
   const inverted = config.inverted === 'true' || config.inverted === true;
 
-  const content = document.createRange().createContextualFragment(`
-    <div class="dropbox-media${inverted ? ' inverted' : ''}">
-      <div class="dropbox-media-content">
-        <h2 class="dropbox-media-title" data-aue-label="Title" data-aue-prop="title" data-aue-type="text">${title}</h2>
-        <p class="dropbox-media-description" data-aue-label="Description" data-aue-prop="description" data-aue-type="text">${description}</p>
-      </div>
-      <div class="dropbox-media-image-wrapper">
-        ${dropboxMedia ? `
-          <img
-            src="${dropboxMedia}"
-            alt="${title}"
-            class="dropbox-media-image"
-          />` : `
-          <div class="dropbox-media-placeholder">No image provided</div>`}
-      </div>
+  const imageSection = `
+    <!-- Image Section (60% width) -->
+    <div class="relative rounded-2xl overflow-hidden shadow-2xl lg:col-span-3 min-h-[500px]" data-aue-label="Image" data-aue-prop="dropboxmedia" data-aue-type="text">
+      ${dropboxMedia ? `
+        <img
+          src="${dropboxMedia}"
+          alt="${title}"
+          class="w-full h-full object-cover object-center"
+        />` : `
+        <div class="flex items-center justify-center h-full bg-gray-200 text-gray-500">No image provided</div>`}
     </div>
+  `;
+
+  const contentSection = `
+    <!-- Content Section (40% width) -->
+    <div class="space-y-6 lg:col-span-2">
+      <h2 data-aue-label="Title" data-aue-prop="title" data-aue-type="text" class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
+        ${title}
+      </h2>
+      <p data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext" class="text-lg text-gray-600 leading-relaxed">
+        ${description}
+      </p>
+    </div>
+  `;
+
+  const content = document.createRange().createContextualFragment(`
+    <section class="py-20 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <div class="grid lg:grid-cols-5 gap-12 items-start">
+          ${inverted ? contentSection + imageSection : imageSection + contentSection}
+        </div>
+      </div>
+    </section>
   `);
 
   block.textContent = '';
