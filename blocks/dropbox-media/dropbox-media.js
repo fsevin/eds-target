@@ -4,7 +4,6 @@ export default async function decorate(block) {
   const config = readBlockConfig(block);
 
   const dropboxMedia = config.dropboxmedia || '';
-  const title = config.title || 'Lorem Ipsum Dolor Sit';
   const description = config.description || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
   const inverted = config.inverted === 'true' || config.inverted === true;
 
@@ -14,7 +13,7 @@ export default async function decorate(block) {
       ${dropboxMedia ? `
         <img
           src="${dropboxMedia}"
-          alt="${title}"
+          alt="Dropbox Media Image"
           class="w-full h-full object-cover object-center"
         />` : `
         <div class="flex items-center justify-center h-full bg-gray-200 text-gray-500">No image provided</div>`}
@@ -23,10 +22,7 @@ export default async function decorate(block) {
 
   const contentSection = `
     <!-- Content Section (40% width) -->
-    <div class="space-y-6 lg:col-span-2">
-      <h2 data-aue-label="Title" data-aue-prop="title" data-aue-type="text" class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
-        ${title}
-      </h2>
+    <div class="lg:col-span-2">
       <p data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext" class="text-lg text-gray-600 leading-relaxed">
         ${description}
       </p>
