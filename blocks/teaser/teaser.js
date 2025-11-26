@@ -10,14 +10,14 @@ export default function decorate(block) {
   const content = document.createRange().createContextualFragment(`
     <section class="py-20 bg-gray-50">
       <div class="container mx-auto px-4">
-        <div class="grid lg:grid-cols-2 gap-12 items-center">
-          <!-- Image Section -->
-          <div id="${blockId}-image" data-aue-label="Image" data-aue-prop="image" data-aue-type="media" class="relative rounded-2xl overflow-hidden shadow-2xl">
+        <div class="grid lg:grid-cols-5 gap-12 items-center">
+          <!-- Image Section (60% width) -->
+          <div id="${blockId}-image" data-aue-label="Image" data-aue-prop="image" data-aue-type="media" class="relative rounded-2xl overflow-hidden shadow-2xl lg:col-span-3">
             ${picture.outerHTML}
           </div>
 
-          <!-- Content Section -->
-          <div class="space-y-6">
+          <!-- Content Section (40% width) -->
+          <div class="space-y-6 lg:col-span-2">
             <h2 id="${blockId}-title" data-aue-label="Title" data-aue-prop="title" data-aue-type="text" class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
               ${config.title}
             </h2>
@@ -38,11 +38,21 @@ export default function decorate(block) {
   block.textContent = '';
   block.append(content);
 
-  // Apply image styling
+  // Apply image styling to fill container
+  const teaserPicture = document.querySelector(`#${blockId}-image picture`);
   const teaserImage = document.querySelector(`#${blockId}-image picture img`);
+
+  if (teaserPicture) {
+    teaserPicture.style.width = '100%';
+    teaserPicture.style.height = '100%';
+    teaserPicture.style.display = 'block';
+  }
+
   if (teaserImage) {
     teaserImage.style.width = '100%';
-    teaserImage.style.height = 'auto';
+    teaserImage.style.height = '100%';
+    teaserImage.style.objectFit = 'cover';
+    teaserImage.style.objectPosition = 'center';
     teaserImage.style.display = 'block';
     teaserImage.style.margin = '0';
   }
@@ -83,10 +93,20 @@ export default function decorate(block) {
           imageElement.innerHTML = picture.outerHTML;
 
           // Reapply image styling for the new image
+          const newPicture = imageElement.querySelector('picture');
           const newImage = imageElement.querySelector('picture img');
+
+          if (newPicture) {
+            newPicture.style.width = '100%';
+            newPicture.style.height = '100%';
+            newPicture.style.display = 'block';
+          }
+
           if (newImage) {
             newImage.style.width = '100%';
-            newImage.style.height = 'auto';
+            newImage.style.height = '100%';
+            newImage.style.objectFit = 'cover';
+            newImage.style.objectPosition = 'center';
             newImage.style.display = 'block';
             newImage.style.margin = '0';
           }
