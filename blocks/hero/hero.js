@@ -8,9 +8,9 @@ export default function decorate(block) {
   const blockId = `hero-${Math.random().toString(36).substr(2, 9)}`;
 
   const content = document.createRange().createContextualFragment(`
-    <section class="relative py-20 md:py-32 bg-cover bg-center bg-no-repeat min-h-[500px] md:min-h-[600px] overflow-hidden">
+    <section class="relative py-20 md:py-32 bg-cover bg-center bg-no-repeat min-h-[500px] md:min-h-[600px]">
       <!-- Background Image -->
-      <div id="${blockId}-image" class="absolute inset-0 z-0 overflow-hidden">
+      <div id="${blockId}-image" class="absolute inset-0 z-0">
         ${picture.outerHTML}
       </div>
 
@@ -44,21 +44,34 @@ export default function decorate(block) {
   block.textContent = '';
   block.append(content);
 
-  // Apply image styling
-  const heroImageContainer = content.querySelector(`#${blockId}-image picture`);
-  if (heroImageContainer) {
-    heroImageContainer.style.width = '100%';
-    heroImageContainer.style.height = '100%';
-    heroImageContainer.style.display = 'block';
+  // Apply background-like styling to the image
+  const imageContainer = document.getElementById(`${blockId}-image`);
+  if (imageContainer) {
+    imageContainer.style.overflow = 'hidden';
   }
 
-  const heroImage = content.querySelector(`#${blockId}-image picture img`);
+  const heroPicture = document.querySelector(`#${blockId}-image picture`);
+  if (heroPicture) {
+    heroPicture.style.position = 'absolute';
+    heroPicture.style.top = '0';
+    heroPicture.style.left = '0';
+    heroPicture.style.width = '100%';
+    heroPicture.style.height = '100%';
+    heroPicture.style.margin = '0';
+    heroPicture.style.padding = '0';
+    heroPicture.style.display = 'block';
+  }
+
+  const heroImage = document.querySelector(`#${blockId}-image picture img`);
   if (heroImage) {
     heroImage.style.width = '100%';
     heroImage.style.height = '100%';
     heroImage.style.objectFit = 'cover';
     heroImage.style.objectPosition = 'center';
+    heroImage.style.margin = '0';
+    heroImage.style.padding = '0';
     heroImage.style.display = 'block';
+    heroImage.style.verticalAlign = 'top';
   }
 
   if (config.offerzone) {
@@ -96,11 +109,16 @@ export default function decorate(block) {
           const picture = createOptimizedPicture(imagePath.substring(`/content/dam/${siteName}`.length), offerContent.imageDescription);
           imageElement.innerHTML = picture.outerHTML;
 
-          // Reapply image styling for the new image
+          // Reapply background-like styling for the new image
           const newPicture = imageElement.querySelector('picture');
           if (newPicture) {
+            newPicture.style.position = 'absolute';
+            newPicture.style.top = '0';
+            newPicture.style.left = '0';
             newPicture.style.width = '100%';
             newPicture.style.height = '100%';
+            newPicture.style.margin = '0';
+            newPicture.style.padding = '0';
             newPicture.style.display = 'block';
           }
 
@@ -110,8 +128,12 @@ export default function decorate(block) {
             newImage.style.height = '100%';
             newImage.style.objectFit = 'cover';
             newImage.style.objectPosition = 'center';
+            newImage.style.margin = '0';
+            newImage.style.padding = '0';
             newImage.style.display = 'block';
+            newImage.style.verticalAlign = 'top';
           }
+
         },
         "error": function (status, error) {
           console.log('Error', status, error);
