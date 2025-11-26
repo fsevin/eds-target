@@ -371,7 +371,7 @@
         "valueType": "string"
       },
       {
-        "component": "text",
+        "component": "reference",
         "valueType": "string",
         "name": "url",
         "label": "Video URL"
