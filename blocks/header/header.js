@@ -1,4 +1,5 @@
 import { loadFragment } from '../fragment/fragment.js';
+import { readBlockConfig } from '../../scripts/aem.js';
 import { isAuthorMode, getPagePath, getIconPath, getCurrentLocale } from '../../scripts/utils.js';
 
 function switchLocale(targetLocale) {
@@ -64,6 +65,9 @@ function extractLoginModalData(fragment) {
 }
 
 export default async function decorate(block) {
+  const config = readBlockConfig(block);
+  console.log('Header config:', JSON.stringify(config));
+
   const headerPath = `/${getCurrentLocale()}/header`;
   const fragment = await loadFragment(headerPath);
 

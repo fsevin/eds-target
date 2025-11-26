@@ -82,7 +82,8 @@
                 "template": {
                   "name": "Menu",
                   "model": "menu",
-                  "filter": "menu"
+                  "filter": "menu",
+                  "key-value": true
                 }
               }
             }
