@@ -67,37 +67,7 @@ export function extractFieldFromBlock(block, fieldName) {
     if (firstDiv && firstDiv.textContent.trim().toLowerCase() === fieldName.toLowerCase()) {
       const contentDiv = row.querySelector('div:nth-child(2)');
       if (contentDiv) {
-        // Clone the content to avoid modifying the original
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = contentDiv.innerHTML;
-
-        // Apply Tailwind styles to standard HTML tags
-        tempDiv.querySelectorAll('h1').forEach(el => {
-          el.className = 'text-4xl md:text-5xl font-bold mb-4';
-        });
-        tempDiv.querySelectorAll('h2').forEach(el => {
-          el.className = 'text-3xl md:text-4xl font-bold mb-4';
-        });
-        tempDiv.querySelectorAll('h3').forEach(el => {
-          el.className = 'text-2xl md:text-3xl font-bold mb-3';
-        });
-        tempDiv.querySelectorAll('h4').forEach(el => {
-          el.className = 'text-xl md:text-2xl font-bold mb-3';
-        });
-        tempDiv.querySelectorAll('h5').forEach(el => {
-          el.className = 'text-lg md:text-xl font-bold mb-2';
-        });
-        tempDiv.querySelectorAll('h6').forEach(el => {
-          el.className = 'text-base md:text-lg font-bold mb-2';
-        });
-        tempDiv.querySelectorAll('p').forEach(el => {
-          el.className = 'mb-4 leading-relaxed';
-        });
-        tempDiv.querySelectorAll('strong, b').forEach(el => {
-          el.className = 'font-bold';
-        });
-
-        return tempDiv.innerHTML;
+        return contentDiv.innerHTML;
       }
     }
   }
