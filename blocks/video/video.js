@@ -67,7 +67,7 @@ export default function decorate(block) {
   `;
 
   const content = document.createRange().createContextualFragment(`
-    <section class="py-20 bg-white">
+    <section class="py-20 bg-gray-50">
       <div class="container mx-auto px-4">
         <div class="max-w-5xl mx-auto">
           <!-- Section Header -->
