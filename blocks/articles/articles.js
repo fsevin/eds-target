@@ -28,7 +28,7 @@ function extractArticlesFromBlock(block) {
   return articles;
 }
 
-function buildArticleCard(article) {
+function buildArticleCard(article, lastModifiedText) {
   const blockId = `article-${article.index}`;
 
   return `
@@ -49,7 +49,7 @@ function buildArticleCard(article) {
 
         <!-- Date -->
         ${article.lastModified ? `<div class="pt-4 border-t border-gray-200">
-          <p class="text-sm font-bold text-gray-900 mb-1">Last Modified</p>
+          <p class="text-sm font-bold text-gray-900 mb-1">${lastModifiedText}</p>
           <p class="text-sm text-gray-500">${article.lastModified}</p>
         </div>` : ''}
       </div>
@@ -59,6 +59,11 @@ function buildArticleCard(article) {
 
 export default async function decorate(block) {
   let articles = extractArticlesFromBlock(block);
+
+  // Fetch translations
+  const lang = getLanguageFromUrl();
+  const resultsText = await getTranslation('Results', lang);
+  const lastModifiedText = await getTranslation('Last Modified', lang);
 
   if (articles.length === 0) {
     const emptyContent = document.createRange().createContextualFragment(`
@@ -73,11 +78,7 @@ export default async function decorate(block) {
     return;
   }
 
-  // Fetch translation for "Results"
-  const lang = getLanguageFromUrl();
-  const resultsText = await getTranslation('Results', lang);
-
-  const articlesHTML = articles.map(article => buildArticleCard(article)).join('');
+  const articlesHTML = articles.map(article => buildArticleCard(article, lastModifiedText)).join('');
 
   const content = document.createRange().createContextualFragment(`
     <section class="py-20 bg-white">
