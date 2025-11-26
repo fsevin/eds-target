@@ -76,7 +76,7 @@ export default async function decorate(block) {
   const fragment = await loadFragment(headerPath);
 
   const currentLocale = getCurrentLocale();
-  const menuItems = extractMenuItems(fragment).filter(item => !item.path.includes('/home'));
+  const menuItems = extractMenuItems(fragment);
   const navigationHTML = buildNavigationHTML(menuItems);
   const loginModalData = extractLoginModalData(fragment);
   const content = document.createRange().createContextualFragment(`
