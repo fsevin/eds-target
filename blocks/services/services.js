@@ -5,7 +5,7 @@ export default async function decorate(block) {
   const config = readBlockConfig(block);
   const descriptionHTML = extractFieldFromBlock(block, 'description');
   const style = config.style || '';
-  const sectionClasses = style.includes('highlight') ? 'py-20 bg-gray-50' : 'py-20';
+  const sectionClasses = style.includes('highlight') ? 'py-20 bg-gray-50' : 'py-20 bg-white';
 
   const services = [
     {

@@ -9,7 +9,7 @@ export default function decorate(block) {
   const descriptionHTML = extractFieldFromBlock(block, 'description');
 
   const blockId = `teaser-${Math.random().toString(36).substr(2, 9)}`;
-  const sectionClasses = style.includes('highlight') ? 'py-20 bg-gray-50' : 'py-20';
+  const sectionClasses = style.includes('highlight') ? 'py-20 bg-gray-50' : 'py-20 bg-white';
 
   const content = document.createRange().createContextualFragment(`
     <section class="${sectionClasses}">
