@@ -72,12 +72,6 @@ function extractLoginModalData(fragment) {
 }
 
 export default async function decorate(block) {
-  // Return empty content in author mode
-  if (isAuthorMode) {
-    block.textContent = '';
-    return;
-  }
-
   const headerPath = `/${getCurrentLocale()}/header`;
   const fragment = await loadFragment(headerPath);
 
