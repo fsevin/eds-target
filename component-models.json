@@ -374,13 +374,13 @@
         "component": "reference",
         "valueType": "string",
         "name": "url",
-        "label": "Video URL"
+        "label": "Reference"
       },
       {
         "component": "boolean",
         "valueType": "boolean",
         "name": "autoplay",
-        "label": "Autoplay Video"
+        "label": "Autoplay"
       }
     ]
   },
