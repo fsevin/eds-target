@@ -375,6 +375,12 @@
         "valueType": "string",
         "name": "url",
         "label": "Video URL"
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "autoplay",
+        "label": "Autoplay Video"
       }
     ]
   },
