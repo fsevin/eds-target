@@ -1,0 +1,29 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    './blocks/**/*.{js,html}',
+    './scripts/**/*.js',
+    './head.html',
+    './nav.html',
+    './footer.html',
+  ],
+  theme: {
+    extend: {
+      colors: {
+        brand: {
+          50: '#e6f2f8',
+          100: '#cce5f1',
+          200: '#99cbe3',
+          300: '#66b1d5',
+          400: '#3397c7',
+          500: '#005285',
+          600: '#005285',
+          700: '#00426a',
+          800: '#003150',
+          900: '#002135'
+        }
+      }
+    }
+  },
+  plugins: [],
+}
