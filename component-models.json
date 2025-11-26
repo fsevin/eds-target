@@ -242,7 +242,7 @@
         "label": "Image Alt Text"
       },
       {
-        "component": "richtext",
+        "component": "text",
         "valueType": "string",
         "name": "title",
         "label": "Title"
@@ -342,7 +342,7 @@
     "id": "services",
     "fields": [
       {
-        "component": "richtext",
+        "component": "text",
         "valueType": "string",
         "name": "title",
         "label": "Title"
@@ -359,7 +359,7 @@
     "id": "video",
     "fields": [
       {
-        "component": "richtext",
+        "component": "text",
         "valueType": "string",
         "name": "title",
         "label": "Title"

@@ -1,9 +1,11 @@
 import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
-import { getSiteNameFromDAM } from '../../scripts/utils.js';
+import { getSiteNameFromDAM, extractFieldFromBlock } from '../../scripts/utils.js';
 
 export default function decorate(block) {
   const config = readBlockConfig(block);
   const picture = createOptimizedPicture(config.image, config.imagedescription);
+
+  const descriptionHTML = extractFieldFromBlock(block, 'description');
 
   const blockId = `teaser-${Math.random().toString(36).substr(2, 9)}`;
 
@@ -21,9 +23,9 @@ export default function decorate(block) {
             <h2 id="${blockId}-title" data-aue-label="Title" data-aue-prop="title" data-aue-type="text" class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
               ${config.title}
             </h2>
-            <p id="${blockId}-description" data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext" class="text-lg text-gray-600 leading-relaxed">
-              ${config.description}
-            </p>
+            <div id="${blockId}-description" data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext" class="text-lg text-gray-600 leading-relaxed">
+              ${descriptionHTML}
+            </div>
             <div>
               <a id="${blockId}-button" data-aue-label="Call to Action" data-aue-prop="buttonText" data-aue-type="text" href="${config.buttonlink}" class="inline-block px-8 py-4 bg-brand-600 text-white font-semibold rounded-lg hover:bg-brand-700 transition shadow-lg hover:shadow-xl">
                 ${config.buttontext}

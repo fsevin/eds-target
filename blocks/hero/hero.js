@@ -1,9 +1,10 @@
 import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
-import { getSiteNameFromDAM } from '../../scripts/utils.js';
+import { getSiteNameFromDAM, extractFieldFromBlock } from '../../scripts/utils.js';
 
 export default function decorate(block) {
   const config = readBlockConfig(block);
   const picture = createOptimizedPicture(config.image, config.imagedescription);
+  const descriptionHTML = extractFieldFromBlock(block, 'description');
 
   const blockId = `hero-${Math.random().toString(36).substr(2, 9)}`;
 
@@ -26,9 +27,9 @@ export default function decorate(block) {
           </h1>
 
           <!-- Description -->
-          <p id="${blockId}-description" data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext" class="text-lg md:text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
-            ${config.description}
-          </p>
+          <div id="${blockId}-description" data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext" class="text-lg md:text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
+            ${descriptionHTML}
+          </div>
 
           <!-- CTA Button -->
           <div class="flex items-center justify-center">

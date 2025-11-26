@@ -1,11 +1,11 @@
 import { readBlockConfig } from '../../scripts/aem.js';
+import { extractFieldFromBlock } from '../../scripts/utils.js';
 
 export default async function decorate(block) {
   const config = readBlockConfig(block);
 
   const dropboxMedia = config.dropboxmedia || '';
-  const description = config.description || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
-  const inverted = config.inverted === 'true' || config.inverted === true;
+  const descriptionHTML = extractFieldFromBlock(block, 'description');
 
   const imageSection = `
     <!-- Image Section (60% width) -->
@@ -23,9 +23,9 @@ export default async function decorate(block) {
   const contentSection = `
     <!-- Content Section (40% width) -->
     <div class="lg:col-span-2">
-      <p data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext" class="text-lg text-gray-600 leading-relaxed">
-        ${description}
-      </p>
+      <div data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext" class="text-lg text-gray-600 leading-relaxed">
+        ${descriptionHTML}
+      </div>
     </div>
   `;
 
@@ -33,7 +33,7 @@ export default async function decorate(block) {
     <section class="py-20 bg-gray-50">
       <div class="container mx-auto px-4">
         <div class="grid lg:grid-cols-5 gap-12 items-start">
-          ${inverted ? contentSection + imageSection : imageSection + contentSection}
+          ${config.inverted ? contentSection + imageSection : imageSection + contentSection}
         </div>
       </div>
     </section>
