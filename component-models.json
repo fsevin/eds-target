@@ -109,8 +109,33 @@
       {
         "component": "text",
         "valueType": "string",
-        "name": "title",
-        "label": "Title"
+        "name": "loginModalTitle",
+        "label": "Login Modal Title"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "loginModalUsernameLabel",
+        "label": "Login Modal Username Label"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "loginModalProfileTypeLabel",
+        "label": "Login Modal Profile Type Label"
+      },
+      {
+        "component": "text",
+        "valueType": "string[]",
+        "name": "loginModalProfileTypeOptions",
+        "label": "Login Modal Profile Type Options",
+        "multi": true
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "loginModalCancelButtonLabel",
+        "label": "Login Modal Cancel Button Label"
       }
     ]
   },
@@ -248,42 +273,6 @@
             "value": "hero-zone"
           }
         ]
-      }
-    ]
-  },
-  {
-    "id": "login-modal",
-    "fields": [
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "title",
-        "label": "Title"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "usernameLabel",
-        "label": "Username Label"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "profileTypeLabel",
-        "label": "Profile Type Label"
-      },
-      {
-        "component": "text",
-        "valueType": "string[]",
-        "name": "profileTypeOptions",
-        "label": "Profile Type Options",
-        "multi": true
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "cancelButtonLabel",
-        "label": "Cancel Button Label"
       }
     ]
   },
