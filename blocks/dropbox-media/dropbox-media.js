@@ -1,11 +1,8 @@
 import { readBlockConfig } from '../../scripts/aem.js';
-import { extractFieldFromBlock } from '../../scripts/utils.js';
 
 export default async function decorate(block) {
   const config = readBlockConfig(block);
-
   const dropboxMedia = config.dropboxmedia || '';
-  const descriptionHTML = extractFieldFromBlock(block, 'description');
 
   const imageSection = `
     <!-- Image Section (60% width) -->
@@ -23,8 +20,21 @@ export default async function decorate(block) {
   const contentSection = `
     <!-- Content Section (40% width) -->
     <div class="lg:col-span-2">
-      <div data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext" class="text-lg text-gray-600 leading-relaxed">
-        ${descriptionHTML}
+      <div data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext" class="text-lg text-gray-600 leading-relaxed space-y-8">
+        <div>
+          <h3 class="text-2xl font-bold text-black mb-3">Lorem Ipsum Dolor</h3>
+          <p class="text-gray-400">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        </div>
+
+        <div>
+          <h3 class="text-2xl font-bold text-black mb-3">Consectetur Adipiscing</h3>
+          <p class="text-gray-400">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
+        </div>
+
+        <div>
+          <h3 class="text-2xl font-bold text-black mb-3">Tempor Incididunt</h3>
+          <p class="text-gray-400">Lorem ipsum dolor sit amet, sed do eiusmod tempor incididunt consectetur adipiscing elit setim.</p>
+        </div>
       </div>
     </div>
   `;
