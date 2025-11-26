@@ -12,7 +12,7 @@ export default function decorate(block) {
       <div class="container mx-auto px-4">
         <div class="grid lg:grid-cols-2 gap-12 items-center">
           <!-- Image Section -->
-          <div id="${blockId}-image" class="relative rounded-2xl overflow-hidden shadow-2xl">
+          <div id="${blockId}-image" data-aue-label="Image" data-aue-prop="image" data-aue-type="media" class="relative rounded-2xl overflow-hidden shadow-2xl">
             ${picture.outerHTML}
           </div>
 
