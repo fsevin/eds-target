@@ -312,16 +312,42 @@
     "id": "products",
     "fields": [
       {
+        "component": "tab",
+        "label": "Fields",
+        "name": "fields"
+      },
+      {
         "component": "commerce-category",
         "name": "commerce-category",
         "label": "Commerce Category",
         "valueType": "string"
+      },
+      {
+        "component": "tab",
+        "label": "Layout",
+        "name": "layout"
+      },
+      {
+        "component": "multiselect",
+        "name": "style",
+        "label": "Style",
+        "options": [
+          {
+            "name": "Highlight",
+            "value": "highlight"
+          }
+        ]
       }
     ]
   },
   {
     "id": "search",
     "fields": [
+      {
+        "component": "tab",
+        "label": "Fields",
+        "name": "fields"
+      },
       {
         "component": "text",
         "valueType": "string",
@@ -340,6 +366,22 @@
         "name": "filters",
         "label": "Filters",
         "multi": true
+      },
+      {
+        "component": "tab",
+        "label": "Layout",
+        "name": "layout"
+      },
+      {
+        "component": "multiselect",
+        "name": "style",
+        "label": "Style",
+        "options": [
+          {
+            "name": "Highlight",
+            "value": "highlight"
+          }
+        ]
       }
     ]
   },
