@@ -3,6 +3,7 @@ import { readBlockConfig } from '../../scripts/aem.js';
 export default async function decorate(block) {
   const config = readBlockConfig(block);
   const dropboxMedia = config.dropboxmedia || '';
+  const inverted = config.inverted === 'true' || config.inverted === true;
 
   const imageSection = `
     <!-- Image Section (60% width) -->
@@ -43,7 +44,7 @@ export default async function decorate(block) {
     <section class="py-20 bg-gray-50">
       <div class="container mx-auto px-4">
         <div class="grid lg:grid-cols-5 gap-12 items-start">
-          ${config.inverted ? contentSection + imageSection : imageSection + contentSection}
+          ${inverted ? contentSection + imageSection : imageSection + contentSection}
         </div>
       </div>
     </section>
