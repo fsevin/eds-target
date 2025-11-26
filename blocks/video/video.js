@@ -72,15 +72,10 @@ export default function decorate(block) {
     <section class="py-20 bg-gray-50">
       <div class="container mx-auto px-4">
         <div class="max-w-5xl mx-auto">
-          <!-- Section Header -->
-          <div class="text-center mb-12">
-            <h2 data-aue-label="Title" data-aue-prop="title" data-aue-type="text" class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              ${config.title}
-            </h2>
-            <p data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext" class="text-lg text-gray-600 max-w-2xl mx-auto">
-              ${descriptionHTML}
-            </p>
-          </div>
+          <div class="text-center mb-16">
+          <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4" data-aue-label="Title" data-aue-prop="title" data-aue-type="text">${config.title}</h2>
+          <div class="text-xl text-gray-600 max-w-3xl mx-auto" data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext">${descriptionHTML}</div>
+        </div>
           ${videoContainerHTML}
         </div>
       </div>
