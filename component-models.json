@@ -72,17 +72,6 @@
         "name": "name",
         "label": "Section Name",
         "description": "The label shown for this section in the Content Tree"
-      },
-      {
-        "component": "multiselect",
-        "name": "style",
-        "label": "Style",
-        "options": [
-          {
-            "name": "Highlight",
-            "value": "highlight"
-          }
-        ]
       }
     ]
   },
@@ -282,6 +271,22 @@
           {
             "name": "Hero",
             "value": "hero-zone"
+          }
+        ]
+      },
+      {
+        "component": "tab",
+        "label": "Layout",
+        "name": "layout"
+      },
+      {
+        "component": "multiselect",
+        "name": "style",
+        "label": "Style",
+        "options": [
+          {
+            "name": "Highlight",
+            "value": "highlight"
           }
         ]
       }
