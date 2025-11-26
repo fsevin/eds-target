@@ -306,7 +306,24 @@
   },
   {
     "id": "articles",
-    "fields": []
+    "fields": [
+      {
+        "component": "tab",
+        "label": "Layout",
+        "name": "layout"
+      },
+      {
+        "component": "multiselect",
+        "name": "style",
+        "label": "Style",
+        "options": [
+          {
+            "name": "Highlight",
+            "value": "highlight"
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "products",
