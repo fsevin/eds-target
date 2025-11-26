@@ -26,9 +26,9 @@ export default function decorate(block) {
                 controls
                 preload="metadata"
                 data-aue-label="Video"
-                data-aue-prop="videourl"
+                data-aue-prop="url"
                 data-aue-type="text">
-                <source src="${config.videourl}" type="video/mp4">
+                <source src="${config.url}" type="video/mp4">
                 Your browser does not support the video tag.
               </video>
             </div>
