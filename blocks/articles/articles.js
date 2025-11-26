@@ -50,6 +50,7 @@ function buildArticleCard(article) {
 
         <!-- Date -->
         ${article.lastModified ? `<div class="pt-4 border-t border-gray-200">
+          <p class="text-sm font-bold text-gray-900 mb-1">Last Modified</p>
           <p class="text-sm text-gray-500">${article.lastModified}</p>
         </div>` : ''}
       </div>
