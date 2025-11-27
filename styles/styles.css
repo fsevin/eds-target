@@ -4,20 +4,13 @@ h1 {
   font-size: 3rem; /* text-5xl */
   font-weight: 700;
   line-height: 1.2;
-  color: #111827;
   padding: 1rem;
-}
-
-p {
-  font-size: 1.125rem; /* text-lg */
-  margin-bottom: 1rem;
-}   
+  background: linear-gradient(135deg, #003d63 0%, #005285 50%, #0067a7 100%);
+  color: #ffffff;
+}  
 
 @media (max-width: 768px) {
   h1 {
     font-size: 2.25rem; /* text-4xl on mobile */
-  }
-  p {
-    font-size: 1rem; /* text-base on mobile */
   }
 }
