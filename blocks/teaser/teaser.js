@@ -62,7 +62,21 @@ export default function decorate(block) {
   }
 
   if (config.offerzone) {
-    if (typeof adobe !== 'undefined' && adobe.target) {
+    alloy('sendEvent', {
+      decisionScopes: [config.offerzone],
+    }).then((result) => {
+      const { propositions } = result;
+      if (propositions) {
+        // Find the discount proposition, if it exists.
+        for (let i = 0; i < propositions.length; i += 1) {
+          const proposition = propositions[i];
+ 
+          const offerContent = proposition.items[0].data.content.data.offerByPath.item;
+          console.log('Offer Content:', offerContent);
+        }
+      }
+    });
+    /* if (typeof adobe !== 'undefined' && adobe.target) {
       handleOffer();
     } else {
       document.addEventListener('at-library-loaded', handleOffer);
@@ -119,6 +133,6 @@ export default function decorate(block) {
           console.log('Error', status, error);
         }
       });
-    }
+    } */
   }
 }
