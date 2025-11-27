@@ -8,8 +8,16 @@ h1 {
   padding: 1rem;
 }
 
+p {
+  font-size: 1.125rem; /* text-lg */
+  margin-bottom: 1rem;
+}   
+
 @media (max-width: 768px) {
   h1 {
     font-size: 2.25rem; /* text-4xl on mobile */
+  }
+  p {
+    font-size: 1rem; /* text-base on mobile */
   }
 }
