@@ -57,7 +57,7 @@ export default async function decorate(block) {
     );
     const searchTerm = searchInput.value;
     const filterText = activeFilter ? activeFilter.textContent : '';
-    const category = filterText.toUpperCase() === 'ALL' ? '' : filterText;
+    const category = (activeFilter && activeFilter === filterBtns[0]) ? '' : filterText;
 
     const event = new CustomEvent('search-filter-change', {
       detail: {
