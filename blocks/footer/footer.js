@@ -25,15 +25,15 @@ export default async function decorate(block) {
               Lorem ipsum dolor sit amet, consectetur adipiscing elit.
             </p>
             <p class="text-sm text-gray-400">
-              Lorem ipsum dolor sited Sed ullam corper consectur adipiscing Mae ornare massa quis lectus.
+              Lorem ipsum dolor sited sed ullam corper consectur adipiscing mae ornare massa quis lectus.
             </p>
           </div>
 
           <!-- Quick Links -->
           <div>
-            <h4 class="text-white font-semibold mb-4">Lorem Ipsum</h4>
+            <h4 class="text-white font-semibold mb-4">Lorem ipsum</h4>
             <ul class="space-y-2">
-              <li><a href="#" class="hover:text-brand-500 transition">Dolor Sit</a></li>
+              <li><a href="#" class="hover:text-brand-500 transition">Dolor sit</a></li>
               <li><a href="#" class="hover:text-brand-500 transition">Consectetur</a></li>
               <li><a href="#" class="hover:text-brand-500 transition">Adipiscing</a></li>
               <li><a href="#" class="hover:text-brand-500 transition">Tempor</a></li>
@@ -42,9 +42,9 @@ export default async function decorate(block) {
 
           <!-- Support -->
           <div>
-            <h4 class="text-white font-semibold mb-4">Labore Magna</h4>
+            <h4 class="text-white font-semibold mb-4">Labore magna</h4>
             <ul class="space-y-2">
-              <li><a href="#" class="hover:text-brand-500 transition">Veniam Quis</a></li>
+              <li><a href="#" class="hover:text-brand-500 transition">Veniam quis</a></li>
               <li><a href="#" class="hover:text-brand-500 transition">Nostrud</a></li>
               <li><a href="#" class="hover:text-brand-500 transition">Exercitation</a></li>
               <li><a href="#" class="hover:text-brand-500 transition">Ullamco</a></li>
@@ -53,7 +53,7 @@ export default async function decorate(block) {
 
           <!-- Newsletter -->
           <div>
-            <h4 class="text-white font-semibold mb-4">Aliqua Enim</h4>
+            <h4 class="text-white font-semibold mb-4">Aliqua enim</h4>
             <p class="mb-4 text-sm">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit.
             </p>

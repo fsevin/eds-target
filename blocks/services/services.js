@@ -14,7 +14,7 @@ export default async function decorate(block) {
         <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
         <line x1="12" y1="22.08" x2="12" y2="12"/>
       </svg>`,
-      title: 'Lorem Ipsum Dolor',
+      title: 'Lorem ipsum dolor',
       description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
     },
     {
@@ -23,7 +23,7 @@ export default async function decorate(block) {
         <path d="M2 17l10 5 10-5"/>
         <path d="M2 12l10 5 10-5"/>
       </svg>`,
-      title: 'Consectetur Adipiscing',
+      title: 'Consectetur adipiscing',
       description: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
     },
     {
@@ -31,7 +31,7 @@ export default async function decorate(block) {
         <circle cx="12" cy="12" r="10"/>
         <polyline points="12 6 12 12 16 14"/>
       </svg>`,
-      title: 'Sed Do Eiusmod',
+      title: 'Sed do eiusmod',
       description: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
     },
     {
@@ -40,21 +40,21 @@ export default async function decorate(block) {
         <line x1="9" y1="9" x2="15" y2="15"/>
         <line x1="15" y1="9" x2="9" y2="15"/>
       </svg>`,
-      title: 'Tempor Incididunt',
+      title: 'Tempor incididunt',
       description: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
     },
     {
       icon: `<svg class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
       </svg>`,
-      title: 'Magna Aliqua',
+      title: 'Magna aliqua',
       description: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium totam rem.'
     },
     {
       icon: `<svg class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
       </svg>`,
-      title: 'Quis Nostrud',
+      title: 'Quis nostrud',
       description: 'Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores.'
     }
   ];
