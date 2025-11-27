@@ -8,6 +8,7 @@
   {
     "id": "section",
     "components": [
+      "heading",
       "hero",
       "menu",
       "login-modal",
