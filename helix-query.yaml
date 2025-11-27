@@ -14,23 +14,17 @@ indices:
       robots:
         select: head > meta[name="robots"]
         value: attribute(el, "content")
-      title1:
+      title:
         select: head > meta[property="og:title"]
         value: |
           attribute(el, 'content')
-  navigation:
+  headings:
     include:
-      - '/pages/**'
+      - '/**'
     exclude:
       - '/**.json'
-    target: /navigation-index.json
+    target: /headings-index.json
     properties:
-      lastModified:
-        select: none
-        value: parseTimestamp(headers["last-modified"], "ddd, DD MMM YYYY hh:mm:ss GMT")
-      robots:
-        select: head > meta[name="robots"]
-        value: attribute(el, "content")
       title:
         select: head > meta[property="og:title"]
         value: |
