@@ -14,12 +14,8 @@ indices:
       robots:
         select: head > meta[name="robots"]
         value: attribute(el, "content")
-      title:
+      title1:
         select: head > meta[property="og:title"]
-        value: |
-          attribute(el, 'content')
-      description:
-        select: head > meta[property="og:description"]
         value: |
           attribute(el, 'content')
   navigation:
