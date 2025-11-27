@@ -1,13 +1,39 @@
 import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
 import { getSiteNameFromDAM, extractFieldFromBlock } from '../../scripts/utils.js';
 
+/**
+ * Apply optimized styling to image elements
+ * @param {Element} imageContainer The container element
+ */
+function applyImageStyling(imageContainer) {
+  const picture = imageContainer?.querySelector('picture');
+  const img = picture?.querySelector('img');
+
+  if (picture) {
+    Object.assign(picture.style, {
+      width: '100%',
+      height: '100%',
+      display: 'block',
+    });
+  }
+
+  if (img) {
+    Object.assign(img.style, {
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover',
+      objectPosition: 'center',
+      display: 'block',
+      margin: '0',
+    });
+  }
+}
+
 export default function decorate(block) {
   const config = readBlockConfig(block);
   const style = config.style || '';
   const picture = createOptimizedPicture(config.image, config.imagedescription);
-
   const descriptionHTML = extractFieldFromBlock(block, 'description');
-
   const blockId = `teaser-${Math.random().toString(36).substr(2, 9)}`;
   const sectionClasses = style.includes('highlight') ? 'py-20 bg-gray-50' : 'py-20 bg-white';
 
@@ -42,97 +68,49 @@ export default function decorate(block) {
   block.textContent = '';
   block.append(content);
 
-  // Apply image styling to fill container
-  const teaserPicture = document.querySelector(`#${blockId}-image picture`);
-  const teaserImage = document.querySelector(`#${blockId}-image picture img`);
+  // Apply initial image styling
+  const imageContainer = document.getElementById(`${blockId}-image`);
+  applyImageStyling(imageContainer);
 
-  if (teaserPicture) {
-    teaserPicture.style.width = '100%';
-    teaserPicture.style.height = '100%';
-    teaserPicture.style.display = 'block';
-  }
-
-  if (teaserImage) {
-    teaserImage.style.width = '100%';
-    teaserImage.style.height = '100%';
-    teaserImage.style.objectFit = 'cover';
-    teaserImage.style.objectPosition = 'center';
-    teaserImage.style.display = 'block';
-    teaserImage.style.margin = '0';
-  }
-
+  // Handle offer zone if configured
   if (config.offerzone) {
     alloy('sendEvent', {
       decisionScopes: [config.offerzone],
     }).then((result) => {
       const { propositions } = result;
-      if (propositions) {
-        // Find the discount proposition, if it exists.
-        for (let i = 0; i < propositions.length; i += 1) {
-          const proposition = propositions[i];
- 
-          const offerContent = proposition.items[0].data.content.data.offerByPath.item;
-          console.log('Offer Content:', offerContent);
+
+      propositions?.forEach((proposition) => {
+        const offerContent = proposition.items[0]?.data?.content?.data?.offerByPath?.item;
+        if (!offerContent) return;
+
+        // Update text content
+        const elements = {
+          title: document.getElementById(`${blockId}-title`),
+          description: document.getElementById(`${blockId}-description`),
+          button: document.getElementById(`${blockId}-button`),
+          image: document.getElementById(`${blockId}-image`),
+        };
+
+        if (elements.title) elements.title.innerHTML = offerContent.title;
+        if (elements.description) elements.description.innerHTML = offerContent.description.html;
+
+        if (elements.button) {
+          elements.button.innerHTML = offerContent.buttonText;
+          elements.button.href = offerContent.buttonLink._path;
         }
-      }
-    });
-    /* if (typeof adobe !== 'undefined' && adobe.target) {
-      handleOffer();
-    } else {
-      document.addEventListener('at-library-loaded', handleOffer);
-    }
 
-    function handleOffer() {
-      adobe.target.getOffer({
-        "mbox": config.offerzone,
-        "params": {
-          "logged": localStorage.getItem('logged'),
-          "profileType": localStorage.getItem('profileType')
-        },
-        "success": function (offer) {
-          if (!offer.length) return;
-
-          const offerContent = offer[0].content[0].data.offerByPath.item;
-
-          const titleElement = document.getElementById(`${blockId}-title`);
-          titleElement.innerHTML = offerContent.title;
-
-          const descriptionElement = document.getElementById(`${blockId}-description`);
-          descriptionElement.innerHTML = offerContent.description.html;
-
-          const buttonElement = document.getElementById(`${blockId}-button`);
-          buttonElement.innerHTML = offerContent.buttonText;
-          buttonElement.href = offerContent.buttonLink['_path'];
-
-          const imageElement = document.getElementById(`${blockId}-image`);
-          const imagePath = offerContent.image['_path'];
+        // Update image
+        if (elements.image && offerContent.image) {
+          const imagePath = offerContent.image._path;
           const siteName = getSiteNameFromDAM(imagePath);
-          const picture = createOptimizedPicture(imagePath.substring(`/content/dam/${siteName}`.length), offerContent.imageDescription);
-          imageElement.innerHTML = picture.outerHTML;
-
-          // Reapply image styling for the new image
-          const newPicture = imageElement.querySelector('picture');
-          const newImage = imageElement.querySelector('picture img');
-
-          if (newPicture) {
-            newPicture.style.width = '100%';
-            newPicture.style.height = '100%';
-            newPicture.style.display = 'block';
-          }
-
-          if (newImage) {
-            newImage.style.width = '100%';
-            newImage.style.height = '100%';
-            newImage.style.objectFit = 'cover';
-            newImage.style.objectPosition = 'center';
-            newImage.style.display = 'block';
-            newImage.style.margin = '0';
-          }
-        },
-        "error": function (status, error) {
-          console.log('Error', status, error);
+          const newPicture = createOptimizedPicture(
+            imagePath.substring(`/content/dam/${siteName}`.length),
+            offerContent.imageDescription
+          );
+          elements.image.innerHTML = newPicture.outerHTML;
+          applyImageStyling(elements.image);
         }
       });
-    } */
+    });
   }
 }

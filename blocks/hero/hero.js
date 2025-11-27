@@ -1,11 +1,49 @@
 import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
 import { getSiteNameFromDAM, extractFieldFromBlock } from '../../scripts/utils.js';
 
+/**
+ * Apply background image styling
+ * @param {Element} imageContainer The image container element
+ */
+function applyBackgroundImageStyling(imageContainer) {
+  if (!imageContainer) return;
+
+  imageContainer.style.overflow = 'hidden';
+
+  const picture = imageContainer.querySelector('picture');
+  const img = picture?.querySelector('img');
+
+  if (picture) {
+    Object.assign(picture.style, {
+      position: 'absolute',
+      top: '0',
+      left: '0',
+      width: '100%',
+      height: '100%',
+      margin: '0',
+      padding: '0',
+      display: 'block',
+    });
+  }
+
+  if (img) {
+    Object.assign(img.style, {
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover',
+      objectPosition: 'center',
+      margin: '0',
+      padding: '0',
+      display: 'block',
+      verticalAlign: 'top',
+    });
+  }
+}
+
 export default function decorate(block) {
   const config = readBlockConfig(block);
   const picture = createOptimizedPicture(config.image, config.imagedescription);
   const descriptionHTML = extractFieldFromBlock(block, 'description');
-
   const blockId = `hero-${Math.random().toString(36).substr(2, 9)}`;
 
   const content = document.createRange().createContextualFragment(`
@@ -45,101 +83,50 @@ export default function decorate(block) {
   block.textContent = '';
   block.append(content);
 
-  // Apply background-like styling to the image
+  // Apply initial background image styling
   const imageContainer = document.getElementById(`${blockId}-image`);
-  if (imageContainer) {
-    imageContainer.style.overflow = 'hidden';
-  }
+  applyBackgroundImageStyling(imageContainer);
 
-  const heroPicture = document.querySelector(`#${blockId}-image picture`);
-  if (heroPicture) {
-    heroPicture.style.position = 'absolute';
-    heroPicture.style.top = '0';
-    heroPicture.style.left = '0';
-    heroPicture.style.width = '100%';
-    heroPicture.style.height = '100%';
-    heroPicture.style.margin = '0';
-    heroPicture.style.padding = '0';
-    heroPicture.style.display = 'block';
-  }
-
-  const heroImage = document.querySelector(`#${blockId}-image picture img`);
-  if (heroImage) {
-    heroImage.style.width = '100%';
-    heroImage.style.height = '100%';
-    heroImage.style.objectFit = 'cover';
-    heroImage.style.objectPosition = 'center';
-    heroImage.style.margin = '0';
-    heroImage.style.padding = '0';
-    heroImage.style.display = 'block';
-    heroImage.style.verticalAlign = 'top';
-  }
-
+  // Handle offer zone if configured
   if (config.offerzone) {
-    if (typeof adobe !== 'undefined' && adobe.target) {
-      handleOffer();
-    } else {
-      document.addEventListener('at-library-loaded', handleOffer);
-    }
+    alloy('sendEvent', {
+      decisionScopes: [config.offerzone],
+    }).then((result) => {
+      const { propositions } = result;
 
-    function handleOffer() {
-      adobe.target.getOffer({
-        "mbox": config.offerzone,
-        "params": {
-          "logged": localStorage.getItem('logged'),
-          "profileType": localStorage.getItem('profileType')
-        },
-        "success": function (offer) {
-          if (!offer.length) return;
+      propositions?.forEach((proposition) => {
+        const offerContent = proposition.items[0]?.data?.content?.data?.offerByPath?.item;
+        if (!offerContent) return;
 
-          const offerContent = offer[0].content[0].data.offerByPath.item;
+        // Cache element references
+        const elements = {
+          title: document.getElementById(`${blockId}-title`),
+          description: document.getElementById(`${blockId}-description`),
+          button: document.getElementById(`${blockId}-button`),
+          image: document.getElementById(`${blockId}-image`),
+        };
 
-          const titleElement = document.getElementById(`${blockId}-title`);
-          titleElement.innerHTML = offerContent.title;
+        // Update text content
+        if (elements.title) elements.title.innerHTML = offerContent.title;
+        if (elements.description) elements.description.innerHTML = offerContent.description.html;
 
-          const descriptionElement = document.getElementById(`${blockId}-description`);
-          descriptionElement.innerHTML = offerContent.description.html;
+        if (elements.button) {
+          elements.button.innerHTML = offerContent.buttonText;
+          elements.button.href = offerContent.buttonLink._path;
+        }
 
-          const buttonElement = document.getElementById(`${blockId}-button`);
-          buttonElement.innerHTML = offerContent.buttonText;
-          buttonElement.href = offerContent.buttonLink['_path'];
-
-          const imageElement = document.getElementById(`${blockId}-image`);
-          const imagePath = offerContent.image['_path'];
+        // Update background image
+        if (elements.image && offerContent.image) {
+          const imagePath = offerContent.image._path;
           const siteName = getSiteNameFromDAM(imagePath);
-          const picture = createOptimizedPicture(imagePath.substring(`/content/dam/${siteName}`.length), offerContent.imageDescription);
-          imageElement.innerHTML = picture.outerHTML;
-
-          // Reapply background-like styling for the new image
-          const newPicture = imageElement.querySelector('picture');
-          if (newPicture) {
-            newPicture.style.position = 'absolute';
-            newPicture.style.top = '0';
-            newPicture.style.left = '0';
-            newPicture.style.width = '100%';
-            newPicture.style.height = '100%';
-            newPicture.style.margin = '0';
-            newPicture.style.padding = '0';
-            newPicture.style.display = 'block';
-          }
-
-          const newImage = imageElement.querySelector('picture img');
-          if (newImage) {
-            newImage.style.width = '100%';
-            newImage.style.height = '100%';
-            newImage.style.objectFit = 'cover';
-            newImage.style.objectPosition = 'center';
-            newImage.style.margin = '0';
-            newImage.style.padding = '0';
-            newImage.style.display = 'block';
-            newImage.style.verticalAlign = 'top';
-          }
-
-        },
-        "error": function (status, error) {
-          console.log('Error', status, error);
+          const newPicture = createOptimizedPicture(
+            imagePath.substring(`/content/dam/${siteName}`.length),
+            offerContent.imageDescription
+          );
+          elements.image.innerHTML = newPicture.outerHTML;
+          applyBackgroundImageStyling(elements.image);
         }
       });
-    }
+    });
   }
 }
