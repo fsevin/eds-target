@@ -1,0 +1,15 @@
+/* Global H1 Styles */
+h1 {
+  text-align: center;
+  font-size: 3rem; /* text-5xl */
+  font-weight: 700;
+  line-height: 1.2;
+  color: #111827;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2.25rem; /* text-4xl on mobile */
+  }
+}
