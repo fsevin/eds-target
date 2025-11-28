@@ -50,31 +50,6 @@ export default async function decorate(block) {
   // Extract services
   let services = extractServices(block);
 
-  // Add placeholder services if none exist
-  if (services.length === 0) {
-    const serviceIconKeys = Object.keys(SERVICE_ICONS);
-    services = [
-      {
-        icon: SERVICE_ICONS[serviceIconKeys[0]],
-        text: 'Service 1',
-        description: 'Add your service description here.',
-        attributes: {}
-      },
-      {
-        icon: SERVICE_ICONS[serviceIconKeys[1]],
-        text: 'Service 2',
-        description: 'Add your service description here.',
-        attributes: {}
-      },
-      {
-        icon: SERVICE_ICONS[serviceIconKeys[2]],
-        text: 'Service 3',
-        description: 'Add your service description here.',
-        attributes: {}
-      }
-    ];
-  }
-
   // Build service cards HTML
   const servicesHTML = services.map(service => {
     // Convert attributes object to HTML attribute string
