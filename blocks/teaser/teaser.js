@@ -1,5 +1,5 @@
 import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
-import { getSiteNameFromDAM, extractFieldFromBlock } from '../../scripts/utils.js';
+import { getSiteNameFromDAM, extractFieldFromBlock, createPlaceholderSVG } from '../../scripts/utils.js';
 
 /**
  * Apply optimized styling to image elements
@@ -44,18 +44,7 @@ export default function decorate(block) {
     const picture = createOptimizedPicture(image, imagedescription);
     pictureHTML = picture.outerHTML;
   } else {
-    // Embedded SVG placeholder
-    pictureHTML = `
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" class="w-full h-full">
-        <rect width="800" height="600" fill="#e5e7eb"/>
-        <g transform="translate(400, 300)">
-          <svg xmlns="http://www.w3.org/2000/svg" x="-40" y="-40" width="80" height="80" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#9ca3af">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/>
-          </svg>
-        </g>
-        <text x="400" y="350" text-anchor="middle" fill="#9ca3af" font-family="system-ui, -apple-system, sans-serif" font-size="16">Add Image</text>
-      </svg>
-    `;
+    pictureHTML = createPlaceholderSVG('image', '4:3');
   }
 
   const descriptionHTML = extractFieldFromBlock(block, 'description') || '<p>Add your teaser description here.</p>';

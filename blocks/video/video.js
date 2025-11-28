@@ -1,5 +1,5 @@
 import { readBlockConfig } from '../../scripts/aem.js';
-import { extractFieldFromBlock } from '../../scripts/utils.js';
+import { extractFieldFromBlock, createPlaceholderSVG } from '../../scripts/utils.js';
 
 export default function decorate(block) {
   const config = readBlockConfig(block);
@@ -21,15 +21,7 @@ export default function decorate(block) {
     <!-- Video Placeholder -->
     <div class="relative rounded-lg overflow-hidden shadow-2xl">
       <div class="aspect-video bg-gray-900 relative">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" class="w-full h-full">
-          <rect width="800" height="450" fill="#e5e7eb"/>
-          <g transform="translate(400, 225)">
-            <svg xmlns="http://www.w3.org/2000/svg" x="-40" y="-40" width="80" height="80" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#9ca3af">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z"/>
-            </svg>
-          </g>
-          <text x="400" y="275" text-anchor="middle" fill="#9ca3af" font-family="system-ui, -apple-system, sans-serif" font-size="16">Add Video URL</text>
-        </svg>
+        ${createPlaceholderSVG('video', '16:9')}
       </div>
     </div>
   ` : shouldAutoplay ? `
