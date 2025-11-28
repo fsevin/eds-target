@@ -194,7 +194,8 @@
                 "template": {
                   "name": "Services",
                   "model": "services",
-                  "filter": "services"
+                  "filter": "services",
+                  "key-value": true
                 }
               }
             }
