@@ -3,19 +3,36 @@ import { extractFieldFromBlock } from '../../scripts/utils.js';
 
 export default function decorate(block) {
   const config = readBlockConfig(block);
-  const videoURL = config.url.split('/as/')[0];
-  const videoThumbnail = config.url.split('/play/')[0];
+  const title = config.title || 'Video Title';
+  const videoUrl = config.url || '';
+  const videoURL = videoUrl ? videoUrl.split('/as/')[0] : '';
+  const videoThumbnail = videoUrl ? videoUrl.split('/play/')[0] : '';
 
   // Build video URL with optional autoplay
   const shouldAutoplay = config.autoplay === 'true';
   const autoplayParams = shouldAutoplay ? '?autoplay=1&muted=1' : '';
-  const finalVideoURL = `${videoURL}${autoplayParams}`;
+  const finalVideoURL = videoURL ? `${videoURL}${autoplayParams}` : '';
 
-  const descriptionHTML = extractFieldFromBlock(block, 'description');
+  const descriptionHTML = extractFieldFromBlock(block, 'description') || '<p>Add your video description here.</p>';
   const style = config.style || '';
   const sectionClasses = style.includes('highlight') ? 'py-20 bg-gray-50' : 'py-20 bg-white';
 
-  const videoContainerHTML = shouldAutoplay ? `
+  const videoContainerHTML = !videoUrl ? `
+    <!-- Video Placeholder -->
+    <div class="relative rounded-lg overflow-hidden shadow-2xl">
+      <div class="aspect-video bg-gray-900 relative">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" class="w-full h-full">
+          <rect width="800" height="450" fill="#e5e7eb"/>
+          <g transform="translate(400, 225)">
+            <svg xmlns="http://www.w3.org/2000/svg" x="-40" y="-40" width="80" height="80" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#9ca3af">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z"/>
+            </svg>
+          </g>
+          <text x="400" y="275" text-anchor="middle" fill="#9ca3af" font-family="system-ui, -apple-system, sans-serif" font-size="16">Add Video URL</text>
+        </svg>
+      </div>
+    </div>
+  ` : shouldAutoplay ? `
     <!-- Video Container with Autoplay -->
     <div class="relative rounded-lg overflow-hidden shadow-2xl">
       <div class="aspect-video bg-gray-900">
@@ -75,7 +92,7 @@ export default function decorate(block) {
       <div class="container mx-auto px-4">
         <div class="max-w-5xl mx-auto">
           <div class="text-center mb-16">
-          <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4" data-aue-label="Title" data-aue-prop="title" data-aue-type="text">${config.title}</h2>
+          <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4" data-aue-label="Title" data-aue-prop="title" data-aue-type="text">${title}</h2>
           <div class="text-xl text-gray-600 max-w-3xl mx-auto" data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext">${descriptionHTML}</div>
         </div>
           ${videoContainerHTML}
