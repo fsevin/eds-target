@@ -76,7 +76,7 @@ export default async function decorate(block) {
   const services = extractServices(block);
 
   const servicesHTML = services.map(service => `
-    <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300" data-aue-type="container" data-aue-model="service-item">
+    <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300" data-aue-type="component" data-aue-model="service-item" data-aue-label="Service Item">
       <div class="text-brand-600 mb-4">
         ${service.icon}
       </div>
@@ -87,7 +87,7 @@ export default async function decorate(block) {
 
   const content = document.createRange().createContextualFragment(`
     <section class="${sectionClasses}">
-      <div class="container mx-auto px-4" data-aue-type="container" data-aue-behavior="component" data-aue-model="services" data-aue-label="Services" data-aue-filter="services">
+      <div class="container mx-auto px-4">
         <!-- Section Header -->
         <div class="text-center mb-16">
           <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4" data-aue-label="Title" data-aue-prop="title" data-aue-type="text">${config.title}</h2>
@@ -95,7 +95,7 @@ export default async function decorate(block) {
         </div>
 
         <!-- Services Grid -->
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" data-aue-type="component" data-aue-model="service-item" data-aue-label="Service Item">
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           ${servicesHTML}
         </div>
       </div>
