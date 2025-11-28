@@ -33,37 +33,41 @@ function extractServices(block) {
   const rows = [...block.children];
   const services = [];
 
-  // Skip first three rows (title, description, style), process from fourth row onwards
-  for (let i = 3; i < rows.length; i += 1) {
-    const row = rows[i];
-    const cells = [...row.children];
+  // Iterate through all rows and extract service items
+  rows.forEach(row => {
+    // Check if this is a service item row
+    if (row.getAttribute('class') === 'services') {
+      const cells = [...row.children];
 
-    if (cells.length >= 2) {
-      const iconValue = cells[0]?.textContent?.trim().toLowerCase() || '';
-      const text = cells[1]?.textContent?.trim() || '';
-      const description = cells[2]?.textContent?.trim() || '';
+      // Service items have 3 cells: icon value, text, description
+      if (cells.length >= 3) {
+        const iconValue = cells[0]?.textContent?.trim().toLowerCase() || '';
+        const text = cells[1]?.textContent?.trim() || '';
+        const description = cells[2]?.textContent?.trim() || '';
 
-      if (text && description) {
-        // Get icon from config if available
-        const icon = (iconValue && ICON_MAP[iconValue]) ? ICON_MAP[iconValue] : '';
+        // Only add service if text and description are present
+        if (text && description) {
+          // Get icon from config if available
+          const icon = (iconValue && ICON_MAP[iconValue]) ? ICON_MAP[iconValue] : '';
 
-        // Extract all data-aue-* attributes dynamically from row element
-        const attributes = {};
-        Array.from(row.attributes).forEach(attr => {
-          if (attr.name.startsWith('data-aue-')) {
-            attributes[attr.name] = attr.value;
-          }
-        });
+          // Extract all data-aue-* attributes dynamically from row element
+          const attributes = {};
+          Array.from(row.attributes).forEach(attr => {
+            if (attr.name.startsWith('data-aue-')) {
+              attributes[attr.name] = attr.value;
+            }
+          });
 
-        services.push({
-          icon,
-          text,
-          description,
-          attributes,
-        });
+          services.push({
+            icon,
+            text,
+            description,
+            attributes,
+          });
+        }
       }
     }
-  }
+  });
 
   return services;
 }
