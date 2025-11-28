@@ -103,43 +103,11 @@ export default async function decorate(block) {
     </section>
   `);*/
 
-  console.log('services block decorated', block);
-
-
-  var element = document.createElement('div');
-  element.innerHTML = `
-        <div>
-         <div>
-            <p>title</p>
-         </div>
-         <div>
-            <p>t</p>
-         </div>
-      </div>
-      <div>
-         <div>
-            <p>description</p>
-         </div>
-         <div>
-            <p>d</p>
-         </div>
-      </div>
-      <div data-aue-resource="urn:aemconnection:/content/3ds/us/en/pages/support/jcr:content/root/section/block_450104975/item" data-aue-type="component" data-aue-model="service-item" data-aue-label="Service Item">
-         <div>
-            <p>ideas</p>
-         </div>
-         <div>
-            <p>t1</p>
-         </div>
-         <div>
-            <p>d1</p>
-         </div>
-      </div>
-   </div>
-    `;
+  console.log(block);
 
 
   
-  //block.textContent = '';
-  //block.append(element);
+  
+  block.textContent = '';
+  block.append(element);
 }
