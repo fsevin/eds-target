@@ -9,7 +9,7 @@ export default async function decorate(block) {
 
 
   const headingHTML = `
-    <div class="w-full py-12 md:py-16 px-4">
+    <section class="w-full py-12 md:py-16 px-4 bg-white">
       <div class="container mx-auto max-w-7xl flex items-center min-h-[120px]">
         <div>
           <h1 class="text-3xl md:text-4xl font-bold text-black mb-4 text-left !p-0">
@@ -20,7 +20,7 @@ export default async function decorate(block) {
           </p>
         </div>
       </div>
-    </div>
+    </section>
   `;
 
   const content = document.createRange().createContextualFragment(headingHTML);
