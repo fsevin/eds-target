@@ -116,5 +116,5 @@ export default async function decorate(block) {
 
   
   block.textContent = '';
-  block.append(title);
+  block.append(titleElement);
 }
