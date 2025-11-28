@@ -76,7 +76,7 @@ export default async function decorate(block) {
   const services = extractServices(block);
 
   const servicesHTML = services.map(service => `
-    <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+    <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300" data-aue-type="container" data-aue-model="service-item">
       <div class="text-brand-600 mb-4">
         ${service.icon}
       </div>
