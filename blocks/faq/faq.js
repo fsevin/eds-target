@@ -50,7 +50,7 @@ export default async function decorate(block) {
       .join(' ');
 
     return `
-    <div class="border-b border-gray-200 last:border-b-0 py-6 px-8" ${attributesStr}>
+    <div class="bg-white rounded-xl shadow-lg p-8 mb-6 last:mb-0" ${attributesStr}>
       <h3 class="text-lg font-semibold text-gray-900 mb-3" data-aue-prop="question" data-aue-type="text" data-aue-label="Question">
         ${faq.question}
       </h3>
@@ -76,7 +76,7 @@ export default async function decorate(block) {
         </div>
 
         <!-- FAQ List -->
-        <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-lg">
+        <div class="max-w-3xl mx-auto">
           ${faqsHTML}
         </div>
       </div>
