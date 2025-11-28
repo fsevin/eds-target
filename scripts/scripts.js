@@ -14,7 +14,6 @@ import {
 
 import {
   initMartech,
-  updateUserConsent,
   martechEager,
   martechLazy,
   martechDelayed,
@@ -133,9 +132,9 @@ async function loadEager(doc) {
     decorateMain(main);
     document.body.classList.add('appear');
     await Promise.all([
-    martechLoadedPromise.then(martechEager),
-    loadSection(main.querySelector('.section'), waitForFirstImage),
-  ]);
+      martechLoadedPromise.then(martechEager),
+      loadSection(main.querySelector('.section'), waitForFirstImage),
+    ]);
   }
 
   try {
