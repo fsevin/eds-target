@@ -331,21 +331,6 @@
         "valueType": "string"
       },
       {
-        "component": "container",
-        "name": "test",
-        "label": "Multi Text",
-        "multi": true,
-        "fields": [
-          {
-            "component": "text",
-            "name": "text",
-            "label": "Sample Text",
-            "valueType": "string"
-          }
-        ]
-      }
-      ,
-      {
         "component": "tab",
         "label": "Layout",
         "name": "layout"
