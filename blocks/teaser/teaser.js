@@ -32,7 +32,12 @@ function applyImageStyling(imageContainer) {
 export default function decorate(block) {
   const config = readBlockConfig(block);
   const style = config.style || '';
-  const picture = createOptimizedPicture(config.image, config.imagedescription);
+  const title = config.title || '';
+  const image = config.image || '';
+  const imagedescription = config.imagedescription || '';
+  const buttonlink = config.buttonlink || '';
+  const buttontext = config.buttontext || '';
+  const picture = createOptimizedPicture(image, imagedescription);
   const descriptionHTML = extractFieldFromBlock(block, 'description');
   const blockId = `teaser-${Math.random().toString(36).substr(2, 9)}`;
   const sectionClasses = style.includes('highlight') ? 'py-20 bg-gray-50' : 'py-20 bg-white';
@@ -49,14 +54,14 @@ export default function decorate(block) {
           <!-- Content Section (40% width) -->
           <div class="space-y-6 lg:col-span-2">
             <h2 id="${blockId}-title" data-aue-label="Title" data-aue-prop="title" data-aue-type="text" class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
-              ${config.title}
+              ${title}
             </h2>
             <div id="${blockId}-description" data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext" class="text-lg text-gray-600 leading-relaxed">
               ${descriptionHTML}
             </div>
             <div>
-              <a id="${blockId}-button" data-aue-label="Call to Action" data-aue-prop="buttonText" data-aue-type="text" href="${config.buttonlink}" class="inline-block px-8 py-4 bg-brand-600 text-white font-semibold rounded-2xl hover:bg-brand-700 transition shadow-lg hover:shadow-xl">
-                ${config.buttontext}
+              <a id="${blockId}-button" data-aue-label="Call to Action" data-aue-prop="buttonText" data-aue-type="text" href="${buttonlink}" class="inline-block px-8 py-4 bg-brand-600 text-white font-semibold rounded-2xl hover:bg-brand-700 transition shadow-lg hover:shadow-xl">
+                ${buttontext}
               </a>
             </div>
           </div>
