@@ -41,25 +41,25 @@ function extractServices(block) {
     const text = cells[1]?.textContent?.trim() || '';
     const description = cells[2]?.textContent?.trim() || '';
 
-    if (text && description) {
-      // Get icon from config if available
-      const icon = (iconValue && ICON_MAP[iconValue]) ? ICON_MAP[iconValue] : '';
 
-      // Extract all data-aue-* attributes dynamically from row element
-      const attributes = {};
-      Array.from(row.attributes).forEach(attr => {
-        if (attr.name.startsWith('data-aue-')) {
-          attributes[attr.name] = attr.value;
-        }
-      });
+    // Get icon from config if available
+    const icon = (iconValue && ICON_MAP[iconValue]) ? ICON_MAP[iconValue] : '';
 
-      services.push({
-        icon,
-        text,
-        description,
-        attributes,
-      });
-    }
+    // Extract all data-aue-* attributes dynamically from row element
+    const attributes = {};
+    Array.from(row.attributes).forEach(attr => {
+      if (attr.name.startsWith('data-aue-')) {
+        attributes[attr.name] = attr.value;
+      }
+    });
+
+    services.push({
+      icon,
+      text,
+      description,
+      attributes,
+    });
+    
   }
 
   return services;
