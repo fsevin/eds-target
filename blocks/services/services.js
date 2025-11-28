@@ -69,8 +69,8 @@ export default async function decorate(block) {
   const rows = [...block.children];
 
   // Extract data from block
-  const title = rows[0]?.querySelector('p')?.textContent?.trim() || '';
-  const description = rows[1]?.querySelector('p')?.textContent?.trim() || '';
+  const title = rows[0]?.querySelector('p')?.textContent?.trim();
+  const description = rows[1]?.querySelector('p')?.textContent?.trim();
   const styleValue = rows[2]?.querySelector('p')?.textContent?.trim().toLowerCase() || '';
 
   // Determine background class based on style
