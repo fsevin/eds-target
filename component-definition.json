@@ -35,8 +35,7 @@
                 "template": {
                   "name": "FAQ",
                   "filter": "faq",
-                  "model": "title-and-description",
-                  "key-value": true
+                  "model": "title-and-description"
                 }
               }
             }
