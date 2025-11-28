@@ -103,6 +103,8 @@ export default async function decorate(block) {
     </section>
   `);*/
 
+  console.log('services block decorated', block);
+
 
   var element = document.createElement('div');
   element.innerHTML = `
