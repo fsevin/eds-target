@@ -1,3 +1,4 @@
+import { readBlockConfig } from '../../scripts/aem.js';
 /**
  * Icon mapping configuration - Using Heroicons
  * @see https://heroicons.com/
@@ -68,12 +69,11 @@ function extractServices(block) {
 }
 
 export default async function decorate(block) {
-  const rows = [...block.children];
+  const config = readBlockConfig(block);
 
-  // Extract data from block
-  const title = rows[0]?.querySelector('p')?.textContent?.trim() || '';
-  const description = rows[1]?.querySelector('p')?.textContent?.trim() || '';
-  const styleValue = rows[2]?.querySelector('p')?.textContent?.trim().toLowerCase() || '';
+  const title = config.title || '';
+  const description = config.description || '';
+  const styleValue = config.style ? config.style.toLowerCase() : '';
 
   // Determine background class based on style
   const sectionClasses = styleValue.includes('highlight') ? 'bg-gray-50' : 'bg-white';
