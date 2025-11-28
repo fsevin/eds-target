@@ -8,17 +8,19 @@ function extractArticlesFromBlock(block) {
     const children = articleDiv.querySelectorAll(':scope > div');
 
     if (children.length >= 4) {
-      const title = children[0]?.querySelector('p')?.textContent.trim() || '';
-      const category = children[1]?.querySelector('p')?.textContent.trim() || '';
-      const description = children[2]?.querySelector('p')?.textContent.trim() || '';     
-      const lastModified = children[3]?.querySelector('p')?.textContent.trim() || '';
-      const picture = children[4]?.querySelector('picture');
+      const category = children[0]?.querySelector('p')?.textContent.trim() || '';
+      const title = children[1]?.querySelector('p')?.textContent.trim() || '';
+      const description = children[2]?.querySelector('p')?.textContent.trim() || '';  
+      const lastModifiedLabel = children[3]?.querySelector('p')?.textContent.trim() || '';   
+      const lastModified = children[4]?.querySelector('p')?.textContent.trim() || '';
+      const picture = children[5]?.querySelector('picture');
 
       articles.push({
         title,
         category,
         description,
         picture: picture ? picture.outerHTML : '',
+        lastModifiedLabel,
         lastModified,
         index
       });
@@ -28,7 +30,7 @@ function extractArticlesFromBlock(block) {
   return articles;
 }
 
-function buildArticleCard(article, lastModifiedText) {
+function buildArticleCard(article) {
   const blockId = `article-${article.index}`;
 
   return `
@@ -49,7 +51,7 @@ function buildArticleCard(article, lastModifiedText) {
 
         <!-- Date -->
         ${article.lastModified ? `<div class="pt-4 border-t border-gray-200">
-          <p class="text-sm font-bold text-gray-900 mb-1">${lastModifiedText}</p>
+          <p class="text-sm font-bold text-gray-900 mb-1">${article.lastModifiedLabel}</p>
           <p class="text-sm text-gray-500">${article.lastModified}</p>
         </div>` : ''}
       </div>
@@ -63,7 +65,6 @@ export default async function decorate(block) {
   // Fetch translations
   const lang = getLanguageFromUrl();
   const resultsText = await getTranslation('Results', lang);
-  const lastModifiedText = await getTranslation('Last Modified', lang);
 
   if (articles.length === 0) {
     const emptyContent = document.createRange().createContextualFragment(`
@@ -78,7 +79,7 @@ export default async function decorate(block) {
     return;
   }
 
-  const articlesHTML = articles.map(article => buildArticleCard(article, lastModifiedText)).join('');
+  const articlesHTML = articles.map(article => buildArticleCard(article)).join('');
 
   const content = document.createRange().createContextualFragment(`
     <section class="py-20 bg-white">

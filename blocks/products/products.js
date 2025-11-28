@@ -16,10 +16,12 @@ function extractProductsFromBlock(block) {
       const priceElement = children[3]?.querySelector('p');
       const price = priceElement ? priceElement.textContent.trim() : children[3]?.textContent.trim() || '';
 
+      const viewDetailsLabel = children[4]?.querySelector('p')?.textContent.trim() || '';
+
       // Picture can be direct <picture> or wrapped in <p>
-      let picture = children[4]?.querySelector('picture');
+      let picture = children[5]?.querySelector('picture');
       if (!picture) {
-        const pictureWrapper = children[4]?.querySelector('p');
+        const pictureWrapper = children[5]?.querySelector('p');
         picture = pictureWrapper?.querySelector('picture');
       }
 
@@ -28,6 +30,7 @@ function extractProductsFromBlock(block) {
         sku,
         description,
         price,
+        viewDetailsLabel,
         picture: picture ? picture.outerHTML : '',
         index
       });
@@ -50,7 +53,7 @@ function buildProductCard(product) {
         ${product.description ? `<p id="${blockId}-description" class="text-gray-600 leading-relaxed mb-4 flex-grow">${product.description}</p>` : ''}
         <div class="flex items-center justify-between pt-4 border-t border-gray-200">
           <span id="${blockId}-price" class="text-2xl font-bold text-brand-600">${product.price}</span>
-          <button class="px-6 py-3 bg-brand-600 text-white font-semibold rounded-lg hover:bg-brand-700 transition shadow-md hover:shadow-lg" data-sku="${product.sku}">View Details</button>
+          <button class="px-6 py-3 bg-brand-600 text-white font-semibold rounded-lg hover:bg-brand-700 transition shadow-md hover:shadow-lg" data-sku="${product.sku}">${product.viewDetailsLabel}</button>
         </div>
       </div>
     </div>
