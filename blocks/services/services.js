@@ -10,12 +10,11 @@ function extractServices(block) {
     const cells = [...row.children];
 
     const iconValue = cells[0]?.textContent?.trim().toLowerCase() || '';
-    const text = cells[1]?.textContent?.trim() || '';
-    const description = cells[2]?.textContent?.trim() || '';
+    const text = cells[1]?.textContent?.trim() || 'Service Title';
+    const description = cells[2]?.textContent?.trim() || 'Add your service description here.';
 
-
-    // Get icon from config if available
-    const icon = (iconValue && SERVICE_ICONS[iconValue]) ? SERVICE_ICONS[iconValue] : '';
+    // Get icon from config if available, otherwise use default 'ideas' icon
+    const icon = (iconValue && SERVICE_ICONS[iconValue]) ? SERVICE_ICONS[iconValue] : SERVICE_ICONS['ideas'];
 
     // Extract all data-aue-* attributes dynamically from row element
     const attributes = {};
@@ -31,7 +30,7 @@ function extractServices(block) {
       description,
       attributes,
     });
-    
+
   }
 
   return services;
@@ -40,16 +39,41 @@ function extractServices(block) {
 export default async function decorate(block) {
   const rows = [...block.children];
 
-  // Extract data from block
-  const title = rows[0]?.querySelector('p')?.textContent?.trim() || '';
-  const description = rows[1]?.querySelector('p')?.innerHTML || '';
+  // Extract data from block with placeholders
+  const title = rows[0]?.querySelector('p')?.textContent?.trim() || 'Our Services';
+  const description = rows[1]?.querySelector('p')?.innerHTML || '<p>Discover our comprehensive range of professional services designed to meet your needs.</p>';
   const styleValue = rows[2]?.querySelector('p')?.textContent?.trim().toLowerCase() || '';
 
   // Determine background class based on style
   const sectionClasses = styleValue.includes('highlight') ? 'bg-gray-50' : 'bg-white';
 
   // Extract services
-  const services = extractServices(block);
+  let services = extractServices(block);
+
+  // Add placeholder services if none exist
+  if (services.length === 0) {
+    const serviceIconKeys = Object.keys(SERVICE_ICONS);
+    services = [
+      {
+        icon: SERVICE_ICONS[serviceIconKeys[0]],
+        text: 'Service 1',
+        description: 'Add your service description here.',
+        attributes: {}
+      },
+      {
+        icon: SERVICE_ICONS[serviceIconKeys[1]],
+        text: 'Service 2',
+        description: 'Add your service description here.',
+        attributes: {}
+      },
+      {
+        icon: SERVICE_ICONS[serviceIconKeys[2]],
+        text: 'Service 3',
+        description: 'Add your service description here.',
+        attributes: {}
+      }
+    ];
+  }
 
   // Build service cards HTML
   const servicesHTML = services.map(service => {
