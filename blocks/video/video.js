@@ -5,13 +5,13 @@ export default function decorate(block) {
   const config = readBlockConfig(block);
   const title = config.title || 'Video Title';
   const deliveryUrl = config.deliveryurl || '';
-  const videoURL = deliveryUrl ? deliveryUrl.split('/as/')[0] : '';
+  const videoUrl = deliveryUrl ? deliveryUrl.split('/as/')[0] : '';
   const videoThumbnail = deliveryUrl ? deliveryUrl.split('/play/')[0] : '';
 
   // Build video URL with optional autoplay
   const shouldAutoplay = config.autoplay === 'true';
   const autoplayParams = shouldAutoplay ? '?autoplay=1&muted=1' : '';
-  const finalVideoURL = videoURL ? `${videoURL}${autoplayParams}` : '';
+  const finalVideoURL = videoUrl ? `${videoUrl}${autoplayParams}` : '';
 
   const descriptionHTML = extractFieldFromBlock(block, 'description') || '<p>Add your video description here.</p>';
   const style = config.style || '';
