@@ -1,4 +1,5 @@
 import { readBlockConfig } from '../../scripts/aem.js';
+import { moveInstrumentation } from '../../scripts/scripts.js';
 import { extractFieldFromBlock } from '../../scripts/utils.js';
 
 /**
@@ -67,7 +68,7 @@ function extractServices(block) {
 }
 
 export default async function decorate(block) {
-  const config = readBlockConfig(block);
+  /*const config = readBlockConfig(block);
   const descriptionHTML = extractFieldFromBlock(block, 'description');
   const style = config.style || '';
   const sectionClasses = style.includes('highlight') ? 'py-20 bg-gray-50' : 'py-20 bg-white';
@@ -100,8 +101,20 @@ export default async function decorate(block) {
         </div>
       </div>
     </section>
-  `);
+  `);*/
 
+
+  const title = block.children[0].children[1].children[0].textContent;
+  console.log('title:', title);
+  var titleElement = document.createElement('div');
+  titleElement.innerHTML = `
+        <p>${title}</p>
+    `;
+
+
+  moveInstrumentation(block.children[0], titleElement);
+
+  
   block.textContent = '';
-  block.append(content);
+  block.append(title);
 }
