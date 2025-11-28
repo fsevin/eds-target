@@ -1,7 +1,3 @@
-import { readBlockConfig } from '../../scripts/aem.js';
-import { moveInstrumentation } from '../../scripts/scripts.js';
-import { extractFieldFromBlock } from '../../scripts/utils.js';
-
 /**
  * Icon mapping configuration - Using Heroicons
  * @see https://heroicons.com/
@@ -32,11 +28,6 @@ const ICON_MAP = {
   </svg>`,
 };
 
-/**
- * Service icons array for fallback cycling
- */
-const SERVICE_ICONS = Object.values(ICON_MAP);
-
 function extractServices(block) {
   const rows = [...block.children];
   const services = [];
@@ -52,29 +43,16 @@ function extractServices(block) {
       const description = cells[2]?.textContent?.trim() || '';
 
       if (text && description) {
-        // Try to get icon from config, otherwise use cyclic fallback
-        let icon;
-        if (iconValue && ICON_MAP[iconValue]) {
-          icon = ICON_MAP[iconValue];
-        } else {
-          const iconIndex = (i - 3) % SERVICE_ICONS.length;
-          icon = SERVICE_ICONS[iconIndex];
-        }
+        // Get icon from config if available
+        const icon = (iconValue && ICON_MAP[iconValue]) ? ICON_MAP[iconValue] : '';
 
-        // Extract data-aue attributes from row element
+        // Extract all data-aue-* attributes dynamically from row element
         const attributes = {};
-        if (row.hasAttribute('data-aue-resource')) {
-          attributes['data-aue-resource'] = row.getAttribute('data-aue-resource');
-        }
-        if (row.hasAttribute('data-aue-type')) {
-          attributes['data-aue-type'] = row.getAttribute('data-aue-type');
-        }
-        if (row.hasAttribute('data-aue-model')) {
-          attributes['data-aue-model'] = row.getAttribute('data-aue-model');
-        }
-        if (row.hasAttribute('data-aue-label')) {
-          attributes['data-aue-label'] = row.getAttribute('data-aue-label');
-        }
+        Array.from(row.attributes).forEach(attr => {
+          if (attr.name.startsWith('data-aue-')) {
+            attributes[attr.name] = attr.value;
+          }
+        });
 
         services.push({
           icon,
