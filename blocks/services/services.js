@@ -37,30 +37,28 @@ function extractServices(block) {
     const row = rows[i];
     const cells = [...row.children];
 
-    if (cells.length >= 2) {
-      const iconValue = cells[0]?.textContent?.trim().toLowerCase() || '';
-      const text = cells[1]?.textContent?.trim() || '';
-      const description = cells[2]?.textContent?.trim() || '';
+    const iconValue = cells[0]?.textContent?.trim().toLowerCase() || '';
+    const text = cells[1]?.textContent?.trim() || '';
+    const description = cells[2]?.textContent?.trim() || '';
 
-      if (text && description) {
-        // Get icon from config if available
-        const icon = (iconValue && ICON_MAP[iconValue]) ? ICON_MAP[iconValue] : '';
+    if (text && description) {
+      // Get icon from config if available
+      const icon = (iconValue && ICON_MAP[iconValue]) ? ICON_MAP[iconValue] : '';
 
-        // Extract all data-aue-* attributes dynamically from row element
-        const attributes = {};
-        Array.from(row.attributes).forEach(attr => {
-          if (attr.name.startsWith('data-aue-')) {
-            attributes[attr.name] = attr.value;
-          }
-        });
+      // Extract all data-aue-* attributes dynamically from row element
+      const attributes = {};
+      Array.from(row.attributes).forEach(attr => {
+        if (attr.name.startsWith('data-aue-')) {
+          attributes[attr.name] = attr.value;
+        }
+      });
 
-        services.push({
-          icon,
-          text,
-          description,
-          attributes,
-        });
-      }
+      services.push({
+        icon,
+        text,
+        description,
+        attributes,
+      });
     }
   }
 
