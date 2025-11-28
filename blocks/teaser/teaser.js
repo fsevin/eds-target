@@ -32,13 +32,33 @@ function applyImageStyling(imageContainer) {
 export default function decorate(block) {
   const config = readBlockConfig(block);
   const style = config.style || '';
-  const title = config.title || '';
+  const title = config.title || 'Teaser Title';
   const image = config.image || '';
-  const imagedescription = config.imagedescription || '';
-  const buttonlink = config.buttonlink || '';
-  const buttontext = config.buttontext || '';
-  const picture = createOptimizedPicture(image, imagedescription);
-  const descriptionHTML = extractFieldFromBlock(block, 'description');
+  const imagedescription = config.imagedescription || 'Teaser image';
+  const buttonlink = config.buttonlink || '#';
+  const buttontext = config.buttontext || 'Learn More';
+
+  // Create picture element or placeholder SVG
+  let pictureHTML;
+  if (image) {
+    const picture = createOptimizedPicture(image, imagedescription);
+    pictureHTML = picture.outerHTML;
+  } else {
+    // Embedded SVG placeholder
+    pictureHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" class="w-full h-full">
+        <rect width="800" height="600" fill="#e5e7eb"/>
+        <g transform="translate(400, 300)">
+          <svg xmlns="http://www.w3.org/2000/svg" x="-40" y="-40" width="80" height="80" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#9ca3af">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/>
+          </svg>
+        </g>
+        <text x="400" y="350" text-anchor="middle" fill="#9ca3af" font-family="system-ui, -apple-system, sans-serif" font-size="16">Add Image</text>
+      </svg>
+    `;
+  }
+
+  const descriptionHTML = extractFieldFromBlock(block, 'description') || '<p>Add your teaser description here.</p>';
   const blockId = `teaser-${Math.random().toString(36).substr(2, 9)}`;
   const sectionClasses = style.includes('highlight') ? 'py-20 bg-gray-50' : 'py-20 bg-white';
 
@@ -48,7 +68,7 @@ export default function decorate(block) {
         <div class="grid lg:grid-cols-5 gap-12 items-center">
           <!-- Image Section (60% width) -->
           <div id="${blockId}-image" data-aue-label="Image" data-aue-prop="image" data-aue-type="media" class="relative rounded-2xl overflow-hidden shadow-2xl lg:col-span-3">
-            ${picture.outerHTML}
+            ${pictureHTML}
           </div>
 
           <!-- Content Section (40% width) -->
