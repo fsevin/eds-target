@@ -20,13 +20,13 @@ export default function decorate(block) {
   let videoThumbnail = '';
   let finalVideoURL = '';
 
-  const autoplayParams = shouldAutoplay ? '?autoplay=1&mute=1' : '';
   if (youtubeUrl) {
     const videoId = getYouTubeVideoId(youtubeUrl);
-    videoThumbnail = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+    const autoplayParams = shouldAutoplay ? '?autoplay=1&mute=1' : '';
     finalVideoURL = `https://www.youtube.com/embed/${videoId}${autoplayParams}`;
   } else if (deliveryUrl) {
     videoThumbnail = deliveryUrl.split('/play/')[0];
+    const autoplayParams = shouldAutoplay ? '?autoplay=1&muted=1' : '';
     finalVideoURL = `${videoUrl}${autoplayParams}`;
   }
 
@@ -62,6 +62,13 @@ export default function decorate(block) {
     <div class="relative rounded-lg overflow-hidden shadow-2xl">
       <div class="aspect-video bg-gray-900 relative">
         ${createPlaceholderSVG('video', '16:9')}
+      </div>
+    </div>
+  ` : youtubeUrl ? `
+    <!-- YouTube Video Container -->
+    <div class="relative rounded-lg overflow-hidden shadow-2xl">
+      <div class="aspect-video bg-gray-900">
+        ${createIframe(finalVideoURL)}
       </div>
     </div>
   ` : shouldAutoplay ? `
@@ -115,8 +122,8 @@ export default function decorate(block) {
   block.textContent = '';
   block.append(content);
 
-  // Add click handler for thumbnail mode
-  if (!shouldAutoplay && videoUrl) {
+  // Add click handler for thumbnail mode (only for non-YouTube videos)
+  if (!shouldAutoplay && videoUrl && !youtubeUrl) {
     const videoContainer = block.querySelector('#video-container');
     const videoThumbnailEl = block.querySelector('#video-thumbnail');
     const playOverlay = block.querySelector('#play-overlay');

@@ -403,7 +403,7 @@
         "component": "reference",
         "valueType": "string",
         "name": "deliveryUrl",
-        "label": "Dynamic Media Delivery URL"
+        "label": "Dynamic Media Video Delivery"
       },
       {
         "component": "text",
