@@ -369,13 +369,15 @@
         "component": "text",
         "valueType": "string",
         "name": "text",
-        "label": "Text"
+        "label": "Text",
+        "value": "[text here]"
       },
       {
         "component": "text",
         "valueType": "string",
         "name": "description",
-        "label": "Description"
+        "label": "Description",
+        "value": "[description here]"
       }
     ]
   },
