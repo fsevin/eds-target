@@ -76,10 +76,8 @@ export default async function decorate(block) {
         </div>
 
         <!-- FAQ List -->
-        <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-lg">
-          <div class="px-8">
-            ${faqsHTML}
-          </div>
+        <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-lg px-8">
+          ${faqsHTML}
         </div>
       </div>
     </section>
