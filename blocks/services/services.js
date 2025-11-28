@@ -69,6 +69,7 @@ function extractServices(block) {
 }
 
 export default async function decorate(block) {
+  console.log(block);
   const config = readBlockConfig(block);
 
   const title = config.title || '';
