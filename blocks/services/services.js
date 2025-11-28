@@ -38,8 +38,8 @@ function extractServices(block) {
     const cells = [...row.children];
 
     const iconValue = cells[0]?.textContent?.trim().toLowerCase() || '';
-    const text = cells[1]?.textContent?.trim() || 'text';
-    const description = cells[2]?.textContent?.trim() || 'description';
+    const text = cells[1]?.textContent?.trim();
+    const description = cells[2]?.textContent?.trim();
 
 
     // Get icon from config if available
