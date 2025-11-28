@@ -71,10 +71,26 @@ function extractServices(block) {
           icon = SERVICE_ICONS[iconIndex];
         }
 
+        // Extract data-aue attributes from row element
+        const attributes = {};
+        if (row.hasAttribute('data-aue-resource')) {
+          attributes['data-aue-resource'] = row.getAttribute('data-aue-resource');
+        }
+        if (row.hasAttribute('data-aue-type')) {
+          attributes['data-aue-type'] = row.getAttribute('data-aue-type');
+        }
+        if (row.hasAttribute('data-aue-model')) {
+          attributes['data-aue-model'] = row.getAttribute('data-aue-model');
+        }
+        if (row.hasAttribute('data-aue-label')) {
+          attributes['data-aue-label'] = row.getAttribute('data-aue-label');
+        }
+
         services.push({
           icon,
           text,
           description,
+          attributes,
         });
       }
     }
@@ -86,81 +102,59 @@ function extractServices(block) {
 export default async function decorate(block) {
   const rows = [...block.children];
 
-  // First row contains title
-  if (rows[0]) {
-    const titleElement = rows[0].querySelector('p');
-    if (titleElement) {
-      titleElement.classList.add('text-4xl', 'md:text-5xl', 'font-bold', 'text-gray-900', 'mb-4', 'text-center');
-    }
-  }
-
-  // Second row contains description
-  if (rows[1]) {
-    const descriptionElement = rows[1].querySelector('div');
-    if (descriptionElement) {
-      descriptionElement.classList.add('text-xl', 'text-gray-600', 'max-w-3xl', 'mx-auto', 'text-center', 'mb-16');
-    }
-  }
-
-  // Third row contains optional style
-  let styleValue = '';
-  if (rows[2]) {
-    const styleElement = rows[2].querySelector('p');
-    if (styleElement) {
-      styleValue = styleElement.textContent?.trim().toLowerCase() || '';
-    }
-    rows[2].style.display = 'none';
-  }
+  // Extract data from block
+  const title = rows[0]?.querySelector('p')?.textContent?.trim() || '';
+  const description = rows[1]?.querySelector('p')?.textContent?.trim() || '';
+  const styleValue = rows[2]?.querySelector('p')?.textContent?.trim().toLowerCase() || '';
 
   // Determine background class based on style
   const bgClass = styleValue.includes('highlight') ? 'bg-gray-50' : 'bg-white';
 
-  // Extract and style service items (from row 3 onwards)
+  // Extract services
   const services = extractServices(block);
 
-  // Hide original service item rows
-  for (let i = 3; i < rows.length; i += 1) {
-    rows[i].style.display = 'none';
-  }
+  // Build service cards HTML
+  const servicesHTML = services.map(service => {
+    // Convert attributes object to HTML attribute string
+    const attributesStr = Object.entries(service.attributes)
+      .map(([key, value]) => `${key}="${value}"`)
+      .join(' ');
 
-  // Create services grid container
-  const servicesGrid = document.createElement('div');
-  servicesGrid.className = 'grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8';
+    return `
+    <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300" ${attributesStr}>
+      <div class="text-brand-600 mb-4">
+        ${service.icon || ''}
+      </div>
+      <h3 class="text-xl font-bold text-gray-900 mb-3" data-aue-prop="text" data-aue-type="text" data-aue-label="Text">
+        ${service.text}
+      </h3>
+      <p class="text-gray-600 leading-relaxed" data-aue-prop="description" data-aue-type="text" data-aue-label="Description">
+        ${service.description}
+      </p>
+    </div>
+  `;
+  }).join('');
 
-  // Build service cards
-  services.forEach(service => {
-    const serviceCard = document.createElement('div');
-    serviceCard.className = 'bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300';
+  // Build complete HTML structure
+  const htmlStructure = `
+    <div class="py-20 ${bgClass} container mx-auto px-4">
+      <!-- Section Header -->
+      <div class="text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4" data-aue-prop="title" data-aue-type="text" data-aue-label="Title">
+          ${title}
+        </h2>
+        <div class="text-xl text-gray-600 max-w-3xl mx-auto" data-aue-prop="description" data-aue-type="richtext" data-aue-label="Description">
+          ${description}
+        </div>
+      </div>
 
-    // Icon container
-    const iconContainer = document.createElement('div');
-    iconContainer.className = 'text-brand-600 mb-4';
-    if (service.icon) {
-      iconContainer.innerHTML = service.icon;
-    }
+      <!-- Services Grid -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        ${servicesHTML}
+      </div>
+    </div>
+  `;
 
-    // Service title
-    const serviceTitle = document.createElement('h3');
-    serviceTitle.className = 'text-xl font-bold text-gray-900 mb-3';
-    serviceTitle.textContent = service.text;
-
-    // Service description
-    const serviceDesc = document.createElement('p');
-    serviceDesc.className = 'text-gray-600 leading-relaxed';
-    serviceDesc.textContent = service.description;
-
-    // Append elements to card
-    serviceCard.appendChild(iconContainer);
-    serviceCard.appendChild(serviceTitle);
-    serviceCard.appendChild(serviceDesc);
-
-    // Append card to grid
-    servicesGrid.appendChild(serviceCard);
-  });
-
-  // Append services grid to block
-  block.appendChild(servicesGrid);
-
-  // Add container styling to block with dynamic background
-  block.classList.add('py-20', bgClass, 'container', 'mx-auto', 'px-4');
+  // Replace block content with new structure
+  block.innerHTML = htmlStructure;
 }
