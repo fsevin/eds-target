@@ -1,4 +1,3 @@
-import { readBlockConfig } from '../../scripts/aem.js';
 /**
  * Icon mapping configuration - Using Heroicons
  * @see https://heroicons.com/
@@ -33,52 +32,48 @@ function extractServices(block) {
   const rows = [...block.children];
   const services = [];
 
-  // Iterate through all rows and extract service items
-  rows.forEach(row => {
-    // Check if this is a service item row
-    if (row.getAttribute('class') === 'services') {
-      const cells = [...row.children];
+  // Skip first three rows (title, description, style), process from fourth row onwards
+  for (let i = 3; i < rows.length; i += 1) {
+    const row = rows[i];
+    const cells = [...row.children];
 
-      // Service items have 3 cells: icon value, text, description
-      if (cells.length >= 3) {
-        const iconValue = cells[0]?.textContent?.trim().toLowerCase() || '';
-        const text = cells[1]?.textContent?.trim() || '';
-        const description = cells[2]?.textContent?.trim() || '';
+    if (cells.length >= 2) {
+      const iconValue = cells[0]?.textContent?.trim().toLowerCase() || '';
+      const text = cells[1]?.textContent?.trim() || '';
+      const description = cells[2]?.textContent?.trim() || '';
 
-        // Only add service if text and description are present
-        if (text && description) {
-          // Get icon from config if available
-          const icon = (iconValue && ICON_MAP[iconValue]) ? ICON_MAP[iconValue] : '';
+      if (text && description) {
+        // Get icon from config if available
+        const icon = (iconValue && ICON_MAP[iconValue]) ? ICON_MAP[iconValue] : '';
 
-          // Extract all data-aue-* attributes dynamically from row element
-          const attributes = {};
-          Array.from(row.attributes).forEach(attr => {
-            if (attr.name.startsWith('data-aue-')) {
-              attributes[attr.name] = attr.value;
-            }
-          });
+        // Extract all data-aue-* attributes dynamically from row element
+        const attributes = {};
+        Array.from(row.attributes).forEach(attr => {
+          if (attr.name.startsWith('data-aue-')) {
+            attributes[attr.name] = attr.value;
+          }
+        });
 
-          services.push({
-            icon,
-            text,
-            description,
-            attributes,
-          });
-        }
+        services.push({
+          icon,
+          text,
+          description,
+          attributes,
+        });
       }
     }
-  });
+  }
 
   return services;
 }
 
 export default async function decorate(block) {
-  console.log(block);
-  const config = readBlockConfig(block);
+  const rows = [...block.children];
 
-  const title = config.title || '';
-  const description = config.description || '';
-  const styleValue = config.style ? config.style.toLowerCase() : '';
+  // Extract data from block
+  const title = rows[0]?.querySelector('p')?.textContent?.trim() || '';
+  const description = rows[1]?.querySelector('p')?.textContent?.trim() || '';
+  const styleValue = rows[2]?.querySelector('p')?.textContent?.trim().toLowerCase() || '';
 
   // Determine background class based on style
   const sectionClasses = styleValue.includes('highlight') ? 'bg-gray-50' : 'bg-white';
