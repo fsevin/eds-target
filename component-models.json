@@ -352,6 +352,20 @@
     "id": "service-item",
     "fields": [
       {
+        "component": "select",
+        "label": "Icon",
+        "name": "icon",
+        "valueType": "string",
+        "options": [
+          { "name": "Ideas", "value": "ideas" },
+          { "name": "Technical Services", "value": "technical-services" },
+          { "name": "Security", "value": "security" },
+          { "name": "Growth", "value": "growth" },
+          { "name": "Performance", "value": "performance" },
+          { "name": "Support", "value": "support" }
+        ]
+      },
+      {
         "component": "text",
         "valueType": "string",
         "name": "text",
