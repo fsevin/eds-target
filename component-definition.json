@@ -35,6 +35,7 @@
                 "template": {
                   "name": "FAQ",
                   "filter": "faq",
+                  "model": "title-and-description",
                   "key-value": true
                 }
               }
@@ -209,7 +210,7 @@
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
                   "name": "Services",
-                  "model": "services",
+                  "model": "title-and-description",
                   "filter": "services"
                 }
               }
