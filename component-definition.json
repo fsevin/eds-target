@@ -51,7 +51,7 @@
                 "template": {
                   "name": "Menu",
                   "filter": "menu",
-                  "key-value": false
+                  "key-value": true
                 }
               }
             }
