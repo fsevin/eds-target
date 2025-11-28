@@ -19,15 +19,21 @@
     ]
   },
   {
-    "id": "faq",
-    "components": [
-      "faq-item"
-    ]
-  },
-  {
     "id": "menu",
     "components": [
       "menu-item"
+    ]
+  },
+  {
+    "id": "services",
+    "components": [
+      "service-item"
+    ]
+  },
+  {
+    "id": "faq",
+    "components": [
+      "faq-item"
     ]
   }
 ]

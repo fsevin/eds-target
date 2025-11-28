@@ -39,23 +39,6 @@
     "fields": []
   },
   {
-    "id": "faq-item",
-    "fields": [
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "question",
-        "label": "Question"
-      },
-      {
-        "component": "richtext",
-        "name": "answer",
-        "label": "Answer",
-        "valueType": "string"
-      }
-    ]
-  },
-  {
     "id": "login-modal",
     "fields": [
       {
@@ -348,26 +331,6 @@
         "valueType": "string"
       },
       {
-        "component": "container",
-        "name": "services",
-        "label": "Services",
-        "multi": true,
-        "fields": [
-          {
-            "component": "text",
-            "valueType": "string",
-            "name": "text",
-            "label": "Text"
-          },
-          {
-            "component": "text",
-            "valueType": "string",
-            "name": "description",
-            "label": "Description"
-          }
-        ]
-      },
-      {
         "component": "tab",
         "label": "Layout",
         "name": "layout"
@@ -382,6 +345,23 @@
             "value": "highlight"
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "service-item",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "text",
+        "label": "Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "description",
+        "label": "Description"
       }
     ]
   },
@@ -470,6 +450,23 @@
             "value": "highlight"
           }
         ]
+      }
+    ]
+  }, 
+  {
+    "id": "faq-item",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "question",
+        "label": "Question"
+      },
+      {
+        "component": "text",
+        "name": "answer",
+        "label": "Answer",
+        "valueType": "string"
       }
     ]
   }
