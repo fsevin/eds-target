@@ -42,12 +42,17 @@ const ICON_MAP = {
   </svg>`,
 };
 
+/**
+ * Service icons array for fallback cycling
+ */
+const SERVICE_ICONS = Object.values(ICON_MAP);
+
 function extractServices(block) {
   const rows = [...block.children];
   const services = [];
 
-  // Skip first two rows (title and description), process from third row onwards
-  for (let i = 2; i < rows.length; i += 1) {
+  // Skip first three rows (title, description, style), process from fourth row onwards
+  for (let i = 3; i < rows.length; i += 1) {
     const row = rows[i];
     const cells = [...row.children];
 
@@ -56,11 +61,22 @@ function extractServices(block) {
       const text = cells[1]?.textContent?.trim() || '';
       const description = cells[2]?.textContent?.trim() || '';
 
-      services.push({
-        icon: ICON_MAP[iconValue],
-        text: text,
-        description,
-      }); 
+      if (text && description) {
+        // Try to get icon from config, otherwise use cyclic fallback
+        let icon;
+        if (iconValue && ICON_MAP[iconValue]) {
+          icon = ICON_MAP[iconValue];
+        } else {
+          const iconIndex = (i - 3) % SERVICE_ICONS.length;
+          icon = SERVICE_ICONS[iconIndex];
+        }
+
+        services.push({
+          icon,
+          text,
+          description,
+        });
+      }
     }
   }
 
@@ -68,43 +84,83 @@ function extractServices(block) {
 }
 
 export default async function decorate(block) {
-  /*const config = readBlockConfig(block);
-  const descriptionHTML = extractFieldFromBlock(block, 'description');
-  const style = config.style || '';
-  const sectionClasses = style.includes('highlight') ? 'py-20 bg-gray-50' : 'py-20 bg-white';
+  const rows = [...block.children];
 
-  // Extract services from block
+  // First row contains title
+  if (rows[0]) {
+    const titleElement = rows[0].querySelector('p');
+    if (titleElement) {
+      titleElement.classList.add('text-4xl', 'md:text-5xl', 'font-bold', 'text-gray-900', 'mb-4', 'text-center');
+    }
+  }
+
+  // Second row contains description
+  if (rows[1]) {
+    const descriptionElement = rows[1].querySelector('div');
+    if (descriptionElement) {
+      descriptionElement.classList.add('text-xl', 'text-gray-600', 'max-w-3xl', 'mx-auto', 'text-center', 'mb-16');
+    }
+  }
+
+  // Third row contains optional style
+  let styleValue = '';
+  if (rows[2]) {
+    const styleElement = rows[2].querySelector('p');
+    if (styleElement) {
+      styleValue = styleElement.textContent?.trim().toLowerCase() || '';
+    }
+    rows[2].style.display = 'none';
+  }
+
+  // Determine background class based on style
+  const bgClass = styleValue.includes('highlight') ? 'bg-gray-50' : 'bg-white';
+
+  // Extract and style service items (from row 3 onwards)
   const services = extractServices(block);
 
-  const servicesHTML = services.map(service => `
-    <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300" data-aue-type="component" data-aue-model="service-item" data-aue-label="Service Item">
-      <div class="text-brand-600 mb-4">
-        ${service.icon}
-      </div>
-      <h3 class="text-xl font-bold text-gray-900 mb-3" data-aue-label="Text" data-aue-prop="text" data-aue-type="text">${service.text}</h3>
-      <p class="text-gray-600 leading-relaxed" data-aue-label="Description" data-aue-prop="description" data-aue-type="text">${service.description}</p>
-    </div>
-  `).join('');
+  // Hide original service item rows
+  for (let i = 3; i < rows.length; i += 1) {
+    rows[i].style.display = 'none';
+  }
 
-  const content = document.createRange().createContextualFragment(`
-    <section class="${sectionClasses}">
-      <div class="container mx-auto px-4">
-        <!-- Section Header -->
-        <div class="text-center mb-16">
-          <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4" data-aue-label="Title" data-aue-prop="title" data-aue-type="text">${config.title}</h2>
-          <div class="text-xl text-gray-600 max-w-3xl mx-auto" data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext">${descriptionHTML}</div>
-        </div>
+  // Create services grid container
+  const servicesGrid = document.createElement('div');
+  servicesGrid.className = 'grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8';
 
-        <!-- Services Grid -->
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          ${servicesHTML}
-        </div>
-      </div>
-    </section>
-  `);*/
+  // Build service cards
+  services.forEach(service => {
+    const serviceCard = document.createElement('div');
+    serviceCard.className = 'bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300';
 
-  console.log(block);
+    // Icon container
+    const iconContainer = document.createElement('div');
+    iconContainer.className = 'text-brand-600 mb-4';
+    if (service.icon) {
+      iconContainer.innerHTML = service.icon;
+    }
 
+    // Service title
+    const serviceTitle = document.createElement('h3');
+    serviceTitle.className = 'text-xl font-bold text-gray-900 mb-3';
+    serviceTitle.textContent = service.text;
 
-  
+    // Service description
+    const serviceDesc = document.createElement('p');
+    serviceDesc.className = 'text-gray-600 leading-relaxed';
+    serviceDesc.textContent = service.description;
+
+    // Append elements to card
+    serviceCard.appendChild(iconContainer);
+    serviceCard.appendChild(serviceTitle);
+    serviceCard.appendChild(serviceDesc);
+
+    // Append card to grid
+    servicesGrid.appendChild(serviceCard);
+  });
+
+  // Append services grid to block
+  block.appendChild(servicesGrid);
+
+  // Add container styling to block with dynamic background
+  block.classList.add('py-20', bgClass, 'container', 'mx-auto', 'px-4');
 }
