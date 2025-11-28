@@ -356,14 +356,14 @@
           {
             "component": "text",
             "valueType": "string",
-            "name": "title",
+            "name": "text",
             "label": "Text"
           },
           {
             "component": "text",
             "valueType": "string",
             "name": "description",
-            "label": "Text"
+            "label": "Description"
           }
         ]
       },
