@@ -8,12 +8,16 @@
   {
     "id": "section",
     "components": [
-      "heading",
-      "hero",
       "menu",
       "login-modal",
+      "heading",
+      "hero",
       "teaser",
+      "articles",
+      "products",
+      "search",
       "services",
+      "faq",
       "video",
       "dropbox-media"
     ]
