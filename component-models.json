@@ -402,8 +402,14 @@
       {
         "component": "reference",
         "valueType": "string",
-        "name": "url",
-        "label": "Reference"
+        "name": "deliveryUrl",
+        "label": "Dynamic Media Delivery URL"
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "youtubeUrl",
+        "label": "YouTube URL"
       },
       {
         "component": "boolean",

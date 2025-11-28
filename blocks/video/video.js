@@ -4,9 +4,9 @@ import { extractFieldFromBlock, createPlaceholderSVG } from '../../scripts/utils
 export default function decorate(block) {
   const config = readBlockConfig(block);
   const title = config.title || 'Video Title';
-  const videoUrl = config.url || '';
-  const videoURL = videoUrl ? videoUrl.split('/as/')[0] : '';
-  const videoThumbnail = videoUrl ? videoUrl.split('/play/')[0] : '';
+  const deliveryUrl = config.deliveryurl || '';
+  const videoURL = deliveryUrl ? deliveryUrl.split('/as/')[0] : '';
+  const videoThumbnail = deliveryUrl ? deliveryUrl.split('/play/')[0] : '';
 
   // Build video URL with optional autoplay
   const shouldAutoplay = config.autoplay === 'true';
