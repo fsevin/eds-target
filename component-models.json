@@ -406,7 +406,7 @@
         "label": "Dynamic Media Delivery URL"
       },
       {
-        "component": "reference",
+        "component": "text",
         "valueType": "string",
         "name": "youtubeUrl",
         "label": "YouTube URL"
