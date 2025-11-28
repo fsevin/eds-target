@@ -70,7 +70,7 @@ export default async function decorate(block) {
     const emptyContent = document.createRange().createContextualFragment(`
       <section class="py-20 bg-white">
         <div class="container mx-auto px-4">
-          <div class="text-center text-xl text-gray-600">No articles found.</div>
+          <div class="text-center text-xl text-gray-600">Articles inserted here.</div>
         </div>
       </section>
     `);
