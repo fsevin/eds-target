@@ -52,12 +52,12 @@ function extractServices(block) {
 
     if (cells.length >= 2) {
       const iconValue = cells[0]?.textContent?.trim().toLowerCase() || '';
-      const title = cells[1]?.textContent?.trim() || '';
+      const text = cells[1]?.textContent?.trim() || '';
       const description = cells[2]?.textContent?.trim() || '';
 
       services.push({
         icon: ICON_MAP[iconValue],
-        title,
+        text: text,
         description,
       }); 
     }
@@ -80,8 +80,8 @@ export default async function decorate(block) {
       <div class="text-brand-600 mb-4">
         ${service.icon}
       </div>
-      <h3 class="text-xl font-bold text-gray-900 mb-3">${service.title}</h3>
-      <p class="text-gray-600 leading-relaxed">${service.description}</p>
+      <h3 class="text-xl font-bold text-gray-900 mb-3" data-aue-label="Text" data-aue-prop="text" data-aue-type="text">${service.text}</h3>
+      <p class="text-gray-600 leading-relaxed" data-aue-label="Description" data-aue-prop="description" data-aue-type="text">${service.description}</p>
     </div>
   `).join('');
 
