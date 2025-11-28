@@ -1,21 +1,61 @@
 import { readBlockConfig } from '../../scripts/aem.js';
 import { extractFieldFromBlock, createPlaceholderSVG } from '../../scripts/utils.js';
 
+// Helper function to extract YouTube video ID
+function getYouTubeVideoId(url) {
+  return url.includes('watch?v=')
+    ? url.split('watch?v=')[1].split('&')[0]
+    : url.split('/').pop().split('?')[0];
+}
+
 export default function decorate(block) {
   const config = readBlockConfig(block);
   const title = config.title || 'Video Title';
   const deliveryUrl = config.deliveryurl || '';
-  const videoUrl = deliveryUrl ? deliveryUrl.split('/as/')[0] : '';
-  const videoThumbnail = deliveryUrl ? deliveryUrl.split('/play/')[0] : '';
-
-  // Build video URL with optional autoplay
+  const youtubeUrl = config.youtubeurl || '';
+  const videoUrl = deliveryUrl ? deliveryUrl.split('/as/')[0] : youtubeUrl;
   const shouldAutoplay = config.autoplay === 'true';
-  const autoplayParams = shouldAutoplay ? '?autoplay=1&muted=1' : '';
-  const finalVideoURL = videoUrl ? `${videoUrl}${autoplayParams}` : '';
+
+  // Get thumbnail URL and final video URL based on video type
+  let videoThumbnail = '';
+  let finalVideoURL = '';
+
+  const autoplayParams = shouldAutoplay ? '?autoplay=1&mute=1' : '';
+  if (youtubeUrl) {
+    const videoId = getYouTubeVideoId(youtubeUrl);
+    videoThumbnail = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+    finalVideoURL = `https://www.youtube.com/embed/${videoId}${autoplayParams}`;
+  } else if (deliveryUrl) {
+    videoThumbnail = deliveryUrl.split('/play/')[0];
+    finalVideoURL = `${videoUrl}${autoplayParams}`;
+  }
 
   const descriptionHTML = extractFieldFromBlock(block, 'description') || '<p>Add your video description here.</p>';
   const style = config.style || '';
   const sectionClasses = style.includes('highlight') ? 'py-20 bg-gray-50' : 'py-20 bg-white';
+
+  // Create common iframe element
+  const createIframe = (src = '', hidden = false) => {
+    const isYouTube = src.includes('youtube.com/embed');
+    const allowAttribute = isYouTube 
+      ? "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      : "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+    
+    return `
+      <iframe
+        class="w-full h-full${hidden ? ' hidden' : ''}"
+        src="${src}"
+        title="Video player"
+        frameborder="0"
+        allow="${allowAttribute}"
+        allowfullscreen
+        data-aue-label="Video URL"
+        data-aue-prop="url"
+        data-aue-type="text"
+        id="video-iframe">
+      </iframe>
+    `;
+  };
 
   const videoContainerHTML = !videoUrl ? `
     <!-- Video Placeholder -->
@@ -28,17 +68,7 @@ export default function decorate(block) {
     <!-- Video Container with Autoplay -->
     <div class="relative rounded-lg overflow-hidden shadow-2xl">
       <div class="aspect-video bg-gray-900">
-        <iframe
-          class="w-full h-full"
-          src="${finalVideoURL}"
-          title="Video player"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-          data-aue-label="Video URL"
-          data-aue-prop="url"
-          data-aue-type="text">
-        </iframe>
+        ${createIframe(finalVideoURL)}
       </div>
     </div>
   ` : `
@@ -63,18 +93,7 @@ export default function decorate(block) {
         </div>
 
         <!-- Video iframe (hidden initially) -->
-        <iframe
-          class="w-full h-full hidden"
-          src=""
-          title="Video player"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-          data-aue-label="Video URL"
-          data-aue-prop="url"
-          data-aue-type="text"
-          id="video-iframe">
-        </iframe>
+        ${createIframe('', true)}
       </div>
     </div>
   `;
@@ -97,7 +116,7 @@ export default function decorate(block) {
   block.append(content);
 
   // Add click handler for thumbnail mode
-  if (!shouldAutoplay) {
+  if (!shouldAutoplay && videoUrl) {
     const videoContainer = block.querySelector('#video-container');
     const videoThumbnailEl = block.querySelector('#video-thumbnail');
     const playOverlay = block.querySelector('#play-overlay');
@@ -111,11 +130,11 @@ export default function decorate(block) {
 
         // Show and load video with autoplay
         videoIframe.classList.remove('hidden');
-        videoIframe.src = `${videoURL}?autoplay=1`;
+        videoIframe.src = `${finalVideoURL}?autoplay=1`;
 
         // Remove cursor pointer from container
         videoContainer.style.cursor = 'default';
-      });
+      }, { once: true });
     }
   }
 }
