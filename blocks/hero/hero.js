@@ -42,7 +42,12 @@ function applyBackgroundImageStyling(imageContainer) {
 
 export default function decorate(block) {
   const config = readBlockConfig(block);
-  const picture = createOptimizedPicture(config.image, config.imagedescription);
+  const title = config.title || '';
+  const image = config.image || '';
+  const imagedescription = config.imagedescription || '';
+  const buttonlink = config.buttonlink || '';
+  const buttontext = config.buttontext || '';
+  const picture = createOptimizedPicture(image, imagedescription);
   const descriptionHTML = extractFieldFromBlock(block, 'description');
   const blockId = `hero-${Math.random().toString(36).substr(2, 9)}`;
 
@@ -61,7 +66,7 @@ export default function decorate(block) {
         <div class="max-w-4xl mx-auto text-center">
           <!-- Main Heading -->
           <h1 id="${blockId}-title" data-aue-label="Title" data-aue-prop="title" data-aue-type="text" class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-            ${config.title}
+            ${title}
           </h1>
 
           <!-- Description -->
@@ -71,8 +76,8 @@ export default function decorate(block) {
 
           <!-- CTA Button -->
           <div class="flex items-center justify-center">
-            <a id="${blockId}-button" data-aue-label="Call to Action" data-aue-prop="buttonText" data-aue-type="text" href="${config.buttonlink}" class="px-8 py-4 bg-brand-600 text-white font-semibold rounded-2xl hover:bg-brand-700 transition shadow-lg hover:shadow-xl">
-              ${config.buttontext}
+            <a id="${blockId}-button" data-aue-label="Call to Action" data-aue-prop="buttonText" data-aue-type="text" href="${buttonlink}" class="px-8 py-4 bg-brand-600 text-white font-semibold rounded-2xl hover:bg-brand-700 transition shadow-lg hover:shadow-xl">
+              ${buttontext}
             </a>
           </div>
         </div>

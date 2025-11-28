@@ -70,7 +70,7 @@ export default async function decorate(block) {
 
   // Extract data from block
   const title = rows[0]?.querySelector('p')?.textContent?.trim() || '';
-  const description = rows[1]?.querySelector('p')?.textContent?.trim() || '';
+  const description = rows[1]?.querySelector('p')?.innerHTML || '';
   const styleValue = rows[2]?.querySelector('p')?.textContent?.trim().toLowerCase() || '';
 
   // Determine background class based on style
