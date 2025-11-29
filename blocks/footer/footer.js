@@ -1,19 +1,4 @@
-import { getMetadata } from '../../scripts/aem.js';
-import { loadFragment } from '../fragment/fragment.js';
-import { getCurrentLocale } from '../../scripts/utils.js';
-
-/**
- * loads and decorates the footer
- * @param {Element} block The footer block element
- */
 export default async function decorate(block) {
-  const currentLocale = getCurrentLocale();
-  const footerMeta = getMetadata('footer');
-  const footerPath = footerMeta ? new URL(footerMeta, window.location).pathname : `/${currentLocale}/footer`;
-  const fragment = await loadFragment(footerPath);
-
-  const copyright = fragment.querySelector('p').innerHTML;
-
   const footerHTML = `
     <!-- Footer -->
     <div class="bg-gray-900 text-gray-300 pt-16 pb-8">
@@ -77,7 +62,7 @@ export default async function decorate(block) {
         <div class="border-t border-gray-800 pt-8">
           <div class="flex flex-col md:flex-row items-center justify-between">
             <p class="text-sm text-gray-400 mb-4 md:mb-0">
-              ${copyright}
+              Copyright &copy; ${new Date().getFullYear()} Adobe.
             </p>
             <div class="flex space-x-6">
               <a href="#" class="text-gray-400 hover:text-brand-500 transition" aria-label="Facebook">
