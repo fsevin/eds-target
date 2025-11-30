@@ -44,12 +44,6 @@ function updateHeroContent(offerContent, elements) {
     elements.image.innerHTML = picture.outerHTML;
     applyBackgroundImageStyling(elements.image);
   }
-
-  // Update Universal Editor resource attribute if section element exists
-  if (elements.section && offerContent._path) {
-    const cleanPath = offerContent._path.replace(/\.html$/, '').replace(/^https?:\/\/[^/]+/, '');
-    elements.section.setAttribute('data-aue-resource', `urn:aemconnection:${cleanPath}/jcr:content/data/master`);
-  }
 }
 
 /**
