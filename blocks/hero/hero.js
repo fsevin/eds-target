@@ -178,6 +178,14 @@ export default async function decorate(block) {
   if (config.offerzone) {
     alloy('sendEvent', {
       decisionScopes: [config.offerzone],
+      data: {
+        "__adobe": {
+          target: {
+            logged: localStorage.getItem('logged'),
+            profileType: localStorage.getItem('profileType'),
+          }
+        }
+      },
     }).then((result) => {
       result.propositions?.forEach((proposition) => {
         const offerContent = proposition.items[0]?.data?.content?.data?.offerByPath?.item;
