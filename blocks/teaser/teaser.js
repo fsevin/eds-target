@@ -58,44 +58,17 @@ function applyImageStyling(imageContainer) {
   }
 }
 
-export default async function decorate(block) {
+export default function decorate(block) {
   const config = readBlockConfig(block);
   const blockId = `teaser-${Math.random().toString(36).substr(2, 9)}`;
 
-  // Default values
-  let title = 'Teaser Title';
-  let imagePath = '';
-  let imagedescription = 'Teaser image';
-  let buttonlink = '#';
-  let buttontext = 'Learn More';
-  let descriptionHTML = '<p>Add your teaser description here.</p>';
-
-  // Fetch content fragment data if path is provided
-  if (config.contentfragmentpath) {
-    const cleanPath = config.contentfragmentpath.replace(/\.html$/, '');
-    const fragmentData = await fetchContentFragment(cleanPath);
-    if (fragmentData) {
-      title = fragmentData.title || title;
-      descriptionHTML = fragmentData.description?.html || descriptionHTML;
-      buttontext = fragmentData.buttonText || buttontext;
-      buttonlink = fragmentData.buttonLink?._path || buttonlink;
-      imagedescription = fragmentData.imageDescription || imagedescription;
-      imagePath = fragmentData.image?._path || imagePath;
-    }
-  }
-
-  // Create picture element or placeholder SVG
-  let pictureHTML;
-  if (imagePath) {
-    const siteName = getSiteNameFromDAM(imagePath);
-    const picture = createOptimizedPicture(
-      imagePath.substring(`/content/dam/${siteName}`.length),
-      imagedescription
-    );
-    pictureHTML = picture.outerHTML;
-  } else {
-    pictureHTML = createPlaceholderSVG('image', '4:3');
-  }
+  // Default placeholder values for instant render
+  const title = 'Teaser Title';
+  const imagedescription = 'Teaser image';
+  const buttonlink = '#';
+  const buttontext = 'Learn More';
+  const descriptionHTML = '<p>Add your teaser description here.</p>';
+  const pictureHTML = createPlaceholderSVG('image', '4:3');
 
   const style = config.style || '';
   const sectionClasses = style.includes('highlight') ? 'py-20 bg-gray-50' : 'py-20 bg-white';
@@ -107,7 +80,7 @@ export default async function decorate(block) {
     ueResource = `data-aue-resource="urn:aemconnection:${cleanPath}/jcr:content/data/master"`;
   }
 
-  // Render teaser HTML
+  // Render teaser HTML immediately with placeholders
   const content = document.createRange().createContextualFragment(`
     <section class="${sectionClasses}" ${ueResource} data-aue-type="reference" data-aue-filter="cf" data-aue-label="Content Fragment">
       <div class="container mx-auto px-4">
@@ -147,6 +120,16 @@ export default async function decorate(block) {
 
   // Apply initial image styling
   applyImageStyling(elements.image);
+
+  // Fetch content fragment data asynchronously if path is provided
+  if (config.contentfragmentpath) {
+    const cleanPath = config.contentfragmentpath.replace(/\.html$/, '');
+    fetchContentFragment(cleanPath).then((fragmentData) => {
+      if (fragmentData) {
+        updateTeaserContent(fragmentData, elements);
+      }
+    });
+  }
 
   // Handle offer zone if configured (only in non-author mode)
   if (config.offerzone && !isAuthorMode) {

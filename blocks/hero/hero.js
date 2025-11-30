@@ -63,44 +63,17 @@ function applyBackgroundImageStyling(imageContainer) {
   }
 }
 
-export default async function decorate(block) {
+export default function decorate(block) {
   const config = readBlockConfig(block);
   const blockId = `hero-${Math.random().toString(36).substr(2, 9)}`;
 
-  // Default values
-  let title = 'Hero Title';
-  let imagePath = '';
-  let imagedescription = 'Hero image';
-  let buttonlink = '#';
-  let buttontext = 'Get Started';
-  let descriptionHTML = '<p>Add your hero description here.</p>';
-
-  // Fetch content fragment data if path is provided
-  if (config.contentfragmentpath) {
-    const cleanPath = config.contentfragmentpath.replace(/\.html$/, '');
-    const fragmentData = await fetchContentFragment(cleanPath);
-    if (fragmentData) {
-      title = fragmentData.title || title;
-      descriptionHTML = fragmentData.description?.html || descriptionHTML;
-      buttontext = fragmentData.buttonText || buttontext;
-      buttonlink = fragmentData.buttonLink;
-      imagedescription = fragmentData.imageDescription || imagedescription;
-      imagePath = fragmentData.image?._path || imagePath;
-    }
-  }
-
-  // Create picture element or placeholder SVG
-  let pictureHTML;
-  if (imagePath) {
-    const siteName = getSiteNameFromDAM(imagePath);
-    const picture = createOptimizedPicture(
-      imagePath.substring(`/content/dam/${siteName}`.length),
-      imagedescription
-    );
-    pictureHTML = picture.outerHTML;
-  } else {
-    pictureHTML = createPlaceholderSVG('image', '4:3');
-  }
+  // Default placeholder values for instant render
+  const title = 'Hero Title';
+  const imagedescription = 'Hero image';
+  const buttonlink = '#';
+  const buttontext = 'Get Started';
+  const descriptionHTML = '<p>Add your hero description here.</p>';
+  const pictureHTML = createPlaceholderSVG('image', '16:9');
 
   // Build Universal Editor resource attribute for content fragment reference
   let ueResource = '';
@@ -109,7 +82,7 @@ export default async function decorate(block) {
     ueResource = `data-aue-resource="urn:aemconnection:${cleanPath}/jcr:content/data/master"`;
   }
 
-  // Render hero HTML
+  // Render hero HTML immediately with placeholders
   const content = document.createRange().createContextualFragment(`
     <section class="relative py-12 md:py-20 bg-cover bg-center bg-no-repeat" ${ueResource} data-aue-type="reference" data-aue-filter="cf" data-aue-label="Content Fragment">
       <div id="${blockId}-image" class="absolute inset-0 z-0">${pictureHTML}</div>
@@ -146,6 +119,16 @@ export default async function decorate(block) {
 
   // Apply initial background image styling
   applyBackgroundImageStyling(elements.image);
+
+  // Fetch content fragment data asynchronously if path is provided
+  if (config.contentfragmentpath) {
+    const cleanPath = config.contentfragmentpath.replace(/\.html$/, '');
+    fetchContentFragment(cleanPath).then((fragmentData) => {
+      if (fragmentData) {
+        updateHeroContent(fragmentData, elements);
+      }
+    });
+  }
 
   // Handle offer zone if configured (only in non-author mode)
   if (config.offerzone && !isAuthorMode) {
