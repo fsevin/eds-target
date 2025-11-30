@@ -129,28 +129,39 @@ export default async function decorate(block) {
     pictureHTML = createPlaceholderSVG('image', '4:3');
   }
 
-  // Build Universal Editor resource attribute for content fragment reference
+  // Build Universal Editor attributes (only in non-author mode)
   let ueResource = '';
-  if (config.contentfragmentpath) {
-    const cleanPath = config.contentfragmentpath.replace(/\.html$/, '').replace(/^https?:\/\/[^/]+/, '');
-    ueResource = `data-aue-resource="urn:aemconnection:${cleanPath}/jcr:content/data/master"`;
+  let ueStaticAttrs = '';
+  let ueTitleAttrs = '';
+  let ueDescAttrs = '';
+  let ueButtonAttrs = '';
+
+  if (!isAuthorMode) {
+    if (config.contentfragmentpath) {
+      const cleanPath = config.contentfragmentpath.replace(/\.html$/, '').replace(/^https?:\/\/[^/]+/, '');
+      ueResource = `data-aue-resource="urn:aemconnection:${cleanPath}/jcr:content/data/master"`;
+    }
+    ueStaticAttrs = 'data-aue-type="reference" data-aue-filter="cf" data-aue-label="Content Fragment"';
+    ueTitleAttrs = 'data-aue-label="Title" data-aue-prop="title" data-aue-type="text"';
+    ueDescAttrs = 'data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext"';
+    ueButtonAttrs = 'data-aue-label="Call to Action" data-aue-prop="buttonText" data-aue-type="text"';
   }
 
   // Render hero HTML
   const content = document.createRange().createContextualFragment(`
-    <section class="relative py-12 md:py-20 bg-cover bg-center bg-no-repeat" ${ueResource} data-aue-type="reference" data-aue-filter="cf" data-aue-label="Content Fragment">
+    <section class="relative py-12 md:py-20 bg-cover bg-center bg-no-repeat" ${ueResource} ${ueStaticAttrs}>
       <div id="${blockId}-image" class="absolute inset-0 z-0">${pictureHTML}</div>
       <div class="absolute inset-0 bg-black/50 z-10"></div>
       <div class="container mx-auto px-4 relative z-20">
         <div class="max-w-4xl mx-auto text-center">
-          <h1 id="${blockId}-title" data-aue-label="Title" data-aue-prop="title" data-aue-type="text" class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+          <h1 id="${blockId}-title" ${ueTitleAttrs} class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
             ${title}
           </h1>
-          <div id="${blockId}-description" data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext" class="text-lg md:text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
+          <div id="${blockId}-description" ${ueDescAttrs} class="text-lg md:text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
             ${descriptionHTML}
           </div>
           <div class="flex items-center justify-center">
-            <a id="${blockId}-button" data-aue-label="Call to Action" data-aue-prop="buttonText" data-aue-type="text" href="${buttonlink}" class="px-8 py-4 bg-brand-600 text-white font-semibold rounded-2xl hover:bg-brand-700 transition shadow-lg hover:shadow-xl">
+            <a id="${blockId}-button" ${ueButtonAttrs} href="${buttonlink}" class="px-8 py-4 bg-brand-600 text-white font-semibold rounded-2xl hover:bg-brand-700 transition shadow-lg hover:shadow-xl">
               ${buttontext}
             </a>
           </div>
