@@ -90,53 +90,17 @@
     ]
   },
   {
-    "id": "hero",
+    "id": "targeted-content-fragment",
     "fields": [
       {
         "component": "tab",
-        "label": "Default",
-        "name": "default"
-      },
-      {
-        "component": "reference",
-        "valueType": "string",
-        "name": "image",
-        "label": "Image",
-        "multi": false
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "imageAltText",
-        "label": "Image Alt Text"
-      },
-      {
-        "component": "text",
-        "name": "title",
-        "label": "Title",
-        "valueType": "string"
-      },
-      {
-        "component": "richtext",
-        "name": "description",
-        "label": "Description",
-        "valueType": "string"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "buttonText",
-        "label": "Button Text"
-      },
-      {
-        "component": "aem-content",
-        "name": "buttonLink",
-        "label": "Button Link"
+        "label": "Fields",
+        "name": "fields"
       },
       {
           "component": "aem-content-fragment",
-          "name": "picker",
-          "label": "Content Fragment Picker",
+          "name": "fragment",
+          "label": "Content Fragment",
           "valueType": "string"
       },
       {
@@ -157,88 +121,6 @@
           {
             "name": "Hero",
             "value": "hero-zone"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "teaser",
-    "fields": [
-      {
-        "component": "tab",
-        "label": "Fields",
-        "name": "fields"
-      },
-      {
-        "component": "reference",
-        "valueType": "string",
-        "name": "image",
-        "label": "Background Image"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "imageAltText", 
-        "label": "Image Alt Text"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "title",
-        "label": "Title"
-      },
-      {
-        "component": "richtext",
-        "name": "description",
-        "label": "Description",
-        "valueType": "string"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "buttonText",
-        "label": "Button Text"
-      },
-      {
-        "component": "aem-content",
-        "name": "buttonLink",
-        "label": "Button Link"
-      },
-      {
-        "component": "tab",
-        "label": "Targeting",
-        "name": "targeting"
-      },
-      {
-        "component": "select",
-        "valueType": "string",
-        "name": "offerZone",
-        "label": "Zone",
-        "options": [
-          {
-            "name": "Teaser",
-            "value": "teaser-zone"
-          },
-          {
-            "name": "Hero",
-            "value": "hero-zone"
-          }
-        ]
-      },
-      {
-        "component": "tab",
-        "label": "Layout",
-        "name": "layout"
-      },
-      {
-        "component": "multiselect",
-        "name": "style",
-        "label": "Style",
-        "options": [
-          {
-            "name": "Highlight",
-            "value": "highlight"
           }
         ]
       }
