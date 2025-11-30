@@ -25,14 +25,13 @@ async function fetchContentFragment(fragmentPath) {
 function updateHeroContent(offerContent, elements) {
   if (!offerContent) return;
 
-  // Remove all data-aue-* attributes from section when content is updated
-  if (elements.section) {
-    Array.from(elements.section.attributes).forEach(attr => {
-      if (attr.name.startsWith('data-aue-')) {
-        elements.section.removeAttribute(attr.name);
-      }
-    });
-  }
+  elemelementsentsToClean.forEach(el => {
+      Array.from(el.attributes).forEach(attr => {
+        if (attr.name.startsWith('data-aue-')) {
+          el.removeAttribute(attr.name);
+        }
+      });
+  });
 
   // Update text content
   if (elements.title) elements.title.innerHTML = offerContent.title;
@@ -142,7 +141,6 @@ export default async function decorate(block) {
   if (config.contentfragmentpath) {
     const cleanPath = config.contentfragmentpath.replace(/\.html$/, '').replace(/^https?:\/\/[^/]+/, '');
     ueResource = `data-aue-resource="urn:aemconnection:${cleanPath}/jcr:content/data/master"`;
-
     ueStaticAttrs = 'data-aue-type="reference" data-aue-filter="cf" data-aue-label="Content Fragment"';
     ueTitleAttrs = 'data-aue-label="Title" data-aue-prop="title" data-aue-type="text"';
     ueDescAttrs = 'data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext"';
