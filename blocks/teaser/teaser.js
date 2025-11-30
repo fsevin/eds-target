@@ -54,7 +54,7 @@ function updateTeaserContent(offerContent, elements) {
   if (elements.section && offerContent._path) {
     const cleanPath = offerContent._path.replace(/\.html$/, '').replace(/^https?:\/\/[^/]+/, '');
     elements.section.setAttribute('data-aue-resource', `urn:aemconnection:${cleanPath}/jcr:content/data/master`);
-    elements.section.setAttribute('data-aue-label', `Teaser Content Fragment: ${offerContent.title}`);
+    elements.section.setAttribute('data-aue-label', `Content Fragment: ${offerContent.title}`);
   }
 }
 
@@ -132,7 +132,7 @@ export default async function decorate(block) {
   let ueAttributes = '';
   if (config.contentfragmentpath) {
     const cleanPath = config.contentfragmentpath.replace(/\.html$/, '').replace(/^https?:\/\/[^/]+/, '');
-    ueAttributes = `data-aue-resource="urn:aemconnection:${cleanPath}/jcr:content/data/master" data-aue-type="reference" data-aue-filter="cf" data-aue-label="Teaser Content Fragment"`;
+    ueAttributes = `data-aue-resource="urn:aemconnection:${cleanPath}/jcr:content/data/master" data-aue-type="reference" data-aue-filter="cf" data-aue-label="Content Fragment"`;
   }
 
   // Render teaser HTML
