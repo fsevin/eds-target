@@ -25,6 +25,15 @@ async function fetchContentFragment(fragmentPath) {
 function updateHeroContent(offerContent, elements) {
   if (!offerContent) return;
 
+  // Remove all data-aue-* attributes from section when content is updated
+  if (elements.section) {
+    Array.from(elements.section.attributes).forEach(attr => {
+      if (attr.name.startsWith('data-aue-')) {
+        elements.section.removeAttribute(attr.name);
+      }
+    });
+  }
+
   // Update text content
   if (elements.title) elements.title.innerHTML = offerContent.title;
   if (elements.description) elements.description.innerHTML = offerContent.description?.html;
@@ -123,18 +132,17 @@ export default async function decorate(block) {
     pictureHTML = createPlaceholderSVG('image', '4:3');
   }
 
-  // Build Universal Editor attributes (only in non-author mode)
+  // Build Universal Editor attributes
   let ueResource = '';
   let ueStaticAttrs = '';
   let ueTitleAttrs = '';
   let ueDescAttrs = '';
   let ueButtonAttrs = '';
 
-  if (!isAuthorMode) {
-    if (config.contentfragmentpath) {
-      const cleanPath = config.contentfragmentpath.replace(/\.html$/, '').replace(/^https?:\/\/[^/]+/, '');
-      ueResource = `data-aue-resource="urn:aemconnection:${cleanPath}/jcr:content/data/master"`;
-    }
+  if (config.contentfragmentpath) {
+    const cleanPath = config.contentfragmentpath.replace(/\.html$/, '').replace(/^https?:\/\/[^/]+/, '');
+    ueResource = `data-aue-resource="urn:aemconnection:${cleanPath}/jcr:content/data/master"`;
+
     ueStaticAttrs = 'data-aue-type="reference" data-aue-filter="cf" data-aue-label="Content Fragment"';
     ueTitleAttrs = 'data-aue-label="Title" data-aue-prop="title" data-aue-type="text"';
     ueDescAttrs = 'data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext"';
