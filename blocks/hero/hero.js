@@ -46,10 +46,9 @@ function updateHeroContent(offerContent, elements) {
   }
 
   // Update Universal Editor resource attribute if section element exists
-  if (elements.section && offerContent._path && offerContent.title) {
+  if (elements.section && offerContent._path) {
     const cleanPath = offerContent._path.replace(/\.html$/, '').replace(/^https?:\/\/[^/]+/, '');
     elements.section.setAttribute('data-aue-resource', `urn:aemconnection:${cleanPath}/jcr:content/data/master`);
-    elements.section.setAttribute('data-aue-label', offerContent.title);
   }
 }
 
@@ -104,13 +103,11 @@ export default async function decorate(block) {
   let descriptionHTML = '<p>Add your hero description here.</p>';
 
   // Fetch content fragment data if path is provided
-  let fragmentTitle = '';
   if (config.contentfragmentpath) {
     const cleanPath = config.contentfragmentpath.replace(/\.html$/, '');
     const fragmentData = await fetchContentFragment(cleanPath);
     if (fragmentData) {
       title = fragmentData.title || title;
-      fragmentTitle = fragmentData.title || '';
       descriptionHTML = fragmentData.description?.html || descriptionHTML;
       buttontext = fragmentData.buttonText || buttontext;
       buttonlink = fragmentData.buttonLink?._path || buttonlink;
@@ -132,16 +129,16 @@ export default async function decorate(block) {
     pictureHTML = createPlaceholderSVG('image', '4:3');
   }
 
-  // Build Universal Editor attributes for content fragment reference
-  let ueAttributes = '';
-  if (config.contentfragmentpath && fragmentTitle) {
+  // Build Universal Editor resource attribute for content fragment reference
+  let ueResource = '';
+  if (config.contentfragmentpath) {
     const cleanPath = config.contentfragmentpath.replace(/\.html$/, '').replace(/^https?:\/\/[^/]+/, '');
-    ueAttributes = `data-aue-resource="urn:aemconnection:${cleanPath}/jcr:content/data/master" data-aue-type="reference" data-aue-filter="cf" data-aue-label="${fragmentTitle}"`;
+    ueResource = `data-aue-resource="urn:aemconnection:${cleanPath}/jcr:content/data/master"`;
   }
 
   // Render hero HTML
   const content = document.createRange().createContextualFragment(`
-    <section class="relative py-12 md:py-20 bg-cover bg-center bg-no-repeat" ${ueAttributes}>
+    <section class="relative py-12 md:py-20 bg-cover bg-center bg-no-repeat" ${ueResource} data-aue-type="reference" data-aue-filter="cf" data-aue-label="Content Fragment">
       <div id="${blockId}-image" class="absolute inset-0 z-0">${pictureHTML}</div>
       <div class="absolute inset-0 bg-black/50 z-10"></div>
       <div class="container mx-auto px-4 relative z-20">

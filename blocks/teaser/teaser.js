@@ -51,10 +51,9 @@ function updateTeaserContent(offerContent, elements) {
   }
 
   // Update Universal Editor resource attribute if section element exists
-  if (elements.section && offerContent._path && offerContent.title) {
+  if (elements.section && offerContent._path) {
     const cleanPath = offerContent._path.replace(/\.html$/, '').replace(/^https?:\/\/[^/]+/, '');
     elements.section.setAttribute('data-aue-resource', `urn:aemconnection:${cleanPath}/jcr:content/data/master`);
-    elements.section.setAttribute('data-aue-label', offerContent.title);
   }
 }
 
@@ -99,13 +98,11 @@ export default async function decorate(block) {
   let descriptionHTML = '<p>Add your teaser description here.</p>';
 
   // Fetch content fragment data if path is provided
-  let fragmentTitle = '';
   if (config.contentfragmentpath) {
     const cleanPath = config.contentfragmentpath.replace(/\.html$/, '');
     const fragmentData = await fetchContentFragment(cleanPath);
     if (fragmentData) {
       title = fragmentData.title || title;
-      fragmentTitle = fragmentData.title || '';
       descriptionHTML = fragmentData.description?.html || descriptionHTML;
       buttontext = fragmentData.buttonText || buttontext;
       buttonlink = fragmentData.buttonLink?._path || buttonlink;
@@ -130,16 +127,16 @@ export default async function decorate(block) {
   const style = config.style || '';
   const sectionClasses = style.includes('highlight') ? 'py-20 bg-gray-50' : 'py-20 bg-white';
 
-  // Build Universal Editor attributes for content fragment reference
-  let ueAttributes = '';
-  if (config.contentfragmentpath && fragmentTitle) {
+  // Build Universal Editor resource attribute for content fragment reference
+  let ueResource = '';
+  if (config.contentfragmentpath) {
     const cleanPath = config.contentfragmentpath.replace(/\.html$/, '').replace(/^https?:\/\/[^/]+/, '');
-    ueAttributes = `data-aue-resource="urn:aemconnection:${cleanPath}/jcr:content/data/master" data-aue-type="reference" data-aue-filter="cf" data-aue-label="${fragmentTitle}"`;
+    ueResource = `data-aue-resource="urn:aemconnection:${cleanPath}/jcr:content/data/master"`;
   }
 
   // Render teaser HTML
   const content = document.createRange().createContextualFragment(`
-    <section class="${sectionClasses}" ${ueAttributes}>
+    <section class="${sectionClasses}" ${ueResource} data-aue-type="reference" data-aue-filter="cf" data-aue-label="Content Fragment">
       <div class="container mx-auto px-4">
         <div class="grid lg:grid-cols-5 gap-12 items-center">
           <div id="${blockId}-image" data-aue-label="Image" data-aue-prop="image" data-aue-type="media" class="relative rounded-2xl overflow-hidden shadow-2xl lg:col-span-3">
