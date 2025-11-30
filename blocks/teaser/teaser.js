@@ -9,24 +9,52 @@ import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode, fetchContentFra
 function updateTeaserContent(offerContent, elements) {
   if (!offerContent) return;
 
+  // Add transition for smooth content updates
+  const transitionElements = [elements.title, elements.description, elements.button, elements.image];
+  transitionElements.forEach(el => {
+    if (el) el.style.transition = 'opacity 0.3s ease-in-out';
+  });
+
   // Update text content
-  if (elements.title) elements.title.innerHTML = offerContent.title;
-  if (elements.description) elements.description.innerHTML = offerContent.description?.html;
+  if (elements.title) {
+    elements.title.style.opacity = '0';
+    setTimeout(() => {
+      elements.title.innerHTML = offerContent.title;
+      elements.title.style.opacity = '1';
+    }, 300);
+  }
+
+  if (elements.description) {
+    elements.description.style.opacity = '0';
+    setTimeout(() => {
+      elements.description.innerHTML = offerContent.description?.html;
+      elements.description.style.opacity = '1';
+    }, 300);
+  }
+
   if (elements.button) {
-    elements.button.innerHTML = offerContent.buttonText;
-    elements.button.href = offerContent.buttonLink || '#';
+    elements.button.style.opacity = '0';
+    setTimeout(() => {
+      elements.button.innerHTML = offerContent.buttonText;
+      elements.button.href = offerContent.buttonLink || '#';
+      elements.button.style.opacity = '1';
+    }, 300);
   }
 
   // Update image content
   if (elements.image && offerContent.image?._path) {
-    const imagePath = offerContent.image._path;
-    const siteName = getSiteNameFromDAM(imagePath);
-    const picture = createOptimizedPicture(
-      imagePath.substring(`/content/dam/${siteName}`.length),
-      offerContent.imageDescription
-    );
-    elements.image.innerHTML = picture.outerHTML;
-    applyImageStyling(elements.image);
+    elements.image.style.opacity = '0';
+    setTimeout(() => {
+      const imagePath = offerContent.image._path;
+      const siteName = getSiteNameFromDAM(imagePath);
+      const picture = createOptimizedPicture(
+        imagePath.substring(`/content/dam/${siteName}`.length),
+        offerContent.imageDescription
+      );
+      elements.image.innerHTML = picture.outerHTML;
+      applyImageStyling(elements.image);
+      elements.image.style.opacity = '1';
+    }, 300);
   }
 }
 
@@ -112,14 +140,14 @@ export default async function decorate(block) {
     <section class="${sectionClasses}" ${ueResource} data-aue-type="reference" data-aue-filter="cf" data-aue-label="Content Fragment">
       <div class="container mx-auto px-4">
         <div class="grid lg:grid-cols-5 gap-12 items-center">
-          <div id="${blockId}-image" data-aue-label="Image" data-aue-prop="image" data-aue-type="media" class="relative rounded-2xl overflow-hidden shadow-2xl lg:col-span-3">
+          <div id="${blockId}-image" data-aue-label="Image" data-aue-prop="image" data-aue-type="media" class="relative rounded-2xl overflow-hidden shadow-2xl lg:col-span-3" style="min-height: 400px; aspect-ratio: 4/3;">
             ${pictureHTML}
           </div>
           <div class="space-y-6 lg:col-span-2">
-            <h2 id="${blockId}-title" data-aue-label="Title" data-aue-prop="title" data-aue-type="text" class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
+            <h2 id="${blockId}-title" data-aue-label="Title" data-aue-prop="title" data-aue-type="text" class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight" style="min-height: 3em;">
               ${title}
             </h2>
-            <div id="${blockId}-description" data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext" class="text-lg text-gray-600 leading-relaxed">
+            <div id="${blockId}-description" data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext" class="text-lg text-gray-600 leading-relaxed" style="min-height: 5em;">
               ${descriptionHTML}
             </div>
             <div>
