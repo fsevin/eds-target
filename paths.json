@@ -7,7 +7,6 @@
   ],
   "includes": [
     "/content/3ds",
-    "/content/dam/3ds/images/",
-    "/content/dam/3ds/fragments/"
+    "/content/dam/3ds/images/"
   ]
 }
