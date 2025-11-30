@@ -30,7 +30,7 @@ function updateHeroContent(offerContent, elements) {
   if (elements.description) elements.description.innerHTML = offerContent.description?.html;
   if (elements.button) {
     elements.button.innerHTML = offerContent.buttonText;
-    elements.button.href = offerContent.buttonLink?._path;
+    elements.button.href = offerContent.buttonLink || '#';
   }
 
   // Update background image
@@ -110,7 +110,7 @@ export default async function decorate(block) {
       title = fragmentData.title || title;
       descriptionHTML = fragmentData.description?.html || descriptionHTML;
       buttontext = fragmentData.buttonText || buttontext;
-      buttonlink = fragmentData.buttonLink?._path || buttonlink;
+      buttonlink = fragmentData.buttonLink;
       imagedescription = fragmentData.imageDescription || imagedescription;
       imagePath = fragmentData.image?._path || imagePath;
     }

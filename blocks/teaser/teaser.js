@@ -35,10 +35,10 @@ function updateTeaserContent(offerContent, elements) {
   if (elements.description) elements.description.innerHTML = offerContent.description?.html;
   if (elements.button) {
     elements.button.innerHTML = offerContent.buttonText;
-    elements.button.href = offerContent.buttonLink?._path;
+    elements.button.href = offerContent.buttonLink || '#';
   }
 
-  // Update image
+  // Update image content
   if (elements.image && offerContent.image?._path) {
     const imagePath = offerContent.image._path;
     const siteName = getSiteNameFromDAM(imagePath);
