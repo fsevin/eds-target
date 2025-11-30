@@ -103,7 +103,12 @@
         "valueType": "string",
         "name": "offerzone",
         "label": "Targeted Zone",
+        "defaultValue": "none",
         "options": [
+          {
+            "name": "None",
+            "value": "none"
+          },
           {
             "name": "Teaser",
             "value": "teaser-zone"
