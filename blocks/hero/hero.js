@@ -46,10 +46,10 @@ function updateHeroContent(offerContent, elements) {
   }
 
   // Update Universal Editor resource attribute if section element exists
-  if (elements.section && offerContent._path) {
+  if (elements.section && offerContent._path && offerContent.title) {
     const cleanPath = offerContent._path.replace(/\.html$/, '').replace(/^https?:\/\/[^/]+/, '');
     elements.section.setAttribute('data-aue-resource', `urn:aemconnection:${cleanPath}/jcr:content/data/master`);
-    elements.section.setAttribute('data-aue-label', `Content Fragment: ${offerContent.title}`);
+    elements.section.setAttribute('data-aue-label', offerContent.title);
   }
 }
 
@@ -104,11 +104,13 @@ export default async function decorate(block) {
   let descriptionHTML = '<p>Add your hero description here.</p>';
 
   // Fetch content fragment data if path is provided
+  let fragmentTitle = '';
   if (config.contentfragmentpath) {
     const cleanPath = config.contentfragmentpath.replace(/\.html$/, '');
     const fragmentData = await fetchContentFragment(cleanPath);
     if (fragmentData) {
       title = fragmentData.title || title;
+      fragmentTitle = fragmentData.title || '';
       descriptionHTML = fragmentData.description?.html || descriptionHTML;
       buttontext = fragmentData.buttonText || buttontext;
       buttonlink = fragmentData.buttonLink?._path || buttonlink;
@@ -132,9 +134,9 @@ export default async function decorate(block) {
 
   // Build Universal Editor attributes for content fragment reference
   let ueAttributes = '';
-  if (config.contentfragmentpath) {
+  if (config.contentfragmentpath && fragmentTitle) {
     const cleanPath = config.contentfragmentpath.replace(/\.html$/, '').replace(/^https?:\/\/[^/]+/, '');
-    ueAttributes = `data-aue-resource="urn:aemconnection:${cleanPath}/jcr:content/data/master" data-aue-type="reference" data-aue-filter="cf" data-aue-label="Content Fragment"`;
+    ueAttributes = `data-aue-resource="urn:aemconnection:${cleanPath}/jcr:content/data/master" data-aue-type="reference" data-aue-filter="cf" data-aue-label="${fragmentTitle}"`;
   }
 
   // Render hero HTML
