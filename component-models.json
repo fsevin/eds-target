@@ -135,8 +135,8 @@
       },
       {
         "component": "tab",
-        "label": "Offer",
-        "name": "offer"
+        "label": "Targeting",
+        "name": "targeting"
       },
       {
         "component": "select",
