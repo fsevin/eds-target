@@ -126,7 +126,7 @@ export default async function decorate(block) {
   // Build Universal Editor attributes for content fragment reference
   let ueAttributes = '';
   if (config.contentfragmentpath) {
-    const cleanPath = config.contentfragmentpath.replace(/\.html$/, '');
+    const cleanPath = config.contentfragmentpath.replace(/\.html$/, '').replace(/^https?:\/\/[^/]+/, '');
     ueAttributes = `data-aue-resource="urn:aemconnection:${cleanPath}/jcr:content/data/master" data-aue-type="reference" data-aue-filter="cf" data-aue-label="Hero Content Fragment"`;
   }
 
