@@ -90,11 +90,11 @@
     ]
   },
   {
-    "id": "targeted-content-fragment",
+    "id": "targetable-content-fragment",
     "fields": [
       {
         "component": "tab",
-        "label": "Fields",
+        "label": "Targetable Content",
         "name": "fields"
       },
       {
@@ -104,15 +104,10 @@
           "valueType": "string"
       },
       {
-        "component": "tab",
-        "label": "Targeting",
-        "name": "targeting"
-      },
-      {
         "component": "select",
         "valueType": "string",
-        "name": "offerZone",
-        "label": "Zone",
+        "name": "targetedZone",
+        "label": "Targeted Zone",
         "options": [
           {
             "name": "Teaser",
