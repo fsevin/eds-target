@@ -96,7 +96,8 @@
           "component": "aem-content-fragment",
           "name": "contentFragmentPath",
           "label": "Content Fragment",
-          "valueType": "string"
+          "valueType": "string",
+          "rootPath": "/content/dam/3ds/fragments"
       },
       {
         "component": "select",
