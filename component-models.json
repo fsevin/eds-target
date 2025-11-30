@@ -93,11 +93,6 @@
     "id": "targetable-content-fragment",
     "fields": [
       {
-        "component": "tab",
-        "label": "Targetable Content",
-        "name": "fields"
-      },
-      {
           "component": "aem-content-fragment",
           "name": "fragment",
           "label": "Content Fragment",
