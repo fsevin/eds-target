@@ -98,7 +98,8 @@ export default async function decorate(block) {
 
   // Fetch content fragment data if path is provided
   if (config.contentfragmentpath) {
-    const fragmentData = await fetchContentFragment(config.contentfragmentpath);
+    const cleanPath = config.contentfragmentpath.replace(/\.html$/, '');
+    const fragmentData = await fetchContentFragment(cleanPath);
     if (fragmentData) {
       title = fragmentData.title || title;
       descriptionHTML = fragmentData.description?.html || descriptionHTML;
