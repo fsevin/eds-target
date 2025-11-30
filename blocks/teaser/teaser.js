@@ -2,20 +2,55 @@ import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
 import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode } from '../../scripts/utils.js';
 
 /**
- * Fetch content fragment data from GraphQL endpoint
+ * Fetch content fragment data from GraphQL endpoint or AEM API
  * @param {string} fragmentPath Content fragment path
  * @returns {Promise<Object>} Content fragment data
  */
 async function fetchContentFragment(fragmentPath) {
   const cleanPath = fragmentPath.replace(/^https?:\/\/[^/]+/, '');
   const domain = isAuthorMode ? 'author-p34570-e1263228' : 'publish-p34570-e1263228';
-  const graphqlUrl = `https://${domain}.adobeaemcloud.com/graphql/execute.json/3ds/offer-by-path;offerPath=${cleanPath}`;
 
   try {
-    const response = await fetch(graphqlUrl);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    const data = await response.json();
-    return data?.data?.offerByPath?.item || null;
+    if (isAuthorMode) {
+      // In author mode, fetch via AEM API
+      // Step 1: Get jcr:uuid from the fragment JSON
+      const jsonUrl = `https://${domain}.adobeaemcloud.com${cleanPath}.json`;
+      const jsonResponse = await fetch(jsonUrl);
+      if (!jsonResponse.ok) throw new Error(`HTTP error! status: ${jsonResponse.status}`);
+      const jsonData = await jsonResponse.json();
+      const uuid = jsonData['jcr:uuid'];
+
+      if (!uuid) throw new Error('jcr:uuid not found in fragment JSON');
+
+      // Step 2: Fetch fragment data using the UUID
+      const fragmentUrl = `https://${domain}.adobeaemcloud.com/adobe/sites/cf/fragments/${uuid}`;
+      const fragmentResponse = await fetch(fragmentUrl);
+      if (!fragmentResponse.ok) throw new Error(`HTTP error! status: ${fragmentResponse.status}`);
+      const fragmentData = await fragmentResponse.json();
+
+      // Transform API response to match GraphQL structure
+      const fields = {};
+      fragmentData.fields?.forEach(field => {
+        fields[field.name] = field.values?.[0] || '';
+      });
+
+      return {
+        _path: fragmentData.path,
+        title: fields.title || '',
+        description: { html: fields.description || '' },
+        buttonText: fields.buttonText || '',
+        buttonLink: { _path: fields.buttonLink || '#' },
+        image: fields.image ? { _path: fields.image } : null,
+        imageDescription: fields.imageDescription || '',
+      };
+    } else {
+      // In publish mode, use GraphQL
+      const graphqlUrl = `https://${domain}.adobeaemcloud.com/graphql/execute.json/3ds/offer-by-path;offerPath=${cleanPath}`;
+      const response = await fetch(graphqlUrl);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const data = await response.json();
+      return data?.data?.offerByPath?.item || null;
+    }
   } catch (error) {
     console.error('Error fetching content fragment:', error);
     return null;
