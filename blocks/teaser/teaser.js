@@ -121,9 +121,16 @@ export default async function decorate(block) {
   const style = config.style || '';
   const sectionClasses = style.includes('highlight') ? 'py-20 bg-gray-50' : 'py-20 bg-white';
 
+  // Build Universal Editor attributes for content fragment reference
+  let ueAttributes = '';
+  if (config.contentfragmentpath) {
+    const cleanPath = config.contentfragmentpath.replace(/\.html$/, '');
+    ueAttributes = `data-aue-resource="urn:aemconnection:${cleanPath}/jcr:content/data/master" data-aue-type="reference" data-aue-filter="cf" data-aue-label="Teaser Content Fragment"`;
+  }
+
   // Render teaser HTML
   const content = document.createRange().createContextualFragment(`
-    <section class="${sectionClasses}">
+    <section class="${sectionClasses}" ${ueAttributes}>
       <div class="container mx-auto px-4">
         <div class="grid lg:grid-cols-5 gap-12 items-center">
           <div id="${blockId}-image" data-aue-label="Image" data-aue-prop="image" data-aue-type="media" class="relative rounded-2xl overflow-hidden shadow-2xl lg:col-span-3">

@@ -123,9 +123,16 @@ export default async function decorate(block) {
     pictureHTML = createPlaceholderSVG('image', '4:3');
   }
 
+  // Build Universal Editor attributes for content fragment reference
+  let ueAttributes = '';
+  if (config.contentfragmentpath) {
+    const cleanPath = config.contentfragmentpath.replace(/\.html$/, '');
+    ueAttributes = `data-aue-resource="urn:aemconnection:${cleanPath}/jcr:content/data/master" data-aue-type="reference" data-aue-filter="cf" data-aue-label="Hero Content Fragment"`;
+  }
+
   // Render hero HTML
   const content = document.createRange().createContextualFragment(`
-    <section class="relative py-12 md:py-20 bg-cover bg-center bg-no-repeat">
+    <section class="relative py-12 md:py-20 bg-cover bg-center bg-no-repeat" ${ueAttributes}>
       <div id="${blockId}-image" class="absolute inset-0 z-0">${pictureHTML}</div>
       <div class="absolute inset-0 bg-black/50 z-10"></div>
       <div class="container mx-auto px-4 relative z-20">
