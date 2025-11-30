@@ -44,6 +44,13 @@ function updateHeroContent(offerContent, elements) {
     elements.image.innerHTML = picture.outerHTML;
     applyBackgroundImageStyling(elements.image);
   }
+
+  // Update Universal Editor resource attribute if section element exists
+  if (elements.section && offerContent._path) {
+    const cleanPath = offerContent._path.replace(/\.html$/, '').replace(/^https?:\/\/[^/]+/, '');
+    elements.section.setAttribute('data-aue-resource', `urn:aemconnection:${cleanPath}/jcr:content/data/master`);
+    elements.section.setAttribute('data-aue-label', `Hero Content Fragment: ${offerContent.title}`);
+  }
 }
 
 /**
@@ -158,6 +165,7 @@ export default async function decorate(block) {
 
   // Cache element references for updates
   const elements = {
+    section: block.querySelector('section'),
     title: document.getElementById(`${blockId}-title`),
     description: document.getElementById(`${blockId}-description`),
     button: document.getElementById(`${blockId}-button`),
