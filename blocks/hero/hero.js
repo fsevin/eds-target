@@ -25,7 +25,7 @@ async function fetchContentFragment(fragmentPath) {
 function updateHeroContent(offerContent, elements) {
   if (!offerContent) return;
 
-  elemelementsentsToClean.forEach(el => {
+  elements.forEach(el => {
       Array.from(el.attributes).forEach(attr => {
         if (attr.name.startsWith('data-aue-')) {
           el.removeAttribute(attr.name);
