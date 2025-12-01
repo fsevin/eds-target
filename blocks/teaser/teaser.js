@@ -64,7 +64,6 @@ export default function decorate(block) {
 
   // Default placeholder values for instant render
   const title = 'Teaser Title';
-  const imagedescription = 'Teaser image';
   const buttonlink = '#';
   const buttontext = 'Learn More';
   const descriptionHTML = '<p>Add your teaser description here.</p>';
@@ -73,16 +72,9 @@ export default function decorate(block) {
   const style = config.style || '';
   const sectionClasses = style.includes('highlight') ? 'py-20 bg-gray-50' : 'py-20 bg-white';
 
-  // Build Universal Editor resource attribute for content fragment reference
-  let ueResource = '';
-  if (config.contentfragmentpath) {
-    const cleanPath = config.contentfragmentpath.replace(/\.html$/, '').replace(/^https?:\/\/[^/]+/, '');
-    ueResource = `data-aue-resource="urn:aemconnection:${cleanPath}/jcr:content/data/master"`;
-  }
-
   // Render teaser HTML immediately with placeholders
   const content = document.createRange().createContextualFragment(`
-    <section class="${sectionClasses}" ${ueResource} data-aue-type="reference" data-aue-filter="cf" data-aue-label="Content Fragment">
+    <section class="${sectionClasses}">
       <div class="container mx-auto px-4">
         <div class="grid lg:grid-cols-5 gap-12 items-center">
           <div id="${blockId}-image" data-aue-label="Image" data-aue-prop="image" data-aue-type="media" class="relative rounded-2xl overflow-hidden shadow-2xl lg:col-span-3" style="min-height: 400px; aspect-ratio: 4/3;">

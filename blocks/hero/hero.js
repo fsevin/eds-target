@@ -1,24 +1,35 @@
 import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
-import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode, fetchContentFragment } from '../../scripts/utils.js';
+import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode } from '../../scripts/utils.js';
 
 function updateHeroContent(offerContent, elements) {
   if (!offerContent) return;
 
   // Update text content
-  if (elements.title) elements.title.innerHTML = offerContent.title;
-  if (elements.description) elements.description.innerHTML = offerContent.description?.html;
+  if (elements.title && (offerContent.title)) {
+    elements.title.innerHTML = offerContent.title;
+  }
+  if (elements.description) {
+    // Handle both offer format (description.html) and config format (description)
+    const descHTML = offerContent.description?.html || offerContent.description;
+    if (descHTML) elements.description.innerHTML = descHTML;
+  }
   if (elements.button) {
-    elements.button.innerHTML = offerContent.buttonText;
-    elements.button.href = offerContent.buttonLink || '#';
+    // Handle both offer format (buttonText) and config format (buttontext)
+    const btnText = offerContent.buttonText || offerContent.buttontext;
+    const btnLink = offerContent.buttonLink || offerContent.buttonlink;
+    if (btnText) elements.button.innerHTML = btnText;
+    if (btnLink) elements.button.href = btnLink;
   }
 
   // Update background image
-  if (elements.image && offerContent.image?._path) {
-    const imagePath = offerContent.image._path;
+  // Handle both offer format (image._path) and config format (image as string)
+  const imagePath = offerContent.image?._path || offerContent.image;
+  if (elements.image && imagePath) {
     const siteName = getSiteNameFromDAM(imagePath);
+    const imageDesc = offerContent.imageDescription || offerContent.imagedescription || 'Hero image';
     const picture = createOptimizedPicture(
       imagePath.substring(`/content/dam/${siteName}`.length),
-      offerContent.imageDescription
+      imageDesc
     );
     elements.image.innerHTML = picture.outerHTML;
     applyBackgroundImageStyling(elements.image);
@@ -69,22 +80,14 @@ export default function decorate(block) {
 
   // Default placeholder values for instant render
   const title = 'Hero Title';
-  const imagedescription = 'Hero image';
   const buttonlink = '#';
   const buttontext = 'Get Started';
   const descriptionHTML = '<p>Add your hero description here.</p>';
   const pictureHTML = createPlaceholderSVG('image', '16:9');
 
-  // Build Universal Editor resource attribute for content fragment reference
-  let ueResource = '';
-  if (config.contentfragmentpath) {
-    const cleanPath = config.contentfragmentpath.replace(/\.html$/, '').replace(/^https?:\/\/[^/]+/, '');
-    ueResource = `data-aue-resource="urn:aemconnection:${cleanPath}/jcr:content/data/master"`;
-  }
-
   // Render hero HTML immediately with placeholders
   const content = document.createRange().createContextualFragment(`
-    <section class="relative py-12 md:py-20 bg-cover bg-center bg-no-repeat" ${ueResource} data-aue-type="reference" data-aue-filter="cf" data-aue-label="Content Fragment">
+    <section class="relative py-12 md:py-20 bg-cover bg-center bg-no-repeat">
       <div id="${blockId}-image" class="absolute inset-0 z-0">${pictureHTML}</div>
       <div class="absolute inset-0 bg-black/50 z-10"></div>
       <div class="container mx-auto px-4 relative z-20">
@@ -120,14 +123,9 @@ export default function decorate(block) {
   // Apply initial background image styling
   applyBackgroundImageStyling(elements.image);
 
-  // Fetch content fragment data asynchronously if path is provided
-  if (config.contentfragmentpath) {
-    const cleanPath = config.contentfragmentpath.replace(/\.html$/, '');
-    fetchContentFragment(cleanPath).then((fragmentData) => {
-      if (fragmentData) {
-        updateHeroContent(fragmentData, elements);
-      }
-    });
+  // Update hero content with config data if available
+  if (config.title || config.description || config.buttontext || config.image) {
+    updateHeroContent(config, elements);
   }
 
   // Handle offer zone if configured (only in non-author mode)
