@@ -36,11 +36,6 @@ function updateHeroContent(source, elements) {
 function applyBackgroundImageStyling(imageContainer) {
   if (!imageContainer) return;
 
-  Object.assign(imageContainer.style, {
-    overflow: 'hidden',
-    contain: 'layout'
-  });
-
   const picture = imageContainer.querySelector('picture');
   const img = picture?.querySelector('img');
 
@@ -89,8 +84,8 @@ export default function decorate(block) {
   }
 
   const content = document.createRange().createContextualFragment(`
-    <section class="relative py-12 md:py-20 bg-cover bg-center bg-no-repeat" style="min-height: 500px; contain: layout;">
-      <div id="${blockId}-image" class="absolute inset-0 z-0" style="contain: layout;">${pictureHTML}</div>
+    <section class="relative py-12 md:py-20 bg-cover bg-center bg-no-repeat">
+      <div id="${blockId}-image" class="absolute inset-0 z-0">${pictureHTML}</div>
       <div class="absolute inset-0 bg-black/50 z-10"></div>
       <div class="container mx-auto px-4 relative z-20">
         <div class="max-w-4xl mx-auto text-center">
@@ -100,7 +95,7 @@ export default function decorate(block) {
           <div id="${blockId}-description" data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext" class="text-lg md:text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
             ${descriptionHTML}
           </div>
-          <div class="flex items-center justify-center" style="min-height: 3.5rem;">
+          <div class="flex items-center justify-center">
             <a id="${blockId}-button" data-aue-label="Call to Action" data-aue-prop="buttonText" data-aue-type="text" href="${buttonlink}" class="px-8 py-4 bg-brand-600 text-white font-semibold rounded-2xl hover:bg-brand-700 transition shadow-lg hover:shadow-xl">
               ${buttontext}
             </a>
