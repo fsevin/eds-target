@@ -122,12 +122,8 @@ export default function decorate(block) {
 
   // Apply initial background image styling
   applyBackgroundImageStyling(elements.image);
-
-  // Update hero content with config data if available
-  if (config.title || config.description || config.buttontext || config.image) {
-    updateHeroContent(config, elements);
-  }
-
+  updateHeroContent(config, elements);
+  
   // Handle offer zone if configured (only in non-author mode)
   if (config.offerzone && !isAuthorMode) {
     alloy('sendEvent', {

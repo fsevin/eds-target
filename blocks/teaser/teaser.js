@@ -112,16 +112,7 @@ export default function decorate(block) {
 
   // Apply initial image styling
   applyImageStyling(elements.image);
-
-  // Fetch content fragment data asynchronously if path is provided
-  if (config.contentfragmentpath) {
-    const cleanPath = config.contentfragmentpath.replace(/\.html$/, '');
-    fetchContentFragment(cleanPath).then((fragmentData) => {
-      if (fragmentData) {
-        updateTeaserContent(fragmentData, elements);
-      }
-    });
-  }
+  updateTeaserContent(config, elements);
 
   // Handle offer zone if configured (only in non-author mode)
   if (config.offerzone && !isAuthorMode) {
