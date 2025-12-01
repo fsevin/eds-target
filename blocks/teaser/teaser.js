@@ -27,7 +27,7 @@ function updateTeaserContent(source, elements) {
       imagePath = imagePath.substring(`/content/dam/${siteName}`.length);
     }
     const imageDescription = source.imageDescription || source.imagedescription || 'Teaser image';
-    const picture = createOptimizedPicture(imagePath, imageDescription);
+    const picture = createOptimizedPicture(imagePath, imageDescription, true);
     elements.image.innerHTML = picture.outerHTML;
     applyImageStyling(elements.image);
   }
@@ -70,7 +70,7 @@ export default function decorate(block) {
 
   let pictureHTML;
   if (config.image) {
-    const picture = createOptimizedPicture(config.image, config.imagedescription || 'Teaser image');
+    const picture = createOptimizedPicture(config.image, config.imagedescription || 'Teaser image', true);
     pictureHTML = picture.outerHTML;
   } else {
     pictureHTML = createPlaceholderSVG('image', '4:3');

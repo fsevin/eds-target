@@ -27,7 +27,7 @@ function updateHeroContent(source, elements) {
       imagePath = imagePath.substring(`/content/dam/${siteName}`.length);
     }
     const imageDescription = source.imageDescription || source.imagedescription || 'Hero image';
-    const picture = createOptimizedPicture(imagePath, imageDescription);
+    const picture = createOptimizedPicture(imagePath, imageDescription, true);
     elements.image.innerHTML = picture.outerHTML;
     applyBackgroundImageStyling(elements.image);
   }
@@ -77,7 +77,7 @@ export default function decorate(block) {
 
   let pictureHTML;
   if (config.image) {
-    const picture = createOptimizedPicture(config.image, config.imagedescription || 'Hero image');
+    const picture = createOptimizedPicture(config.image, config.imagedescription || 'Hero image', true);
     pictureHTML = picture.outerHTML;
   } else {
     pictureHTML = createPlaceholderSVG('image', '16:9');
