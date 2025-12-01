@@ -37,10 +37,6 @@ function updateTeaserContent(source, elements, showIcon = false) {
 function applyImageStyling(imageContainer) {
   if (!imageContainer) return;
 
-  Object.assign(imageContainer.style, {
-    contain: 'layout'
-  });
-
   const picture = imageContainer?.querySelector('picture');
   const img = picture?.querySelector('img');
 
@@ -86,18 +82,18 @@ export default function decorate(block) {
 
   const icon = showIcon ? getButtonIcon() : '';
 
-  const imageBlock = `<div id="${blockId}-image" data-aue-label="Image" data-aue-prop="image" data-aue-type="media" class="relative rounded-2xl overflow-hidden shadow-2xl lg:col-span-3" style="min-height: 400px; aspect-ratio: 4/3; contain: layout;">
+  const imageBlock = `<div id="${blockId}-image" data-aue-label="Image" data-aue-prop="image" data-aue-type="media" class="relative rounded-2xl overflow-hidden shadow-2xl lg:col-span-3">
     ${pictureHTML}
   </div>`;
 
-  const textBlock = `<div class="space-y-6 lg:col-span-2" style="contain: layout; min-height: 400px;">
-    <h2 id="${blockId}-title" data-aue-label="Title" data-aue-prop="title" data-aue-type="text" class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight" style="min-height: 5rem;">
+  const textBlock = `<div class="space-y-6 lg:col-span-2">
+    <h2 id="${blockId}-title" data-aue-label="Title" data-aue-prop="title" data-aue-type="text" class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
       ${title}
     </h2>
-    <div id="${blockId}-description" data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext" class="text-lg text-gray-600 leading-relaxed" style="min-height: 8rem;">
+    <div id="${blockId}-description" data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext" class="text-lg text-gray-600 leading-relaxed">
       ${descriptionHTML}
     </div>
-    <div style="min-height: 3.5rem;">
+    <div>
       <a id="${blockId}-button" data-aue-label="Call to Action" data-aue-prop="buttonText" data-aue-type="text" href="${buttonlink}" class="inline-flex items-center px-8 py-4 bg-brand-600 text-white font-semibold rounded-2xl hover:bg-brand-700 transition shadow-lg hover:shadow-xl">
         ${buttontext}${icon}
       </a>
@@ -105,7 +101,7 @@ export default function decorate(block) {
   </div>`;
 
   const content = document.createRange().createContextualFragment(`
-    <section class="py-20 py-20 bg-white" style="contain: layout;">
+    <section class="py-20 py-20 bg-white">
       <div class="container mx-auto px-4">
         <div class="grid lg:grid-cols-5 gap-12 items-center">
           ${flipLayout ? textBlock + imageBlock : imageBlock + textBlock}

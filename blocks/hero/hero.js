@@ -75,6 +75,9 @@ export default function decorate(block) {
   const buttonlink = config.buttonlink || config.buttonLink || '#';
   const buttontext = config.buttontext || config.buttonText || 'Get Started';
   const descriptionHTML = config.description || '<p>Add your hero description here.</p>';
+  const showIcon = config.showicon === 'true' || config.showicon === true;
+
+  const icon = showIcon ? getButtonIcon() : '';
 
   let pictureHTML;
   if (config.image) {
@@ -98,7 +101,7 @@ export default function decorate(block) {
           </div>
           <div class="flex items-center justify-center">
             <a id="${blockId}-button" data-aue-label="Call to Action" data-aue-prop="buttonText" data-aue-type="text" href="${buttonlink}" class="px-8 py-4 bg-brand-600 text-white font-semibold rounded-2xl hover:bg-brand-700 transition shadow-lg hover:shadow-xl">
-              ${buttontext}
+              ${buttontext}${icon}
             </a>
           </div>
         </div>
@@ -133,7 +136,7 @@ export default function decorate(block) {
     }).then((result) => {
       result.propositions?.forEach((proposition) => {
         const offerContent = proposition.items[0]?.data?.content?.data?.offerByPath?.item;
-        updateHeroContent(offerContent, elements);
+        updateHeroContent(offerContent, elements, showIcon);
       });
     });
   }
