@@ -28,10 +28,6 @@ function updateHeroContent(source, elements) {
     }
     const imageDescription = source.imageDescription || source.imagedescription || 'Hero image';
     const picture = createOptimizedPicture(imagePath, imageDescription, true);
-    const img = picture.querySelector('img');
-    if (img) {
-      img.setAttribute('fetchpriority', 'high');
-    }
     elements.image.innerHTML = picture.outerHTML;
     applyBackgroundImageStyling(elements.image);
   }
@@ -82,10 +78,6 @@ export default function decorate(block) {
   let pictureHTML;
   if (config.image) {
     const picture = createOptimizedPicture(config.image, config.imagedescription || 'Hero image', true);
-    const img = picture.querySelector('img');
-    if (img) {
-      img.setAttribute('fetchpriority', 'high');
-    }
     pictureHTML = picture.outerHTML;
   } else {
     pictureHTML = createPlaceholderSVG('image', '16:9');
