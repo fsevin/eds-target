@@ -80,9 +80,9 @@ export default function decorate(block) {
   const icon = showButtonIcon ? getButtonIcon() : '';
 
   let pictureHTML;
-  const existingPicture = block.querySelector('picture');
-  if (existingPicture) {
-    pictureHTML = existingPicture.outerHTML;
+  if (config.image) {
+    const picture = createOptimizedPicture(config.image, config.imagedescription || 'Hero image', true);
+    pictureHTML = picture.outerHTML;
   } else {
     pictureHTML = createPlaceholderSVG('image', '16:9');
   }
