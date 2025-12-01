@@ -1,7 +1,7 @@
 import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
 import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode } from '../../scripts/utils.js';
 
-function updateTeaserContent(source, elements) {
+function updateTeaserContent(source, elements, showArrow = false) {
   if (!source) return;
 
   if (elements.title && source.title) {
@@ -16,7 +16,10 @@ function updateTeaserContent(source, elements) {
   const buttonText = source.buttonText || source.buttontext;
   const buttonLink = source.buttonLink || source.buttonlink;
   if (elements.button) {
-    if (buttonText) elements.button.innerHTML = buttonText;
+    const arrowIcon = showArrow ? `<svg class="inline-block w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+    </svg>` : '';
+    if (buttonText) elements.button.innerHTML = buttonText + arrowIcon;
     if (buttonLink) elements.button.href = buttonLink;
   }
 
@@ -80,7 +83,12 @@ export default function decorate(block) {
     pictureHTML = createPlaceholderSVG('image', '4:3');
   }
 
-  const isInverted = config.inverted === 'true' || config.inverted === true;
+  const flipLayout = config.flipLayout === 'true' || config.flipLayout === true;
+  const showArrow = config.showArrow === 'true' || config.showArrow === true;
+
+  const arrowIcon = showArrow ? `<svg class="inline-block w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+  </svg>` : '';
 
   const imageBlock = `<div id="${blockId}-image" data-aue-label="Image" data-aue-prop="image" data-aue-type="media" class="relative rounded-2xl overflow-hidden shadow-2xl lg:col-span-3" style="min-height: 400px; aspect-ratio: 4/3; contain: layout;">
     ${pictureHTML}
@@ -94,8 +102,8 @@ export default function decorate(block) {
       ${descriptionHTML}
     </div>
     <div style="min-height: 3.5rem;">
-      <a id="${blockId}-button" data-aue-label="Call to Action" data-aue-prop="buttonText" data-aue-type="text" href="${buttonlink}" class="inline-block px-8 py-4 bg-brand-600 text-white font-semibold rounded-2xl hover:bg-brand-700 transition shadow-lg hover:shadow-xl">
-        ${buttontext}
+      <a id="${blockId}-button" data-aue-label="Call to Action" data-aue-prop="buttonText" data-aue-type="text" href="${buttonlink}" class="inline-flex items-center px-8 py-4 bg-brand-600 text-white font-semibold rounded-2xl hover:bg-brand-700 transition shadow-lg hover:shadow-xl">
+        ${buttontext}${arrowIcon}
       </a>
     </div>
   </div>`;
@@ -104,7 +112,7 @@ export default function decorate(block) {
     <section class="py-20 py-20 bg-white" style="contain: layout;">
       <div class="container mx-auto px-4">
         <div class="grid lg:grid-cols-5 gap-12 items-center">
-          ${isInverted ? textBlock + imageBlock : imageBlock + textBlock}
+          ${flipLayout ? textBlock + imageBlock : imageBlock + textBlock}
         </div>
       </div>
     </section>
@@ -137,7 +145,7 @@ export default function decorate(block) {
     }).then((result) => {
       result.propositions?.forEach((proposition) => {
         const offerContent = proposition.items[0]?.data?.content?.data?.offerByPath?.item;
-        updateTeaserContent(offerContent, elements);
+        updateTeaserContent(offerContent, elements, showArrow);
       });
     });
   }

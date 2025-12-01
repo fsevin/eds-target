@@ -1,5 +1,5 @@
 {
-  "project": "3DS",
+  "project": "AEM XWalk Boilerplate",
   "editUrlLabel": "AEM Editor",
-  "editUrlPattern": "https://experience.adobe.com/#/@ags128/aem/editor/canvas/{{contentSourceUrl}}{{pathname}}"
+  "editUrlPattern": "{{contentSourceUrl}}{{pathname}}?cmd=open"
 }
