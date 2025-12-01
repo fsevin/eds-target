@@ -82,6 +82,11 @@ export default function decorate(block) {
   let pictureHTML;
   if (config.image) {
     const picture = createOptimizedPicture(config.image, config.imagedescription || 'Hero image', true);
+    const img = picture.querySelector('img');
+    if (img) {
+      img.setAttribute('fetchpriority', 'high');
+      img.setAttribute('loading', 'eager');
+    }
     pictureHTML = picture.outerHTML;
   } else {
     pictureHTML = createPlaceholderSVG('image', '16:9');
