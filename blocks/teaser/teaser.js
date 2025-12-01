@@ -1,39 +1,50 @@
 import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
-import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode, fetchContentFragment } from '../../scripts/utils.js';
+import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode } from '../../scripts/utils.js';
 
-/**
- * Update teaser content with offer data
- * @param {Object} offerContent Offer content from fragment or alloy
- * @param {Object} elements DOM element references
- */
-function updateTeaserContent(offerContent, elements) {
-  if (!offerContent) return;
+function createTeaserContent(source, isOffer = false) {
+  if (!source) return null;
 
-  // Update text content
-  if (elements.title) elements.title.innerHTML = offerContent.title;
-  if (elements.description) elements.description.innerHTML = offerContent.description?.html;
-  if (elements.button) {
-    elements.button.innerHTML = offerContent.buttonText;
-    elements.button.href = offerContent.buttonLink || '#';
+  let imagePath = source.image?._path || source.image;
+
+  if (isOffer && imagePath) {
+    const siteName = getSiteNameFromDAM(imagePath);
+    imagePath = imagePath.substring(`/content/dam/${siteName}`.length);
   }
 
-  // Update image content
-  if (elements.image && offerContent.image?._path) {
-    const imagePath = offerContent.image._path;
-    const siteName = getSiteNameFromDAM(imagePath);
+  return {
+    title: source.title,
+    description: source.description?.html || source.description,
+    buttonText: source.buttonText || source.buttontext,
+    buttonLink: source.buttonLink || source.buttonlink,
+    image: imagePath,
+    imageDescription: source.imageDescription || source.imagedescription || 'Teaser image'
+  };
+}
+
+function updateTeaserContent(teaserContent, elements) {
+  if (!teaserContent) return;
+
+  if (elements.title && teaserContent.title) {
+    elements.title.innerHTML = teaserContent.title;
+  }
+  if (elements.description && teaserContent.description) {
+    elements.description.innerHTML = teaserContent.description;
+  }
+  if (elements.button) {
+    if (teaserContent.buttonText) elements.button.innerHTML = teaserContent.buttonText;
+    if (teaserContent.buttonLink) elements.button.href = teaserContent.buttonLink;
+  }
+
+  if (elements.image && teaserContent.image) {
     const picture = createOptimizedPicture(
-      imagePath.substring(`/content/dam/${siteName}`.length),
-      offerContent.imageDescription
+      teaserContent.image,
+      teaserContent.imageDescription
     );
     elements.image.innerHTML = picture.outerHTML;
     applyImageStyling(elements.image);
   }
 }
 
-/**
- * Apply optimized styling to image elements
- * @param {Element} imageContainer The container element
- */
 function applyImageStyling(imageContainer) {
   const picture = imageContainer?.querySelector('picture');
   const img = picture?.querySelector('img');
@@ -62,7 +73,6 @@ export default function decorate(block) {
   const config = readBlockConfig(block);
   const blockId = `teaser-${Math.random().toString(36).substr(2, 9)}`;
 
-  // Default placeholder values for instant render
   const title = 'Teaser Title';
   const buttonlink = '#';
   const buttontext = 'Learn More';
@@ -72,7 +82,6 @@ export default function decorate(block) {
   const style = config.style || '';
   const sectionClasses = style.includes('highlight') ? 'py-20 bg-gray-50' : 'py-20 bg-white';
 
-  // Render teaser HTML immediately with placeholders
   const content = document.createRange().createContextualFragment(`
     <section class="${sectionClasses}">
       <div class="container mx-auto px-4">
@@ -101,7 +110,6 @@ export default function decorate(block) {
   block.textContent = '';
   block.append(content);
 
-  // Cache element references for updates
   const elements = {
     section: block.querySelector('section'),
     title: document.getElementById(`${blockId}-title`),
@@ -110,11 +118,11 @@ export default function decorate(block) {
     image: document.getElementById(`${blockId}-image`),
   };
 
-  // Apply initial image styling
   applyImageStyling(elements.image);
-  updateTeaserContent(config, elements);
 
-  // Handle offer zone if configured (only in non-author mode)
+  const teaserContent = createTeaserContent(config, false);
+  updateTeaserContent(teaserContent, elements);
+
   if (config.offerzone && !isAuthorMode) {
     alloy('sendEvent', {
       decisionScopes: [config.offerzone],
@@ -129,7 +137,8 @@ export default function decorate(block) {
     }).then((result) => {
       result.propositions?.forEach((proposition) => {
         const offerContent = proposition.items[0]?.data?.content?.data?.offerByPath?.item;
-        updateTeaserContent(offerContent, elements);
+        const offerTeaserContent = createTeaserContent(offerContent, true);
+        updateTeaserContent(offerTeaserContent, elements);
       });
     });
   }

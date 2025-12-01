@@ -1,45 +1,47 @@
 import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
 import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode } from '../../scripts/utils.js';
 
-function updateHeroContent(offerContent, elements) {
-  if (!offerContent) return;
+function createHeroContent(source, isOffer = false) {
+  if (!source) return null;
 
-  // Update text content
-  if (elements.title && (offerContent.title)) {
-    elements.title.innerHTML = offerContent.title;
+  let imagePath = source.image?._path || source.image;
+
+  if (isOffer && imagePath) {
+    const siteName = getSiteNameFromDAM(imagePath);
+    imagePath = imagePath.substring(`/content/dam/${siteName}`.length);
   }
-  if (elements.description) {
-    // Handle both offer format (description.html) and config format (description)
-    const descHTML = offerContent.description?.html || offerContent.description;
-    if (descHTML) elements.description.innerHTML = descHTML;
+
+  return {
+    title: source.title,
+    description: source.description?.html || source.description,
+    buttonText: source.buttonText || source.buttontext,
+    buttonLink: source.buttonLink || source.buttonlink,
+    image: imagePath,
+    imageDescription: source.imageDescription || source.imagedescription || 'Hero image'
+  };
+}
+
+function updateHeroContent(heroContent, elements) {
+  if (!heroContent) return;
+
+  if (elements.title && heroContent.title) {
+    elements.title.innerHTML = heroContent.title;
+  }
+  if (elements.description && heroContent.description) {
+    elements.description.innerHTML = heroContent.description;
   }
   if (elements.button) {
-    // Handle both offer format (buttonText) and config format (buttontext)
-    const btnText = offerContent.buttonText || offerContent.buttontext;
-    const btnLink = offerContent.buttonLink || offerContent.buttonlink;
-    if (btnText) elements.button.innerHTML = btnText;
-    if (btnLink) elements.button.href = btnLink;
+    if (heroContent.buttonText) elements.button.innerHTML = heroContent.buttonText;
+    if (heroContent.buttonLink) elements.button.href = heroContent.buttonLink;
   }
 
-  // Update background image
-  // Handle both offer format (image._path) and config format (image as string)
-  const imagePath = offerContent.image?._path || offerContent.image;
-  if (elements.image && imagePath) {
-    const siteName = getSiteNameFromDAM(imagePath);
-    const imageDesc = offerContent.imageDescription || offerContent.imagedescription || 'Hero image';
-    const picture = createOptimizedPicture(
-      imagePath.substring(`/content/dam/${siteName}`.length),
-      imageDesc
-    );
+  if (elements.image && heroContent.image) {
+    const picture = createOptimizedPicture(heroContent.image, heroContent.imageDescription);
     elements.image.innerHTML = picture.outerHTML;
     applyBackgroundImageStyling(elements.image);
   }
 }
 
-/**
- * Apply background image styling
- * @param {Element} imageContainer The image container element
- */
 function applyBackgroundImageStyling(imageContainer) {
   if (!imageContainer) return;
 
@@ -78,14 +80,12 @@ export default function decorate(block) {
   const config = readBlockConfig(block);
   const blockId = `hero-${Math.random().toString(36).substr(2, 9)}`;
 
-  // Default placeholder values for instant render
   const title = 'Hero Title';
   const buttonlink = '#';
   const buttontext = 'Get Started';
   const descriptionHTML = '<p>Add your hero description here.</p>';
   const pictureHTML = createPlaceholderSVG('image', '16:9');
 
-  // Render hero HTML immediately with placeholders
   const content = document.createRange().createContextualFragment(`
     <section class="relative py-12 md:py-20 bg-cover bg-center bg-no-repeat">
       <div id="${blockId}-image" class="absolute inset-0 z-0">${pictureHTML}</div>
@@ -111,7 +111,6 @@ export default function decorate(block) {
   block.textContent = '';
   block.append(content);
 
-  // Cache element references for updates
   const elements = {
     section: block.querySelector('section'),
     title: document.getElementById(`${blockId}-title`),
@@ -120,11 +119,11 @@ export default function decorate(block) {
     image: document.getElementById(`${blockId}-image`),
   };
 
-  // Apply initial background image styling
   applyBackgroundImageStyling(elements.image);
-  updateHeroContent(config, elements);
-  
-  // Handle offer zone if configured (only in non-author mode)
+
+  const heroContent = createHeroContent(config, false);
+  updateHeroContent(heroContent, elements);
+
   if (config.offerzone && !isAuthorMode) {
     alloy('sendEvent', {
       decisionScopes: [config.offerzone],
@@ -139,7 +138,8 @@ export default function decorate(block) {
     }).then((result) => {
       result.propositions?.forEach((proposition) => {
         const offerContent = proposition.items[0]?.data?.content?.data?.offerByPath?.item;
-        updateHeroContent(offerContent, elements);
+        const offerHeroContent = createHeroContent(offerContent, true);
+        updateHeroContent(offerHeroContent, elements);
       });
     });
   }
