@@ -1,7 +1,7 @@
 import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
 import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode, getButtonIcon } from '../../scripts/utils.js';
 
-function updateHeroContent(source, elements, showIcon = false) {
+function updateHeroContent(source, elements, showButtonIcon = false) {
   if (!source) return;
 
   if (elements.title && source.title) {
@@ -16,7 +16,7 @@ function updateHeroContent(source, elements, showIcon = false) {
   const buttonText = source.buttonText || source.buttontext;
   const buttonLink = source.buttonLink || source.buttonlink;
   if (elements.button) {
-    const icon = showIcon ? getButtonIcon() : '';
+    const icon = showButtonIcon ? getButtonIcon() : '';
     if (buttonText) elements.button.innerHTML = buttonText + icon;
     if (buttonLink) elements.button.href = buttonLink;
   }
@@ -75,9 +75,9 @@ export default function decorate(block) {
   const buttonlink = config.buttonlink || config.buttonLink || '#';
   const buttontext = config.buttontext || config.buttonText || 'Get Started';
   const descriptionHTML = config.description || '<p>Add your hero description here.</p>';
-  const showIcon = config.showicon === 'true' || config.showicon === true;
+  const showButtonIcon = config.showbuttonicon === 'true' || config.showbuttonicon === true;
 
-  const icon = showIcon ? getButtonIcon() : '';
+  const icon = showButtonIcon ? getButtonIcon() : '';
 
   let pictureHTML;
   if (config.image) {
@@ -136,7 +136,7 @@ export default function decorate(block) {
     }).then((result) => {
       result.propositions?.forEach((proposition) => {
         const offerContent = proposition.items[0]?.data?.content?.data?.offerByPath?.item;
-        updateHeroContent(offerContent, elements, showIcon);
+        updateHeroContent(offerContent, elements, showButtonIcon);
       });
     });
   }

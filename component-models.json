@@ -148,8 +148,8 @@
       {
         "component": "boolean",
         "valueType": "boolean",
-        "name": "showIcon",
-        "label": "Show Icon"
+        "name": "showButtonIcon",
+        "label": "Show Button Icon"
       },
       {
         "component": "tab",

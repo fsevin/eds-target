@@ -1,7 +1,7 @@
 import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
 import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode, getButtonIcon } from '../../scripts/utils.js';
 
-function updateTeaserContent(source, elements, showIcon = false) {
+function updateTeaserContent(source, elements, showButtonIcon = false) {
   if (!source) return;
 
   if (elements.title && source.title) {
@@ -16,7 +16,7 @@ function updateTeaserContent(source, elements, showIcon = false) {
   const buttonText = source.buttonText || source.buttontext;
   const buttonLink = source.buttonLink || source.buttonlink;
   if (elements.button) {
-    const icon = showIcon ? getButtonIcon() : '';
+    const icon = showButtonIcon ? getButtonIcon() : '';
     if (buttonText) elements.button.innerHTML = buttonText + icon;
     if (buttonLink) elements.button.href = buttonLink;
   }
@@ -78,9 +78,9 @@ export default function decorate(block) {
   }
 
   const flipLayout = config.fliplayout === 'true' || config.fliplayout === true;
-  const showIcon = config.showicon === 'true' || config.showicon === true;
+  const showButtonIcon = config.showbuttonicon === 'true' || config.showbuttonicon === true;
 
-  const icon = showIcon ? getButtonIcon() : '';
+  const icon = showButtonIcon ? getButtonIcon() : '';
 
   const imageBlock = `<div id="${blockId}-image" data-aue-label="Image" data-aue-prop="image" data-aue-type="media" class="relative rounded-2xl overflow-hidden shadow-2xl lg:col-span-3">
     ${pictureHTML}
@@ -137,7 +137,7 @@ export default function decorate(block) {
     }).then((result) => {
       result.propositions?.forEach((proposition) => {
         const offerContent = proposition.items[0]?.data?.content?.data?.offerByPath?.item;
-        updateTeaserContent(offerContent, elements, showIcon);
+        updateTeaserContent(offerContent, elements, showButtonIcon);
       });
     });
   }
