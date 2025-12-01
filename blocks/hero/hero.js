@@ -1,7 +1,7 @@
 import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
-import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode } from '../../scripts/utils.js';
+import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode, getButtonIcon } from '../../scripts/utils.js';
 
-function updateHeroContent(source, elements) {
+function updateHeroContent(source, elements, showIcon = false) {
   if (!source) return;
 
   if (elements.title && source.title) {
@@ -16,7 +16,8 @@ function updateHeroContent(source, elements) {
   const buttonText = source.buttonText || source.buttontext;
   const buttonLink = source.buttonLink || source.buttonlink;
   if (elements.button) {
-    if (buttonText) elements.button.innerHTML = buttonText;
+    const icon = showIcon ? getButtonIcon() : '';
+    if (buttonText) elements.button.innerHTML = buttonText + icon;
     if (buttonLink) elements.button.href = buttonLink;
   }
 

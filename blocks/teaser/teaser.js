@@ -1,5 +1,5 @@
 import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
-import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode, getCircularIcon } from '../../scripts/utils.js';
+import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode, getButtonIcon } from '../../scripts/utils.js';
 
 function updateTeaserContent(source, elements, showIcon = false) {
   if (!source) return;
@@ -16,7 +16,7 @@ function updateTeaserContent(source, elements, showIcon = false) {
   const buttonText = source.buttonText || source.buttontext;
   const buttonLink = source.buttonLink || source.buttonlink;
   if (elements.button) {
-    const icon = showIcon ? getCircularIcon() : '';
+    const icon = showIcon ? getButtonIcon() : '';
     if (buttonText) elements.button.innerHTML = buttonText + icon;
     if (buttonLink) elements.button.href = buttonLink;
   }
@@ -84,7 +84,7 @@ export default function decorate(block) {
   const flipLayout = config.fliplayout === 'true' || config.fliplayout === true;
   const showIcon = config.showicon === 'true' || config.showicon === true;
 
-  const icon = showIcon ? getCircularIcon() : '';
+  const icon = showIcon ? getButtonIcon() : '';
 
   const imageBlock = `<div id="${blockId}-image" data-aue-label="Image" data-aue-prop="image" data-aue-type="media" class="relative rounded-2xl overflow-hidden shadow-2xl lg:col-span-3" style="min-height: 400px; aspect-ratio: 4/3; contain: layout;">
     ${pictureHTML}
