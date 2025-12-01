@@ -1,42 +1,33 @@
 import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
 import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode } from '../../scripts/utils.js';
 
-function createHeroContent(source, isOffer = false) {
-  if (!source) return null;
+function updateHeroContent(source, elements) {
+  if (!source) return;
+
+  if (elements.title && source.title) {
+    elements.title.innerHTML = source.title;
+  }
+
+  const description = source.description?.html || source.description;
+  if (elements.description && description) {
+    elements.description.innerHTML = description;
+  }
+
+  const buttonText = source.buttonText || source.buttontext;
+  const buttonLink = source.buttonLink || source.buttonlink;
+  if (elements.button) {
+    if (buttonText) elements.button.innerHTML = buttonText;
+    if (buttonLink) elements.button.href = buttonLink;
+  }
 
   let imagePath = source.image?._path || source.image;
-
-  if (isOffer && imagePath) {
-    const siteName = getSiteNameFromDAM(imagePath);
-    imagePath = imagePath.substring(`/content/dam/${siteName}`.length);
-  }
-
-  return {
-    title: source.title,
-    description: source.description?.html || source.description,
-    buttonText: source.buttonText || source.buttontext,
-    buttonLink: source.buttonLink || source.buttonlink,
-    image: imagePath,
-    imageDescription: source.imageDescription || source.imagedescription || 'Hero image'
-  };
-}
-
-function updateHeroContent(heroContent, elements) {
-  if (!heroContent) return;
-
-  if (elements.title && heroContent.title) {
-    elements.title.innerHTML = heroContent.title;
-  }
-  if (elements.description && heroContent.description) {
-    elements.description.innerHTML = heroContent.description;
-  }
-  if (elements.button) {
-    if (heroContent.buttonText) elements.button.innerHTML = heroContent.buttonText;
-    if (heroContent.buttonLink) elements.button.href = heroContent.buttonLink;
-  }
-
-  if (elements.image && heroContent.image) {
-    const picture = createOptimizedPicture(heroContent.image, heroContent.imageDescription);
+  if (elements.image && imagePath) {
+    if (imagePath.includes('/content/dam/')) {
+      const siteName = getSiteNameFromDAM(imagePath);
+      imagePath = imagePath.substring(`/content/dam/${siteName}`.length);
+    }
+    const imageDescription = source.imageDescription || source.imagedescription || 'Hero image';
+    const picture = createOptimizedPicture(imagePath, imageDescription);
     elements.image.innerHTML = picture.outerHTML;
     applyBackgroundImageStyling(elements.image);
   }
@@ -84,11 +75,18 @@ export default function decorate(block) {
   const config = readBlockConfig(block);
   const blockId = `hero-${Math.random().toString(36).substr(2, 9)}`;
 
-  const title = 'Hero Title';
-  const buttonlink = '#';
-  const buttontext = 'Get Started';
-  const descriptionHTML = '<p>Add your hero description here.</p>';
-  const pictureHTML = createPlaceholderSVG('image', '16:9');
+  const title = config.title || 'Hero Title';
+  const buttonlink = config.buttonlink || config.buttonLink || '#';
+  const buttontext = config.buttontext || config.buttonText || 'Get Started';
+  const descriptionHTML = config.description || '<p>Add your hero description here.</p>';
+
+  let pictureHTML;
+  if (config.image) {
+    const picture = createOptimizedPicture(config.image, config.imagedescription || 'Hero image');
+    pictureHTML = picture.outerHTML;
+  } else {
+    pictureHTML = createPlaceholderSVG('image', '16:9');
+  }
 
   const content = document.createRange().createContextualFragment(`
     <section class="relative py-12 md:py-20 bg-cover bg-center bg-no-repeat" style="min-height: 500px; contain: layout;">
@@ -125,9 +123,6 @@ export default function decorate(block) {
 
   applyBackgroundImageStyling(elements.image);
 
-  const heroContent = createHeroContent(config, false);
-  updateHeroContent(heroContent, elements);
-
   if (config.offerzone && !isAuthorMode) {
     alloy('sendEvent', {
       decisionScopes: [config.offerzone],
@@ -142,8 +137,7 @@ export default function decorate(block) {
     }).then((result) => {
       result.propositions?.forEach((proposition) => {
         const offerContent = proposition.items[0]?.data?.content?.data?.offerByPath?.item;
-        const offerHeroContent = createHeroContent(offerContent, true);
-        updateHeroContent(offerHeroContent, elements);
+        updateHeroContent(offerContent, elements);
       });
     });
   }

@@ -1,45 +1,33 @@
 import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
 import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode } from '../../scripts/utils.js';
 
-function createTeaserContent(source, isOffer = false) {
-  if (!source) return null;
+function updateTeaserContent(source, elements) {
+  if (!source) return;
+
+  if (elements.title && source.title) {
+    elements.title.innerHTML = source.title;
+  }
+
+  const description = source.description?.html || source.description;
+  if (elements.description && description) {
+    elements.description.innerHTML = description;
+  }
+
+  const buttonText = source.buttonText || source.buttontext;
+  const buttonLink = source.buttonLink || source.buttonlink;
+  if (elements.button) {
+    if (buttonText) elements.button.innerHTML = buttonText;
+    if (buttonLink) elements.button.href = buttonLink;
+  }
 
   let imagePath = source.image?._path || source.image;
-
-  if (isOffer && imagePath) {
-    const siteName = getSiteNameFromDAM(imagePath);
-    imagePath = imagePath.substring(`/content/dam/${siteName}`.length);
-  }
-
-  return {
-    title: source.title,
-    description: source.description?.html || source.description,
-    buttonText: source.buttonText || source.buttontext,
-    buttonLink: source.buttonLink || source.buttonlink,
-    image: imagePath,
-    imageDescription: source.imageDescription || source.imagedescription || 'Teaser image'
-  };
-}
-
-function updateTeaserContent(teaserContent, elements) {
-  if (!teaserContent) return;
-
-  if (elements.title && teaserContent.title) {
-    elements.title.innerHTML = teaserContent.title;
-  }
-  if (elements.description && teaserContent.description) {
-    elements.description.innerHTML = teaserContent.description;
-  }
-  if (elements.button) {
-    if (teaserContent.buttonText) elements.button.innerHTML = teaserContent.buttonText;
-    if (teaserContent.buttonLink) elements.button.href = teaserContent.buttonLink;
-  }
-
-  if (elements.image && teaserContent.image) {
-    const picture = createOptimizedPicture(
-      teaserContent.image,
-      teaserContent.imageDescription
-    );
+  if (elements.image && imagePath) {
+    if (imagePath.includes('/content/dam/')) {
+      const siteName = getSiteNameFromDAM(imagePath);
+      imagePath = imagePath.substring(`/content/dam/${siteName}`.length);
+    }
+    const imageDescription = source.imageDescription || source.imagedescription || 'Teaser image';
+    const picture = createOptimizedPicture(imagePath, imageDescription);
     elements.image.innerHTML = picture.outerHTML;
     applyImageStyling(elements.image);
   }
@@ -79,11 +67,18 @@ export default function decorate(block) {
   const config = readBlockConfig(block);
   const blockId = `teaser-${Math.random().toString(36).substr(2, 9)}`;
 
-  const title = 'Teaser Title';
-  const buttonlink = '#';
-  const buttontext = 'Learn More';
-  const descriptionHTML = '<p>Add your teaser description here.</p>';
-  const pictureHTML = createPlaceholderSVG('image', '4:3');
+  const title = config.title || 'Teaser Title';
+  const buttonlink = config.buttonlink || config.buttonLink || '#';
+  const buttontext = config.buttontext || config.buttonText || 'Learn More';
+  const descriptionHTML = config.description || '<p>Add your teaser description here.</p>';
+
+  let pictureHTML;
+  if (config.image) {
+    const picture = createOptimizedPicture(config.image, config.imagedescription || 'Teaser image');
+    pictureHTML = picture.outerHTML;
+  } else {
+    pictureHTML = createPlaceholderSVG('image', '4:3');
+  }
 
   const style = config.style || '';
   const sectionClasses = style.includes('highlight') ? 'py-20 bg-gray-50' : 'py-20 bg-white';
@@ -126,9 +121,6 @@ export default function decorate(block) {
 
   applyImageStyling(elements.image);
 
-  const teaserContent = createTeaserContent(config, false);
-  updateTeaserContent(teaserContent, elements);
-
   if (config.offerzone && !isAuthorMode) {
     alloy('sendEvent', {
       decisionScopes: [config.offerzone],
@@ -143,8 +135,7 @@ export default function decorate(block) {
     }).then((result) => {
       result.propositions?.forEach((proposition) => {
         const offerContent = proposition.items[0]?.data?.content?.data?.offerByPath?.item;
-        const offerTeaserContent = createTeaserContent(offerContent, true);
-        updateTeaserContent(offerTeaserContent, elements);
+        updateTeaserContent(offerContent, elements);
       });
     });
   }
