@@ -1,5 +1,0 @@
-{
-  "project": "3DS",
-  "editUrlLabel": "AEM Editor",
-  "editUrlPattern": "{{contentSourceUrl}}{{pathname}}?cmd=open"
-}
