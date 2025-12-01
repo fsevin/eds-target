@@ -71,7 +71,7 @@ export default function decorate(block) {
 
   let pictureHTML;
   if (config.image) {
-    const picture = createOptimizedPicture(config.image, config.imagedescription || 'Teaser image', true);
+    const picture = createOptimizedPicture(config.image, config.imagedescription || 'Teaser image');
     pictureHTML = picture.outerHTML;
   } else {
     pictureHTML = createPlaceholderSVG('image', '4:3');
