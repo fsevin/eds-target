@@ -87,14 +87,14 @@ export default function decorate(block) {
     <section class="${sectionClasses}" style="contain: layout;">
       <div class="container mx-auto px-4">
         <div class="grid lg:grid-cols-5 gap-12 items-center">
-          <div id="${blockId}-image" data-aue-label="Image" data-aue-prop="image" data-aue-type="media" class="relative rounded-2xl overflow-hidden shadow-2xl lg:col-span-3" style="min-height: 400px; aspect-ratio: 4/3; contain: layout;">
+          <div id="${blockId}-image" data-aue-label="Image" data-aue-prop="image" data-aue-type="media" class="relative rounded-2xl overflow-hidden shadow-2xl lg:col-span-3">
             ${pictureHTML}
           </div>
           <div class="space-y-6 lg:col-span-2" style="contain: layout;">
-            <h2 id="${blockId}-title" data-aue-label="Title" data-aue-prop="title" data-aue-type="text" class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight" style="min-height: 5rem;">
+            <h2 id="${blockId}-title" data-aue-label="Title" data-aue-prop="title" data-aue-type="text" class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
               ${title}
             </h2>
-            <div id="${blockId}-description" data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext" class="text-lg text-gray-600 leading-relaxed" style="min-height: 8rem;">
+            <div id="${blockId}-description" data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext" class="text-lg text-gray-600 leading-relaxed">
               ${descriptionHTML}
             </div>
             <div style="min-height: 3.5rem;">
