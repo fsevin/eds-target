@@ -321,7 +321,7 @@ function createOptimizedPicture(
     if (i < breakpoints.length - 1) {
       const source = document.createElement('source');
       if (br.media) source.setAttribute('media', br.media);
-      source.setAttribute('srcset', `${pathname}?width=${br.width}&format=${ext}&optimize=medium`);
+      source.setAttribute('srcset', `${pathname}?width=${br.width}&format=${ext}&optimize=high`);
       picture.appendChild(source);
     } else {
       const img = document.createElement('img');
