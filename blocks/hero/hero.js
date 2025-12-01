@@ -36,7 +36,11 @@ function updateHeroContent(heroContent, elements) {
   }
 
   if (elements.image && heroContent.image) {
-    const picture = createOptimizedPicture(heroContent.image, heroContent.imageDescription);
+    const picture = createOptimizedPicture(heroContent.image, heroContent.imageDescription, true);
+    const img = picture.querySelector('img');
+    if (img) {
+      img.setAttribute('fetchpriority', 'high');
+    }
     elements.image.innerHTML = picture.outerHTML;
     applyBackgroundImageStyling(elements.image);
   }
@@ -84,11 +88,22 @@ export default function decorate(block) {
   const config = readBlockConfig(block);
   const blockId = `hero-${Math.random().toString(36).substr(2, 9)}`;
 
-  const title = 'Hero Title';
-  const buttonlink = '#';
-  const buttontext = 'Get Started';
-  const descriptionHTML = '<p>Add your hero description here.</p>';
-  const pictureHTML = createPlaceholderSVG('image', '16:9');
+  const title = config.title || 'Hero Title';
+  const buttonlink = config.buttonlink || config.buttonLink || '#';
+  const buttontext = config.buttontext || config.buttonText || 'Get Started';
+  const descriptionHTML = config.description || '<p>Add your hero description here.</p>';
+
+  let pictureHTML;
+  if (config.image) {
+    const picture = createOptimizedPicture(config.image, config.imagedescription || 'Hero image', true);
+    const img = picture.querySelector('img');
+    if (img) {
+      img.setAttribute('fetchpriority', 'high');
+    }
+    pictureHTML = picture.outerHTML;
+  } else {
+    pictureHTML = createPlaceholderSVG('image', '16:9');
+  }
 
   const content = document.createRange().createContextualFragment(`
     <section class="relative py-12 md:py-20 bg-cover bg-center bg-no-repeat" style="min-height: 500px; contain: layout;">
