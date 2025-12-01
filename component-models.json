@@ -148,8 +148,8 @@
       {
         "component": "boolean",
         "valueType": "boolean",
-        "name": "showArrow",
-        "label": "Show Arrow"
+        "name": "showIcon",
+        "label": "Show Icon"
       },
       {
         "component": "tab",

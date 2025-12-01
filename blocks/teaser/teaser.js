@@ -1,7 +1,7 @@
 import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
-import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode, getCircularArrowIcon } from '../../scripts/utils.js';
+import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode, getCircularIcon } from '../../scripts/utils.js';
 
-function updateTeaserContent(source, elements, showArrow = false) {
+function updateTeaserContent(source, elements, showIcon = false) {
   if (!source) return;
 
   if (elements.title && source.title) {
@@ -16,8 +16,8 @@ function updateTeaserContent(source, elements, showArrow = false) {
   const buttonText = source.buttonText || source.buttontext;
   const buttonLink = source.buttonLink || source.buttonlink;
   if (elements.button) {
-    const arrowIcon = showArrow ? getCircularArrowIcon() : '';
-    if (buttonText) elements.button.innerHTML = buttonText + arrowIcon;
+    const icon = showIcon ? getCircularIcon() : '';
+    if (buttonText) elements.button.innerHTML = buttonText + icon;
     if (buttonLink) elements.button.href = buttonLink;
   }
 
@@ -82,9 +82,9 @@ export default function decorate(block) {
   }
 
   const flipLayout = config.fliplayout === 'true' || config.fliplayout === true;
-  const showArrow = config.showarrow === 'true' || config.showarrow === true;
+  const showIcon = config.showicon === 'true' || config.showicon === true;
 
-  const arrowIcon = showArrow ? getCircularArrowIcon() : '';
+  const icon = showIcon ? getCircularIcon() : '';
 
   const imageBlock = `<div id="${blockId}-image" data-aue-label="Image" data-aue-prop="image" data-aue-type="media" class="relative rounded-2xl overflow-hidden shadow-2xl lg:col-span-3" style="min-height: 400px; aspect-ratio: 4/3; contain: layout;">
     ${pictureHTML}
@@ -99,7 +99,7 @@ export default function decorate(block) {
     </div>
     <div style="min-height: 3.5rem;">
       <a id="${blockId}-button" data-aue-label="Call to Action" data-aue-prop="buttonText" data-aue-type="text" href="${buttonlink}" class="inline-flex items-center px-8 py-4 bg-brand-600 text-white font-semibold rounded-2xl hover:bg-brand-700 transition shadow-lg hover:shadow-xl">
-        ${buttontext}${arrowIcon}
+        ${buttontext}${icon}
       </a>
     </div>
   </div>`;
@@ -141,7 +141,7 @@ export default function decorate(block) {
     }).then((result) => {
       result.propositions?.forEach((proposition) => {
         const offerContent = proposition.items[0]?.data?.content?.data?.offerByPath?.item;
-        updateTeaserContent(offerContent, elements, showArrow);
+        updateTeaserContent(offerContent, elements, showIcon);
       });
     });
   }
