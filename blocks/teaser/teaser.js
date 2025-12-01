@@ -80,8 +80,6 @@ export default function decorate(block) {
     pictureHTML = createPlaceholderSVG('image', '4:3');
   }
 
-  const style = config.style || '';
-  const sectionClasses = style.includes('highlight') ? 'py-20 bg-gray-50' : 'py-20 bg-white';
   const isInverted = config.inverted === 'true' || config.inverted === true;
 
   const imageBlock = `<div id="${blockId}-image" data-aue-label="Image" data-aue-prop="image" data-aue-type="media" class="relative rounded-2xl overflow-hidden shadow-2xl lg:col-span-3" style="min-height: 400px; aspect-ratio: 4/3; contain: layout;">
@@ -103,7 +101,7 @@ export default function decorate(block) {
   </div>`;
 
   const content = document.createRange().createContextualFragment(`
-    <section class="${sectionClasses}" style="contain: layout;">
+    <section class="py-20 py-20 bg-white" style="contain: layout;">
       <div class="container mx-auto px-4">
         <div class="grid lg:grid-cols-5 gap-12 items-center">
           ${isInverted ? textBlock + imageBlock : imageBlock + textBlock}
