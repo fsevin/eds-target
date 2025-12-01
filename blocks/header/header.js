@@ -1,4 +1,4 @@
-import { readBlockConfig } from '../../scripts/aem.js';
+import { loadFragment } from '../fragment/fragment.js';
 import { isAuthorMode, getPagePath, getIconPath, getCurrentLocale } from '../../scripts/utils.js';
 
 function switchLocale(targetLocale) {
@@ -6,6 +6,34 @@ function switchLocale(targetLocale) {
   const currentPath = window.location.pathname;
   const newPath = currentPath.replace(`/${currentLocale}/`, `/${targetLocale}/`);
   window.location.href = newPath;
+}
+
+function extractMenuItems(fragment) {
+  const menuItems = [];
+  const menuBlock = fragment.querySelector('.menu');
+
+  if (menuBlock) {
+    const items = menuBlock.querySelectorAll(':scope > div');
+    items.forEach(item => {
+      const labelEl = item.querySelector('div:first-child');
+      const linkEl = item.querySelector('div:nth-child(2) a');
+
+      if (labelEl && linkEl) {
+        menuItems.push({
+          label: labelEl.textContent.trim(),
+          path: linkEl.getAttribute('href')
+        });
+      }
+    });
+  }
+
+  if (!isAuthorMode) {
+    menuItems.forEach(item => {
+      item.path = item.path.replace(/\/templates\//, '/pages/');
+    });
+  }
+
+  return menuItems;
 }
 
 function buildNavigationHTML(menuItems) {
@@ -23,20 +51,41 @@ function buildNavigationHTML(menuItems) {
   }).join('');
 }
 
-export default function decorate(block) {
-  const config = readBlockConfig(block);
-  const currentLocale = getCurrentLocale();
+function extractLoginModalData(fragment) {
+  const loginModalBlock = fragment.querySelector('.login-modal');
+  if (!loginModalBlock) {
+    return {
+      title: 'Login',
+      usernameLabel: 'Username',
+      profileTypeLabel: 'Profile Type',
+      profileOptions: [],
+      cancelButtonLabel: 'Cancel'
+    };
+  }
 
-  // Get menu items and login modal data from config
-  const menuItems = config.menuItems || [];
+  const items = loginModalBlock.querySelectorAll(':scope > div');
+  const title = items[0]?.querySelector('div:nth-child(2)')?.textContent.trim() || 'Login';
+  const usernameLabel = items[1]?.querySelector('div:nth-child(2)')?.textContent.trim() || 'Username';
+  const profileTypeLabel = items[2]?.querySelector('div:nth-child(2)')?.textContent.trim() || 'Profile Type';
+  const optionsText = items[3]?.querySelector('div:nth-child(2)')?.textContent.trim() || '';
+  const cancelButtonLabel = items[4]?.querySelector('div:nth-child(2)')?.textContent.trim() || 'Cancel';
+
+  const profileOptions = optionsText.split(',').map(option => {
+    const trimmedOption = option.trim();
+    return { value: trimmedOption.toLowerCase(), label: trimmedOption };
+  }).filter(opt => opt.value);
+
+  return { title, usernameLabel, profileTypeLabel, profileOptions, cancelButtonLabel };
+}
+
+export default async function decorate(block) {
+  const headerPath = `/${getCurrentLocale()}/header`;
+  const fragment = await loadFragment(headerPath);
+
+  const currentLocale = getCurrentLocale();
+  const menuItems = extractMenuItems(fragment);
   const navigationHTML = buildNavigationHTML(menuItems);
-  const loginModalData = config.loginModalData || {
-    title: 'Login',
-    usernameLabel: 'Username',
-    profileTypeLabel: 'Profile Type',
-    profileOptions: [],
-    cancelButtonLabel: 'Cancel'
-  };
+  const loginModalData = extractLoginModalData(fragment);
   const content = document.createRange().createContextualFragment(`
     <!-- Header -->
     <nav class="container mx-auto px-4 py-4">
