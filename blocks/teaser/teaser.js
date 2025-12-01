@@ -38,13 +38,8 @@ function updateTeaserContent(teaserContent, elements) {
   if (elements.image && teaserContent.image) {
     const picture = createOptimizedPicture(
       teaserContent.image,
-      teaserContent.imageDescription,
-      true
+      teaserContent.imageDescription
     );
-    const img = picture.querySelector('img');
-    if (img) {
-      img.setAttribute('fetchpriority', 'high');
-    }
     elements.image.innerHTML = picture.outerHTML;
     applyImageStyling(elements.image);
   }
@@ -84,22 +79,11 @@ export default function decorate(block) {
   const config = readBlockConfig(block);
   const blockId = `teaser-${Math.random().toString(36).substr(2, 9)}`;
 
-  const title = config.title || 'Teaser Title';
-  const buttonlink = config.buttonlink || config.buttonLink || '#';
-  const buttontext = config.buttontext || config.buttonText || 'Learn More';
-  const descriptionHTML = config.description || '<p>Add your teaser description here.</p>';
-
-  let pictureHTML;
-  if (config.image) {
-    const picture = createOptimizedPicture(config.image, config.imagedescription || 'Teaser image', true);
-    const img = picture.querySelector('img');
-    if (img) {
-      img.setAttribute('fetchpriority', 'high');
-    }
-    pictureHTML = picture.outerHTML;
-  } else {
-    pictureHTML = createPlaceholderSVG('image', '4:3');
-  }
+  const title = 'Teaser Title';
+  const buttonlink = '#';
+  const buttontext = 'Learn More';
+  const descriptionHTML = '<p>Add your teaser description here.</p>';
+  const pictureHTML = createPlaceholderSVG('image', '4:3');
 
   const style = config.style || '';
   const sectionClasses = style.includes('highlight') ? 'py-20 bg-gray-50' : 'py-20 bg-white';
