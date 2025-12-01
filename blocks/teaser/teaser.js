@@ -1,5 +1,5 @@
 import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
-import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode } from '../../scripts/utils.js';
+import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode, getCircularArrowIcon } from '../../scripts/utils.js';
 
 function updateTeaserContent(source, elements, showArrow = false) {
   if (!source) return;
@@ -16,9 +16,7 @@ function updateTeaserContent(source, elements, showArrow = false) {
   const buttonText = source.buttonText || source.buttontext;
   const buttonLink = source.buttonLink || source.buttonlink;
   if (elements.button) {
-    const arrowIcon = showArrow ? `<svg class="inline-block w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-    </svg>` : '';
+    const arrowIcon = showArrow ? getCircularArrowIcon() : '';
     if (buttonText) elements.button.innerHTML = buttonText + arrowIcon;
     if (buttonLink) elements.button.href = buttonLink;
   }
@@ -86,9 +84,7 @@ export default function decorate(block) {
   const flipLayout = config.fliplayout === 'true' || config.fliplayout === true;
   const showArrow = config.showarrow === 'true' || config.showarrow === true;
 
-  const arrowIcon = showArrow ? `<svg class="inline-block w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-  </svg>` : '';
+  const arrowIcon = showArrow ? getCircularArrowIcon() : '';
 
   const imageBlock = `<div id="${blockId}-image" data-aue-label="Image" data-aue-prop="image" data-aue-type="media" class="relative rounded-2xl overflow-hidden shadow-2xl lg:col-span-3" style="min-height: 400px; aspect-ratio: 4/3; contain: layout;">
     ${pictureHTML}

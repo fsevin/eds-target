@@ -27,6 +27,13 @@ export function getIconPath(imageName) {
   return `${isAuthorMode ? `/content/${getSiteName()}.resource/icons/` : '/icons/'}${imageName}`;
 }
 
+export function getCircularArrowIcon() {
+  return `<svg class="inline-block w-6 h-6 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="10" stroke-width="2"/>
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 8l4 4m0 0l-4 4m4-4H7"/>
+  </svg>`;
+}
+
 export function getDeliveryUrl(url, smartCrop) {
   const processedUrl = url
     .replace(/original\//g, '')
