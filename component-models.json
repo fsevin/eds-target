@@ -136,6 +136,17 @@
       },
       {
         "component": "tab",
+        "label": "Layout",
+        "name": "layout"
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "inverted",
+        "label": "Invert Layout"
+      },
+      {
+        "component": "tab",
         "label": "Targeting",
         "name": "targeting"
       },
