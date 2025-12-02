@@ -1,4 +1,4 @@
-import { createOptimizedPicture } from '../../scripts/aem.js';
+import { createOptimizedPicture } from 'aem.js';
 
 function getSiteName() {
   const path = window.location.pathname;
