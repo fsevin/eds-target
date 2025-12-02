@@ -90,7 +90,60 @@
     ]
   },
   {
-    "id": "targetable-content",
+    "id": "hero",
+    "fields": [
+      {
+        "component": "tab",
+        "label": "Fields",
+        "name": "fields" 
+      },
+      {        
+        "component": "aem-content-fragment",
+        "valueType": "string",
+        "name": "contentFragment",
+        "label": "Content Fragment"
+      },
+      {
+        "component": "tab",
+        "label": "Layout",
+        "name": "layout"
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "showButtonIcon",
+        "label": "Show Button Icon"
+      },
+      {
+        "component": "tab",
+        "label": "Targeting",
+        "name": "targeting"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "offerzone",
+        "label": "Targeted Zone",
+        "defaultValue": "none",
+        "options": [
+          {
+            "name": "None",
+            "value": "none"
+          },
+          {
+            "name": "Teaser",
+            "value": "teaser-zone"
+          },
+          {
+            "name": "Hero",
+            "value": "hero-zone"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "teaser",
     "fields": [
       {
         "component": "tab",
