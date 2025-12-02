@@ -1,5 +1,38 @@
 import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
-import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode, getButtonIcon, fetchContentFragmentByPath, updateBlockContent } from '../../scripts/utils.js';
+import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode, getButtonIcon, fetchContentFragmentByPath } from '../../scripts/utils.js';
+
+function updateTeaserContent(source, elements, showButtonIcon = false) {
+  if (!source) return;
+
+  if (elements.title && source.title) {
+    elements.title.innerHTML = source.title;
+  }
+
+  const description = source.description?.html || source.description;
+  if (elements.description && description) {
+    elements.description.innerHTML = description;
+  }
+
+  const buttonText = source.buttonText || source.buttontext;
+  const buttonLink = source.buttonLink || source.buttonlink;
+  if (elements.button) {
+    const icon = showButtonIcon ? getButtonIcon() : '';
+    if (buttonText) elements.button.innerHTML = buttonText + icon;
+    if (buttonLink) elements.button.href = buttonLink;
+  }
+
+  let imagePath = source.image?._path || source.image;
+  if (elements.image && imagePath) {
+    if (imagePath.includes('/content/dam/')) {
+      const siteName = getSiteNameFromDAM(imagePath);
+      imagePath = imagePath.substring(`/content/dam/${siteName}`.length);
+    }
+    const imageDescription = source.imageDescription || source.imagedescription || 'Teaser image';
+    const picture = createOptimizedPicture(imagePath, imageDescription, true);
+    elements.image.innerHTML = picture.outerHTML;
+    applyImageStyling(elements.image);
+  }
+}
 
 function applyImageStyling(imageContainer) {
   if (!imageContainer) return;
@@ -100,7 +133,7 @@ export default async function decorate(block) {
 
   // Update with fragment data if available
   if (fragmentData) {
-    updateBlockContent(fragmentData, elements, showButtonIcon, 'Teaser image', applyImageStyling);
+    updateTeaserContent(fragmentData, elements, showButtonIcon);
   }
 
   if (config.offerzone && !isAuthorMode) {
@@ -117,7 +150,7 @@ export default async function decorate(block) {
     }).then((result) => {
       result.propositions?.forEach((proposition) => {
         const offerContent = proposition.items[0]?.data?.content?.data?.offerByPath?.item;
-        updateBlockContent(offerContent, elements, showButtonIcon, 'Teaser image', applyImageStyling);
+        updateTeaserContent(offerContent, elements, showButtonIcon);
       });
     });
   }

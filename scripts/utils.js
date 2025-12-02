@@ -1,5 +1,3 @@
-import { createOptimizedPicture } from 'aem.js';
-
 function getSiteName() {
   const path = window.location.pathname;
   const match = path.match(/^\/content\/([^/]+)\//);
@@ -108,41 +106,6 @@ export const SERVICE_ICONS = {
     <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"/>
   </svg>`,
 };
-
-export function updateBlockContent(source, elements, showButtonIcon = false, imageDescription = 'Image', applyImageStyling = null) {
-  if (!source) return;
-
-  if (elements.title && source.title) {
-    elements.title.innerHTML = source.title;
-  }
-
-  const description = source.description?.html || source.description;
-  if (elements.description && description) {
-    elements.description.innerHTML = description;
-  }
-
-  const buttonText = source.buttonText || source.buttontext;
-  const buttonLink = source.buttonLink || source.buttonlink;
-  if (elements.button) {
-    const icon = showButtonIcon ? getButtonIcon() : '';
-    if (buttonText) elements.button.innerHTML = buttonText + icon;
-    if (buttonLink) elements.button.href = buttonLink;
-  }
-
-  let imagePath = source.image?._path || source.image;
-  if (elements.image && imagePath) {
-    if (imagePath.includes('/content/dam/')) {
-      const siteName = getSiteNameFromDAM(imagePath);
-      imagePath = imagePath.substring(`/content/dam/${siteName}`.length);
-    }
-    const imageDesc = source.imageDescription || source.imagedescription || imageDescription;
-    const picture = createOptimizedPicture(imagePath, imageDesc, true);
-    elements.image.innerHTML = picture.outerHTML;
-    if (applyImageStyling) {
-      applyImageStyling(elements.image);
-    }
-  }
-}
 
 export async function fetchContentFragmentByPath(fragmentPath) {
   try {
