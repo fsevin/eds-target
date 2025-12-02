@@ -96,7 +96,8 @@ export default async function decorate(block) {
     : '';
 
   const content = document.createRange().createContextualFragment(`
-    <section class="relative py-12 md:py-20 bg-cover bg-center bg-no-repeat" ${aueAttrs}>
+    <section class="relative py-12 md:py-20 bg-cover bg-center bg-no-repeat" >
+      <div ${aueAttrs}>
       <div id="${blockId}-image" class="absolute inset-0 z-0">${pictureHTML}</div>
       <div class="absolute inset-0 bg-black/50 z-10"></div>
       <div class="container mx-auto px-4 relative z-20">
@@ -113,6 +114,7 @@ export default async function decorate(block) {
             </a>
           </div>
         </div>
+      </div>
       </div>
     </section>
   `);
