@@ -105,32 +105,12 @@ export default async function decorate(block) {
     fragmentData = await fetchContentFragmentByPath(fragmentPath);
   }
 
-  // Use fragment data OR config, not both
-  let title, buttonlink, buttontext, descriptionHTML, imageSource, imageDesc;
-
-
-    title = fragmentData.title || 'Teaser Title';
-    buttonlink = fragmentData.buttonLink || '#';
-    buttontext = fragmentData.buttonText || 'Learn More';
-    descriptionHTML = fragmentData.description || '<p>Add your teaser description here.</p>';
-    imageSource = fragmentData.image;
-    imageDesc = fragmentData.imageDescription || 'Teaser image';
-  
-
-  let pictureHTML;
-
-  if (imageSource) {
-    let imagePath = imageSource;
-    // Remove DAM prefix if present
-    if (imagePath.includes('/content/dam/')) {
-      const siteName = getSiteNameFromDAM(imagePath);
-      imagePath = imagePath.substring(`/content/dam/${siteName}`.length);
-    }
-    const picture = createOptimizedPicture(imagePath, imageDesc);
-    pictureHTML = picture.outerHTML;
-  } else {
-    pictureHTML = createPlaceholderSVG('image', '4:3');
-  }
+  // Initialize with default values
+  const title = 'Teaser Title';
+  const buttonlink = '#';
+  const buttontext = 'Learn More';
+  const descriptionHTML = '<p>Add your teaser description here.</p>';
+  const pictureHTML = createPlaceholderSVG('image', '4:3');
 
   const flipLayout = config.fliplayout === 'true' || config.fliplayout === true;
   const showButtonIcon = config.showbuttonicon === 'true' || config.showbuttonicon === true;
@@ -182,6 +162,11 @@ export default async function decorate(block) {
   };
 
   applyImageStyling(elements.image);
+
+  // Update with fragment data if available
+  if (fragmentData) {
+    updateTeaserContent(fragmentData, elements, showButtonIcon);
+  }
 
   if (config.offerzone && !isAuthorMode) {
     alloy('sendEvent', {
