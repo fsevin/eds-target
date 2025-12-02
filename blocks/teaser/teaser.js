@@ -1,6 +1,44 @@
 import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
 import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode, getButtonIcon } from '../../scripts/utils.js';
 
+async function fetchContentFragmentByPath(fragmentUrl) {
+  if (!fragmentUrl) return null;
+
+  try {
+    // Remove domain and extension from URL
+    let path = fragmentUrl.replace(/^https?:\/\/[^/]+/, '');
+    path = path.replace(/\.(html|json)$/, '');
+
+    const apiUrl = `https://author-p34570-e1263228.adobeaemcloud.com/adobe/sites/cf/fragments?path=${path}`;
+    const response = await fetch(apiUrl);
+
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+    const data = await response.json();
+    const item = data.items?.[0];
+
+    if (!item) return null;
+
+    // Transform fields array into object
+    const fields = {};
+    item.fields?.forEach(field => {
+      fields[field.name] = field.values?.[0] || '';
+    });
+
+    return {
+      title: fields.title || '',
+      description: fields.description || '',
+      buttonText: fields.buttonText || '',
+      buttonLink: fields.buttonLink || '#',
+      image: fields.image || null,
+      imageDescription: fields.imageDescription || '',
+    };
+  } catch (error) {
+    console.error('Error fetching content fragment:', error);
+    return null;
+  }
+}
+
 function updateTeaserContent(source, elements, showButtonIcon = false) {
   if (!source) return;
 
@@ -60,18 +98,35 @@ function applyImageStyling(imageContainer) {
   }
 }
 
-export default function decorate(block) {
+export default async function decorate(block) {
   const config = readBlockConfig(block);
   const blockId = `teaser-${Math.random().toString(36).substr(2, 9)}`;
 
-  const title = config.title || 'Teaser Title';
-  const buttonlink = config.buttonlink || config.buttonLink || '#';
-  const buttontext = config.buttontext || config.buttonText || 'Learn More';
-  const descriptionHTML = config.description || '<p>Add your teaser description here.</p>';
+  // Fetch content fragment if specified
+  let fragmentData = null;
+  if (config.contentfragment) {
+    fragmentData = await fetchContentFragmentByPath(config.contentfragment);
+  }
+
+  // Use fragment data or fall back to config
+  const source = fragmentData || config;
+  const title = source.title || 'Teaser Title';
+  const buttonlink = source.buttonLink || source.buttonlink || '#';
+  const buttontext = source.buttonText || source.buttontext || 'Learn More';
+  const descriptionHTML = source.description || '<p>Add your teaser description here.</p>';
 
   let pictureHTML;
-  if (config.image) {
-    const picture = createOptimizedPicture(config.image, config.imagedescription || 'Teaser image');
+  const imageSource = source.image || config.image;
+  const imageDesc = source.imageDescription || config.imagedescription || 'Teaser image';
+
+  if (imageSource) {
+    let imagePath = imageSource;
+    // Remove DAM prefix if present
+    if (imagePath.includes('/content/dam/')) {
+      const siteName = getSiteNameFromDAM(imagePath);
+      imagePath = imagePath.substring(`/content/dam/${siteName}`.length);
+    }
+    const picture = createOptimizedPicture(imagePath, imageDesc);
     pictureHTML = picture.outerHTML;
   } else {
     pictureHTML = createPlaceholderSVG('image', '4:3');
