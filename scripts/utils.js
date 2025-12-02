@@ -158,7 +158,6 @@ export async function fetchContentFragmentByPath(fragmentPath) {
       const item = data.items?.[0];
       if (!item) return null;
 
-      // Transform fields array into object
       const fields = {};
       item.fields?.forEach(field => {
         fields[field.name] = field.values?.[0] || '';
