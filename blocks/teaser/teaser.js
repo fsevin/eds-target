@@ -105,16 +105,19 @@ export default async function decorate(block) {
     fragmentData = await fetchContentFragmentByPath(fragmentPath);
   }
 
-  // Use fragment data or fall back to config
-  const source = fragmentData || config;
-  const title = source.title || 'Teaser Title';
-  const buttonlink = source.buttonLink || source.buttonlink || '#';
-  const buttontext = source.buttonText || source.buttontext || 'Learn More';
-  const descriptionHTML = source.description || '<p>Add your teaser description here.</p>';
+  // Use fragment data OR config, not both
+  let title, buttonlink, buttontext, descriptionHTML, imageSource, imageDesc;
+
+
+    title = fragmentData.title || 'Teaser Title';
+    buttonlink = fragmentData.buttonLink || '#';
+    buttontext = fragmentData.buttonText || 'Learn More';
+    descriptionHTML = fragmentData.description || '<p>Add your teaser description here.</p>';
+    imageSource = fragmentData.image;
+    imageDesc = fragmentData.imageDescription || 'Teaser image';
+  
 
   let pictureHTML;
-  const imageSource = source.image || config.image;
-  const imageDesc = source.imageDescription || config.imagedescription || 'Teaser image';
 
   if (imageSource) {
     let imagePath = imageSource;
