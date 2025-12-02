@@ -107,55 +107,84 @@ export const SERVICE_ICONS = {
   </svg>`,
 };
 
-/**
- * Fetch content fragment data from GraphQL endpoint or AEM API
- * @param {string} fragmentPath Content fragment path
- * @returns {Promise<Object>} Content fragment data
- */
-export async function fetchContentFragment(fragmentPath) {
-  const cleanPath = fragmentPath.replace(/^https?:\/\/[^/]+/, '');
-  const domain = isAuthorMode ? 'author-p34570-e1263228' : 'publish-p34570-e1263228';
+export function updateBlockContent(source, elements, showButtonIcon = false, imageDescription = 'Image') {
+  if (!source) return;
 
+  if (elements.title && source.title) {
+    elements.title.innerHTML = source.title;
+  }
+
+  const description = source.description?.html || source.description;
+  if (elements.description && description) {
+    elements.description.innerHTML = description;
+  }
+
+  const buttonText = source.buttonText || source.buttontext;
+  const buttonLink = source.buttonLink || source.buttonlink;
+  if (elements.button) {
+    const icon = showButtonIcon ? getButtonIcon() : '';
+    if (buttonText) elements.button.innerHTML = buttonText + icon;
+    if (buttonLink) elements.button.href = buttonLink;
+  }
+
+  let imagePath = source.image?._path || source.image;
+  if (elements.image && imagePath) {
+    if (imagePath.includes('/content/dam/')) {
+      const siteName = getSiteNameFromDAM(imagePath);
+      imagePath = imagePath.substring(`/content/dam/${siteName}`.length);
+    }
+    const imageDesc = source.imageDescription || source.imagedescription || imageDescription;
+    const picture = createOptimizedPicture(imagePath, imageDesc, true);
+    elements.image.innerHTML = picture.outerHTML;
+  }
+}
+
+export async function fetchContentFragmentByPath(fragmentPath) {
   try {
+    let apiUrl, data;
+
     if (isAuthorMode) {
-      // In author mode, fetch via AEM API
-      // Step 1: Get jcr:uuid from the fragment JSON
-      const jsonUrl = `https://${domain}.adobeaemcloud.com${cleanPath}.json`;
-      const jsonResponse = await fetch(jsonUrl);
-      if (!jsonResponse.ok) throw new Error(`HTTP error! status: ${jsonResponse.status}`);
-      const jsonData = await jsonResponse.json();
-      const uuid = jsonData['jcr:uuid'];
+      // Author mode: Use fragments API
+      apiUrl = `https://author-p34570-e1263228.adobeaemcloud.com/adobe/sites/cf/fragments?path=${fragmentPath}`;
+      const response = await fetch(apiUrl);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
-      if (!uuid) throw new Error('jcr:uuid not found in fragment JSON');
+      data = await response.json();
+      const item = data.items?.[0];
+      if (!item) return null;
 
-      // Step 2: Fetch fragment data using the UUID
-      const fragmentUrl = `https://${domain}.adobeaemcloud.com/adobe/sites/cf/fragments/${uuid}`;
-      const fragmentResponse = await fetch(fragmentUrl);
-      if (!fragmentResponse.ok) throw new Error(`HTTP error! status: ${fragmentResponse.status}`);
-      const fragmentData = await fragmentResponse.json();
-
-      // Transform API response to match GraphQL structure
+      // Transform fields array into object
       const fields = {};
-      fragmentData.fields?.forEach(field => {
+      item.fields?.forEach(field => {
         fields[field.name] = field.values?.[0] || '';
       });
 
       return {
-        _path: fragmentData.path,
         title: fields.title || '',
-        description: { html: fields.description || '' },
+        description: fields.description || '',
         buttonText: fields.buttonText || '',
-        buttonLink: { _path: fields.buttonLink || '#' },
-        image: fields.image ? { _path: fields.image } : null,
+        buttonLink: fields.buttonLink || '#',
+        image: fields.image || null,
         imageDescription: fields.imageDescription || '',
       };
     } else {
-      // In publish mode, use GraphQL
-      const graphqlUrl = `https://${domain}.adobeaemcloud.com/graphql/execute.json/3ds/offer-by-path;offerPath=${cleanPath}`;
-      const response = await fetch(graphqlUrl);
+      // Publish mode: Use GraphQL
+      apiUrl = `https://publish-p34570-e1263228.adobeaemcloud.com/graphql/execute.json/3ds/offer-by-path;offerPath=${fragmentPath}`;
+      const response = await fetch(apiUrl);
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      const data = await response.json();
-      return data?.data?.offerByPath?.item || null;
+
+      data = await response.json();
+      const item = data?.data?.offerByPath?.item;
+      if (!item) return null;
+
+      return {
+        title: item.title || '',
+        description: item.description?.html || item.description || '',
+        buttonText: item.buttonText || '',
+        buttonLink: item.buttonLink || '#',
+        image: item.image?._path || null,
+        imageDescription: item.imageDescription || '',
+      };
     }
   } catch (error) {
     console.error('Error fetching content fragment:', error);

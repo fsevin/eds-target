@@ -1,5 +1,38 @@
 import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
-import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode, getButtonIcon, fetchContentFragmentByPath, updateBlockContent } from '../../scripts/utils.js';
+import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode, getButtonIcon } from '../../scripts/utils.js';
+
+function updateTeaserContent(source, elements, showButtonIcon = false) {
+  if (!source) return;
+
+  if (elements.title && source.title) {
+    elements.title.innerHTML = source.title;
+  }
+
+  const description = source.description?.html || source.description;
+  if (elements.description && description) {
+    elements.description.innerHTML = description;
+  }
+
+  const buttonText = source.buttonText || source.buttontext;
+  const buttonLink = source.buttonLink || source.buttonlink;
+  if (elements.button) {
+    const icon = showButtonIcon ? getButtonIcon() : '';
+    if (buttonText) elements.button.innerHTML = buttonText + icon;
+    if (buttonLink) elements.button.href = buttonLink;
+  }
+
+  let imagePath = source.image?._path || source.image;
+  if (elements.image && imagePath) {
+    if (imagePath.includes('/content/dam/')) {
+      const siteName = getSiteNameFromDAM(imagePath);
+      imagePath = imagePath.substring(`/content/dam/${siteName}`.length);
+    }
+    const imageDescription = source.imageDescription || source.imagedescription || 'Teaser image';
+    const picture = createOptimizedPicture(imagePath, imageDescription, true);
+    elements.image.innerHTML = picture.outerHTML;
+    applyImageStyling(elements.image);
+  }
+}
 
 function applyImageStyling(imageContainer) {
   if (!imageContainer) return;
@@ -27,35 +60,27 @@ function applyImageStyling(imageContainer) {
   }
 }
 
-export default async function decorate(block) {
+export default function decorate(block) {
   const config = readBlockConfig(block);
   const blockId = `teaser-${Math.random().toString(36).substr(2, 9)}`;
 
-  // Fetch content fragment if specified
-  let fragmentData = null;
-  let fragmentPath = null;
-  if (config.contentfragment) {
-    fragmentPath = config.contentfragment.replace(/^https?:\/\/[^/]+/, '');
-    fragmentPath = fragmentPath.replace(/\.(html|json)$/, '');
-    fragmentData = await fetchContentFragmentByPath(fragmentPath);
-  }
+  const title = config.title || 'Teaser Title';
+  const buttonlink = config.buttonlink || config.buttonLink || '#';
+  const buttontext = config.buttontext || config.buttonText || 'Learn More';
+  const descriptionHTML = config.description || '<p>Add your teaser description here.</p>';
 
-  // Initialize with default values
-  const title = 'Teaser Title';
-  const buttonlink = '#';
-  const buttontext = 'Learn More';
-  const descriptionHTML = '<p>Add your teaser description here.</p>';
-  const pictureHTML = createPlaceholderSVG('image', '4:3');
+  let pictureHTML;
+  if (config.image) {
+    const picture = createOptimizedPicture(config.image, config.imagedescription || 'Teaser image');
+    pictureHTML = picture.outerHTML;
+  } else {
+    pictureHTML = createPlaceholderSVG('image', '4:3');
+  }
 
   const flipLayout = config.fliplayout === 'true' || config.fliplayout === true;
   const showButtonIcon = config.showbuttonicon === 'true' || config.showbuttonicon === true;
 
   const icon = showButtonIcon ? getButtonIcon() : '';
-
-  // Build AUE attributes for section if using content fragment
-  const aueAttrs = fragmentPath
-    ? `data-aue-resource="urn:aemconnection:${fragmentPath}/jcr:content/data/master" data-aue-type="reference" data-aue-filter="cf" data-aue-label="Content Fragment"`
-    : '';
 
   const imageBlock = `<div id="${blockId}-image" data-aue-label="Image" data-aue-prop="image" data-aue-type="media" class="relative rounded-2xl overflow-hidden shadow-2xl lg:col-span-3">
     ${pictureHTML}
@@ -76,7 +101,7 @@ export default async function decorate(block) {
   </div>`;
 
   const content = document.createRange().createContextualFragment(`
-    <section class="py-20 py-20 bg-white" ${aueAttrs}>
+    <section class="py-20 py-20 bg-white">
       <div class="container mx-auto px-4">
         <div class="grid lg:grid-cols-5 gap-12 items-center">
           ${flipLayout ? textBlock + imageBlock : imageBlock + textBlock}
@@ -98,12 +123,6 @@ export default async function decorate(block) {
 
   applyImageStyling(elements.image);
 
-  // Update with fragment data if available
-  if (fragmentData) {
-    updateBlockContent(fragmentData, elements, showButtonIcon, 'Teaser image');
-    applyImageStyling(elements.image);
-  }
-
   if (config.offerzone && !isAuthorMode) {
     alloy('sendEvent', {
       decisionScopes: [config.offerzone],
@@ -118,8 +137,7 @@ export default async function decorate(block) {
     }).then((result) => {
       result.propositions?.forEach((proposition) => {
         const offerContent = proposition.items[0]?.data?.content?.data?.offerByPath?.item;
-        updateBlockContent(offerContent, elements, showButtonIcon, 'Teaser image');
-        applyImageStyling(elements.image);
+        updateTeaserContent(offerContent, elements, showButtonIcon);
       });
     });
   }
