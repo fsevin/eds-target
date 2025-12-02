@@ -97,42 +97,11 @@
         "label": "Fields",
         "name": "fields" 
       },
-      {
-        "component": "text",
+      {        
+        "component": "aem-content-fragment",
         "valueType": "string",
-        "name": "title",
-        "label": "Title"
-      },
-      {
-        "component": "richtext",
-        "name": "description",
-        "label": "Description",
-        "valueType": "string"
-      },
-      {
-        "component": "reference",
-        "valueType": "string",
-        "name": "image",
-        "label": "Image",
-        "multi": false
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "imageDescription",
-        "label": "Image Description"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "buttonText",
-        "label": "Button Text"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "buttonLink",
-        "label": "Button Link"
+        "name": "contentFragment",
+        "label": "Content Fragment"
       },
       {
         "component": "tab",
