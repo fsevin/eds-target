@@ -1,15 +1,9 @@
 import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
 import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode, getButtonIcon } from '../../scripts/utils.js';
 
-async function fetchContentFragmentByPath(fragmentUrl) {
-  if (!fragmentUrl) return null;
-
+async function fetchContentFragmentByPath(fragmentPath) {
   try {
-    // Remove domain and extension from URL
-    let path = fragmentUrl.replace(/^https?:\/\/[^/]+/, '');
-    path = path.replace(/\.(html|json)$/, '');
-
-    const apiUrl = `https://author-p34570-e1263228.adobeaemcloud.com/adobe/sites/cf/fragments?path=${path}`;
+    const apiUrl = `https://author-p34570-e1263228.adobeaemcloud.com/adobe/sites/cf/fragments?path=${fragmentPath}`;
     const response = await fetch(apiUrl);
 
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -104,8 +98,11 @@ export default async function decorate(block) {
 
   // Fetch content fragment if specified
   let fragmentData = null;
+  let fragmentPath = null;
   if (config.contentfragment) {
-    fragmentData = await fetchContentFragmentByPath(config.contentfragment);
+    fragmentPath = config.contentfragment.replace(/^https?:\/\/[^/]+/, '');
+    fragmentPath = fragmentPath.replace(/\.(html|json)$/, '');
+    fragmentData = await fetchContentFragmentByPath(fragmentPath);
   }
 
   // Use fragment data or fall back to config
@@ -137,6 +134,11 @@ export default async function decorate(block) {
 
   const icon = showButtonIcon ? getButtonIcon() : '';
 
+  // Build AUE attributes for section if using content fragment
+  const aueAttrs = fragmentPath
+    ? `data-aue-resource="urn:aemconnection:${fragmentPath}/jcr:content/data/master" data-aue-type="reference" data-aue-filter="cf" data-aue-label="Content Fragment"`
+    : '';
+
   const imageBlock = `<div id="${blockId}-image" data-aue-label="Image" data-aue-prop="image" data-aue-type="media" class="relative rounded-2xl overflow-hidden shadow-2xl lg:col-span-3">
     ${pictureHTML}
   </div>`;
@@ -156,7 +158,7 @@ export default async function decorate(block) {
   </div>`;
 
   const content = document.createRange().createContextualFragment(`
-    <section class="py-20 py-20 bg-white">
+    <section class="py-20 py-20 bg-white" ${aueAttrs}>
       <div class="container mx-auto px-4">
         <div class="grid lg:grid-cols-5 gap-12 items-center">
           ${flipLayout ? textBlock + imageBlock : imageBlock + textBlock}
