@@ -1,38 +1,5 @@
-import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
-import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode, getButtonIcon, fetchContentFragmentByPath } from '../../scripts/utils.js';
-
-function updateHeroContent(source, elements, showButtonIcon = false) {
-  if (!source) return;
-
-  if (elements.title && source.title) {
-    elements.title.innerHTML = source.title;
-  }
-
-  const description = source.description?.html || source.description;
-  if (elements.description && description) {
-    elements.description.innerHTML = description;
-  }
-
-  const buttonText = source.buttonText || source.buttontext;
-  const buttonLink = source.buttonLink || source.buttonlink;
-  if (elements.button) {
-    const icon = showButtonIcon ? getButtonIcon() : '';
-    if (buttonText) elements.button.innerHTML = buttonText + icon;
-    if (buttonLink) elements.button.href = buttonLink;
-  }
-
-  let imagePath = source.image?._path || source.image;
-  if (elements.image && imagePath) {
-    if (imagePath.includes('/content/dam/')) {
-      const siteName = getSiteNameFromDAM(imagePath);
-      imagePath = imagePath.substring(`/content/dam/${siteName}`.length);
-    }
-    const imageDescription = source.imageDescription || source.imagedescription || 'Hero image';
-    const picture = createOptimizedPicture(imagePath, imageDescription, true);
-    elements.image.innerHTML = picture.outerHTML;
-    applyBackgroundImageStyling(elements.image);
-  }
-}
+import { readBlockConfig } from '../../scripts/aem.js';
+import { createPlaceholderSVG, isAuthorMode, getButtonIcon, fetchContentFragmentByPath, updateBlockContent } from '../../scripts/utils.js';
 
 function applyBackgroundImageStyling(imageContainer) {
   if (!imageContainer) return;
@@ -132,7 +99,7 @@ export default async function decorate(block) {
 
   // Update with fragment data if available
   if (fragmentData) {
-    updateHeroContent(fragmentData, elements, showButtonIcon);
+    updateBlockContent(fragmentData, elements, showButtonIcon, 'Hero image', applyBackgroundImageStyling);
   }
 
   if (config.offerzone && !isAuthorMode) {
@@ -149,7 +116,7 @@ export default async function decorate(block) {
     }).then((result) => {
       result.propositions?.forEach((proposition) => {
         const offerContent = proposition.items[0]?.data?.content?.data?.offerByPath?.item;
-        updateHeroContent(offerContent, elements, showButtonIcon);
+        updateBlockContent(offerContent, elements, showButtonIcon, 'Hero image', applyBackgroundImageStyling);
       });
     });
   }
