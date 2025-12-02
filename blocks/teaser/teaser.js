@@ -3,30 +3,51 @@ import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode, getButtonIcon }
 
 async function fetchContentFragmentByPath(fragmentPath) {
   try {
-    const apiUrl = `https://author-p34570-e1263228.adobeaemcloud.com/adobe/sites/cf/fragments?path=${fragmentPath}`;
-    const response = await fetch(apiUrl);
+    let apiUrl, data;
 
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    if (isAuthorMode) {
+      // Author mode: Use fragments API
+      apiUrl = `https://author-p34570-e1263228.adobeaemcloud.com/adobe/sites/cf/fragments?path=${fragmentPath}`;
+      const response = await fetch(apiUrl);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
-    const data = await response.json();
-    const item = data.items?.[0];
+      data = await response.json();
+      const item = data.items?.[0];
+      if (!item) return null;
 
-    if (!item) return null;
+      // Transform fields array into object
+      const fields = {};
+      item.fields?.forEach(field => {
+        fields[field.name] = field.values?.[0] || '';
+      });
 
-    // Transform fields array into object
-    const fields = {};
-    item.fields?.forEach(field => {
-      fields[field.name] = field.values?.[0] || '';
-    });
+      return {
+        title: fields.title || '',
+        description: fields.description || '',
+        buttonText: fields.buttonText || '',
+        buttonLink: fields.buttonLink || '#',
+        image: fields.image || null,
+        imageDescription: fields.imageDescription || '',
+      };
+    } else {
+      // Publish mode: Use GraphQL
+      apiUrl = `https://publish-p34570-e1263228.adobeaemcloud.com/graphql/execute.json/3ds/offer-by-path;offerPath=${fragmentPath}`;
+      const response = await fetch(apiUrl);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
-    return {
-      title: fields.title || '',
-      description: fields.description || '',
-      buttonText: fields.buttonText || '',
-      buttonLink: fields.buttonLink || '#',
-      image: fields.image || null,
-      imageDescription: fields.imageDescription || '',
-    };
+      data = await response.json();
+      const item = data?.data?.offerByPath?.item;
+      if (!item) return null;
+
+      return {
+        title: item.title || '',
+        description: item.description?.html || item.description || '',
+        buttonText: item.buttonText || '',
+        buttonLink: item.buttonLink || '#',
+        image: item.image?._path || null,
+        imageDescription: item.imageDescription || '',
+      };
+    }
   } catch (error) {
     console.error('Error fetching content fragment:', error);
     return null;
