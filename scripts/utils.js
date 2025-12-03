@@ -132,7 +132,7 @@ export async function fetchContentFragmentByPath(fragmentPath) {
         description: fields.description || '',
         buttonText: fields.buttonText || '',
         buttonLink: fields.buttonLink || '#',
-        image: { _id: imageAssetId },
+        image: { _id: imageAssetId, _path: fields.image } || null,
         imageDescription: fields.imageDescription || '',
       };
     }
