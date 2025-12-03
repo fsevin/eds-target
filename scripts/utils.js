@@ -199,19 +199,19 @@ export function createDynamicMediaPicture(
   // large screens (>=600px)
   const sourceLarge = document.createElement('source');
   sourceLarge.setAttribute('media', '(min-width: 600px)');
-  sourceLarge.setAttribute('srcset', `${baseUrl}/image.webp?${smartCropParam}`);
+  sourceLarge.setAttribute('srcset', `${baseUrl}/image.jpeg?${smartCropParam}`);
   picture.appendChild(sourceLarge);
 
   // small screens (<600px)
   const sourceSmall = document.createElement('source');
-  sourceSmall.setAttribute('srcset', `${baseUrl}/image.webp?width=500${smartCropParam}`);
+  sourceSmall.setAttribute('srcset', `${baseUrl}/image.jpeg?width=500${smartCropParam}`);
   picture.appendChild(sourceSmall);
 
   // fallback img
   const img = document.createElement('img');
   img.setAttribute('loading', eager ? 'eager' : 'lazy');
   img.setAttribute('alt', alt);
-  img.setAttribute('src', `${baseUrl}/image.jpg?width=500${smartCropParam}`);
+  img.setAttribute('src', `${baseUrl}/image.jpeg?width=500${smartCropParam}`);
   picture.appendChild(img);
 
   return picture;
