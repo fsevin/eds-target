@@ -126,12 +126,21 @@ export async function fetchContentFragmentByPath(fragmentPath) {
         fields[field.name] = field.values?.[0] || '';
       });
 
+      // Find image assetId from references by matching path
+      let imageAssetId = null;
+      if (fields.image && item.references) {
+        const imageRef = item.references.find(ref => ref.path === fields.image);
+        if (imageRef?.assetId) {
+          imageAssetId = imageRef.assetId.replace('urn:aaid:aem:', '');
+        }
+      }
+
       return {
         title: fields.title || '',
         description: fields.description || '',
         buttonText: fields.buttonText || '',
         buttonLink: fields.buttonLink || '#',
-        image: fields.image || null,
+        image: { _id: imageAssetId },
         imageDescription: fields.imageDescription || '',
       };
     } else {
