@@ -170,26 +170,27 @@ export function createDynamicMediaPicture(
   alt = '',
   eager = false,
   smartCrop,
-  breakpoints = [{ media: '(min-width: 600px)', width: '1500' }, { width: '500' }],
 ) {
   const picture = document.createElement('picture');
   const baseUrl = `${DELIVERY_DOMAIN}/adobe/assets/urn:aaid:aem:${assetId}/as`;
   const smartCropParam = smartCrop ? `&smartcrop=${smartCrop}` : '';
 
-  // webp sources
-  breakpoints.forEach((br) => {
-    const source = document.createElement('source');
-    if (br.media) source.setAttribute('media', br.media);
-    source.setAttribute('srcset', `${baseUrl}/image.webp?width=${br.width}${smartCropParam}`);
-    picture.appendChild(source);
-  });
+  // large screens (>=600px)
+  const sourceLarge = document.createElement('source');
+  sourceLarge.setAttribute('media', '(min-width: 600px)');
+  sourceLarge.setAttribute('srcset', `${baseUrl}/image.webp?${smartCropParam}`);
+  picture.appendChild(sourceLarge);
+
+  // small screens (<600px)
+  const sourceSmall = document.createElement('source');
+  sourceSmall.setAttribute('srcset', `${baseUrl}/image.webp?width=500${smartCropParam}`);
+  picture.appendChild(sourceSmall);
 
   // fallback img
-  const lastBreakpoint = breakpoints[breakpoints.length - 1];
   const img = document.createElement('img');
   img.setAttribute('loading', eager ? 'eager' : 'lazy');
   img.setAttribute('alt', alt);
-  img.setAttribute('src', `${baseUrl}/image.jpg?width=${lastBreakpoint.width}${smartCropParam}`);
+  img.setAttribute('src', `${baseUrl}/image.jpg?width=500${smartCropParam}`);
   picture.appendChild(img);
 
   return picture;
