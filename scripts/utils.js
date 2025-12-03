@@ -108,32 +108,24 @@ export const SERVICE_ICONS = {
 
 export async function fetchContentFragmentByPath(fragmentPath) {
   try {
-    let apiUrl, data;
+    const apiUrl = isAuthorMode
+      ? `${AUTHOR_DOMAIN}/adobe/sites/cf/fragments?path=${fragmentPath}&references=direct`
+      : `${PUBLISH_DOMAIN}/graphql/execute.json/3ds/offer-by-path;offerPath=${fragmentPath}`;
+
+    const response = await fetch(apiUrl);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+    const data = await response.json();
 
     if (isAuthorMode) {
-      // Author mode: Use fragments API
-      apiUrl = `${AUTHOR_DOMAIN}/adobe/sites/cf/fragments?path=${fragmentPath}&references=direct`;
-      const response = await fetch(apiUrl);
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-      data = await response.json();
       const item = data.items?.[0];
       if (!item) return null;
 
-      // Transform fields array into object
-      const fields = {};
-      item.fields?.forEach(field => {
-        fields[field.name] = field.values?.[0] || '';
-      });
-
-      // Find image assetId from references by matching path
-      let imageAssetId = null;
-      if (fields.image && item.references) {
-        const imageRef = item.references.find(ref => ref.path === fields.image);
-        if (imageRef?.assetId) {
-          imageAssetId = imageRef.assetId.replace('urn:aaid:aem:', '');
-        }
-      }
+      const fields = Object.fromEntries(
+        item.fields?.map(f => [f.name, f.values?.[0] || '']) || []
+      );
+      const imageRef = item.references?.find(ref => ref.path === fields.image);
+      const imageAssetId = imageRef?.assetId?.replace('urn:aaid:aem:', '') || null;
 
       return {
         title: fields.title || '',
@@ -143,25 +135,19 @@ export async function fetchContentFragmentByPath(fragmentPath) {
         image: { _id: imageAssetId },
         imageDescription: fields.imageDescription || '',
       };
-    } else {
-      // Publish mode: Use GraphQL
-      apiUrl = `${PUBLISH_DOMAIN}/graphql/execute.json/3ds/offer-by-path;offerPath=${fragmentPath}`;
-      const response = await fetch(apiUrl);
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-      data = await response.json();
-      const item = data?.data?.offerByPath?.item;
-      if (!item) return null;
-
-      return {
-        title: item.title || '',
-        description: item.description?.html || item.description || '',
-        buttonText: item.buttonText || '',
-        buttonLink: item.buttonLink || '#',
-        image: item.image || null,
-        imageDescription: item.imageDescription || '',
-      };
     }
+
+    const item = data?.data?.offerByPath?.item;
+    if (!item) return null;
+
+    return {
+      title: item.title || '',
+      description: item.description?.html || item.description || '',
+      buttonText: item.buttonText || '',
+      buttonLink: item.buttonLink || '#',
+      image: item.image || null,
+      imageDescription: item.imageDescription || '',
+    };
   } catch (error) {
     console.error('Error fetching content fragment:', error);
     return null;
