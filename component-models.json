@@ -111,6 +111,12 @@
       {
         "component": "boolean",
         "valueType": "boolean",
+        "name": "dynamicMediaDelivery",
+        "label": "Dynamic Media Delivery"
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
         "name": "showButtonIcon",
         "label": "Show Button Icon"
       },
@@ -160,6 +166,12 @@
         "component": "tab",
         "label": "Layout",
         "name": "layout"
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "dynamicMediaDelivery",
+        "label": "Dynamic Media Delivery"
       },
       {
         "component": "boolean",
