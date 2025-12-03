@@ -1,7 +1,7 @@
-import { readBlockConfig } from '../../scripts/aem.js';
+import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
 import { createDynamicMediaPicture, createPlaceholderSVG, isAuthorMode, getButtonIcon, fetchContentFragmentByPath } from '../../scripts/utils.js';
 
-function updateHeroContent(source, elements, showButtonIcon = false) {
+function updateHeroContent(source, elements, showButtonIcon = false, useDynamicMedia = true) {
   if (!source) return;
 
   if (elements.title && source.title) {
@@ -21,10 +21,16 @@ function updateHeroContent(source, elements, showButtonIcon = false) {
     if (buttonLink) elements.button.href = buttonLink;
   }
 
-  let imageId = source.image?.['_id'];
-  if (elements.image && imageId) {
-    const imageDescription = source.imageDescription || source.imagedescription || 'Hero image';
+  const imageId = source.image?.['_id'];
+  const imagePath = source.image?.['_path'];
+  const imageDescription = source.imageDescription || source.imagedescription || 'Hero image';
+
+  if (elements.image && useDynamicMedia && imageId) {
     const picture = createDynamicMediaPicture(imageId, imageDescription, true, '1500x450');
+    elements.image.innerHTML = picture.outerHTML;
+    applyBackgroundImageStyling(elements.image);
+  } else if (elements.image && imagePath) {
+    const picture = createOptimizedPicture(imagePath, imageDescription, true);
     elements.image.innerHTML = picture.outerHTML;
     applyBackgroundImageStyling(elements.image);
   }
@@ -83,6 +89,7 @@ export default async function decorate(block) {
   const descriptionHTML = '<p>Add your hero description here.</p>';
   const pictureHTML = createPlaceholderSVG('image', '16:9');
   const showButtonIcon = config.showbuttonicon === 'true' || config.showbuttonicon === true;
+  const useDynamicMedia = config.dynamicmediadelivery === 'true' || config.dynamicmediadelivery === true;
 
   const icon = showButtonIcon ? getButtonIcon() : '';
 
@@ -130,7 +137,7 @@ export default async function decorate(block) {
 
   // Update with fragment data if available
   if (fragmentData) {
-    updateHeroContent(fragmentData, elements, showButtonIcon);
+    updateHeroContent(fragmentData, elements, showButtonIcon, useDynamicMedia);
   }
 
   if (config.offerzone && !isAuthorMode) {
@@ -147,7 +154,7 @@ export default async function decorate(block) {
     }).then((result) => {
       result.propositions?.forEach((proposition) => {
         const offerContent = proposition.items[0]?.data?.content?.data?.offerByPath?.item;
-        updateHeroContent(offerContent, elements, showButtonIcon);
+        updateHeroContent(offerContent, elements, showButtonIcon, useDynamicMedia);
       });
     });
   }
