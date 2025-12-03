@@ -45,7 +45,7 @@ function buildProductCard(product) {
 
   return `
     <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col h-full">
-      <div id="${blockId}-image" class="relative aspect-square overflow-hidden bg-gray-100">
+      <div id="${blockId}-image" class="relative aspect-[5/3] overflow-hidden bg-gray-100">
         ${product.picture}
       </div>
       <div class="p-6 flex flex-col flex-grow">
