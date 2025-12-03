@@ -1,7 +1,7 @@
-import { readBlockConfig } from '../../scripts/aem.js';
+import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
 import { createDynamicMediaPicture, createPlaceholderSVG, isAuthorMode, getButtonIcon, fetchContentFragmentByPath } from '../../scripts/utils.js';
 
-function updateTeaserContent(source, elements, showButtonIcon = false) {
+function updateTeaserContent(source, elements, showButtonIcon = false, useDynamicMedia = true) {
   if (!source) return;
 
   if (elements.title && source.title) {
@@ -21,10 +21,16 @@ function updateTeaserContent(source, elements, showButtonIcon = false) {
     if (buttonLink) elements.button.href = buttonLink;
   }
 
-  let imageId = source.image?.['_id'];
-  if (elements.image && imageId) {
-    const imageDescription = source.imageDescription || 'Teaser image';
+  const imageId = source.image?.['_id'];
+  const imagePath = source.image?.['_path'];
+  const imageDescription = source.imageDescription || 'Teaser image';
+
+  if (elements.image && useDynamicMedia && imageId) {
     const picture = createDynamicMediaPicture(imageId, imageDescription, true, '730x438');
+    elements.image.innerHTML = picture.outerHTML;
+    applyImageStyling(elements.image);
+  } else if (elements.image && imagePath) {
+    const picture = createOptimizedPicture(imagePath, imageDescription, true);
     elements.image.innerHTML = picture.outerHTML;
     applyImageStyling(elements.image);
   }
@@ -78,6 +84,7 @@ export default async function decorate(block) {
 
   const flipLayout = config.fliplayout === 'true' || config.fliplayout === true;
   const showButtonIcon = config.showbuttonicon === 'true' || config.showbuttonicon === true;
+  const useDynamicMedia = config.dynamicmediadelivery === 'true' || config.dynamicmediadelivery === true;
 
   const icon = showButtonIcon ? getButtonIcon() : '';
 
@@ -131,7 +138,7 @@ export default async function decorate(block) {
 
   // Update with fragment data if available
   if (fragmentData) {
-    updateTeaserContent(fragmentData, elements, showButtonIcon);
+    updateTeaserContent(fragmentData, elements, showButtonIcon, useDynamicMedia);
   }
 
   if (config.offerzone && !isAuthorMode) {
@@ -148,7 +155,7 @@ export default async function decorate(block) {
     }).then((result) => {
       result.propositions?.forEach((proposition) => {
         const offerContent = proposition.items[0]?.data?.content?.data?.offerByPath?.item;
-        updateTeaserContent(offerContent, elements, showButtonIcon);
+        updateTeaserContent(offerContent, elements, showButtonIcon, useDynamicMedia);
       });
     });
   }
