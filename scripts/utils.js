@@ -108,25 +108,51 @@ export const SERVICE_ICONS = {
 
 export async function fetchContentFragmentByPath(fragmentPath) {
   try {
-    const apiUrl = isAuthorMode
-      ? `${AUTHOR_DOMAIN}/adobe/sites/cf/fragments?path=${fragmentPath}`
-      : `${PUBLISH_DOMAIN}/graphql/execute.json/3ds/offer-by-path;offerPath=${fragmentPath}`;
+    let apiUrl, data;
 
-    const response = await fetch(apiUrl);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    if (isAuthorMode) {
+      // Author mode: Use fragments API
+      apiUrl = `${AUTHOR_DOMAIN}/adobe/sites/cf/fragments?path=${fragmentPath}`;
+      const response = await fetch(apiUrl);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
-    const data = await response.json();
-    const item = isAuthorMode ? data.items?.[0] : data?.data?.offerByPath?.item;
-    if (!item) return null;
+      data = await response.json();
+      const item = data.items?.[0];
+      if (!item) return null;
 
-    return {
-      title: item.title || '',
-      description: item.description?.html || item.description || '',
-      buttonText: item.buttonText || '',
-      buttonLink: item.buttonLink || '#',
-      image: item.image || null,
-      imageDescription: item.imageDescription || '',
-    };
+      // Transform fields array into object
+      const fields = {};
+      item.fields?.forEach(field => {
+        fields[field.name] = field.values?.[0] || '';
+      });
+
+      return {
+        title: fields.title || '',
+        description: fields.description || '',
+        buttonText: fields.buttonText || '',
+        buttonLink: fields.buttonLink || '#',
+        image: fields.image || null,
+        imageDescription: fields.imageDescription || '',
+      };
+    } else {
+      // Publish mode: Use GraphQL
+      apiUrl = `${PUBLISH_DOMAIN}/graphql/execute.json/3ds/offer-by-path;offerPath=${fragmentPath}`;
+      const response = await fetch(apiUrl);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+      data = await response.json();
+      const item = data?.data?.offerByPath?.item;
+      if (!item) return null;
+
+      return {
+        title: item.title || '',
+        description: item.description?.html || item.description || '',
+        buttonText: item.buttonText || '',
+        buttonLink: item.buttonLink || '#',
+        image: item.image || null,
+        imageDescription: item.imageDescription || '',
+      };
+    }
   } catch (error) {
     console.error('Error fetching content fragment:', error);
     return null;
