@@ -145,7 +145,7 @@ export async function fetchContentFragmentByPath(fragmentPath) {
       };
     } else {
       // Publish mode: Use GraphQL
-      apiUrl = `${PUBLISH_DOMAIN}/graphql/execute.json/3ds/offer-by-path;offerPath=${fragmentPath}`;
+      apiUrl = `${PUBLISH_DOMAIN}/graphql/execute.json/3ds/offer-by-path;offerPath=${fragmentPath}&references=direct`;
       const response = await fetch(apiUrl);
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
