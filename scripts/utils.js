@@ -112,7 +112,7 @@ export async function fetchContentFragmentByPath(fragmentPath) {
 
     if (isAuthorMode) {
       // Author mode: Use fragments API
-      apiUrl = `${AUTHOR_DOMAIN}/adobe/sites/cf/fragments?path=${fragmentPath}`;
+      apiUrl = `${AUTHOR_DOMAIN}/adobe/sites/cf/fragments?path=${fragmentPath}&references=direct`;
       const response = await fetch(apiUrl);
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
@@ -126,26 +126,17 @@ export async function fetchContentFragmentByPath(fragmentPath) {
         fields[field.name] = field.values?.[0] || '';
       });
 
-      // Find image assetId from references by matching path
-      let imageAssetId = null;
-      if (fields.image && item.references) {
-        const imageRef = item.references.find(ref => ref.path === fields.image);
-        if (imageRef?.assetId) {
-          imageAssetId = imageRef.assetId.replace('urn:aaid:aem:', '');
-        }
-      }
-
       return {
         title: fields.title || '',
         description: fields.description || '',
         buttonText: fields.buttonText || '',
         buttonLink: fields.buttonLink || '#',
-        image: { _id: imageAssetId },
+        image: fields.image || null,
         imageDescription: fields.imageDescription || '',
       };
     } else {
       // Publish mode: Use GraphQL
-      apiUrl = `${PUBLISH_DOMAIN}/graphql/execute.json/3ds/offer-by-path;offerPath=${fragmentPath}&references=direct`;
+      apiUrl = `${PUBLISH_DOMAIN}/graphql/execute.json/3ds/offer-by-path;offerPath=${fragmentPath}`;
       const response = await fetch(apiUrl);
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
