@@ -1,12 +1,11 @@
+const AUTHOR_DOMAIN = 'https://author-p34570-e1263228.adobeaemcloud.com';
+const PUBLISH_DOMAIN = 'https://publish-p34570-e1263228.adobeaemcloud.com';
+const DELIVERY_DOMAIN = 'https://delivery-p34570-e1263228.adobeaemcloud.com';
+
 function getSiteName() {
   const path = window.location.pathname;
   const match = path.match(/^\/content\/([^/]+)\//);
   return match ? match[1] : '/';
-}
-
-export function getSiteNameFromDAM(damPath) {
-  const match = damPath.match(/^\/content\/dam\/([^/]+)/);
-  return match[1];
 }
 
 export function getCurrentLocale() {
@@ -109,51 +108,25 @@ export const SERVICE_ICONS = {
 
 export async function fetchContentFragmentByPath(fragmentPath) {
   try {
-    let apiUrl, data;
+    const apiUrl = isAuthorMode
+      ? `${AUTHOR_DOMAIN}/adobe/sites/cf/fragments?path=${fragmentPath}`
+      : `${PUBLISH_DOMAIN}/graphql/execute.json/3ds/offer-by-path;offerPath=${fragmentPath}`;
 
-    if (isAuthorMode) {
-      // Author mode: Use fragments API
-      apiUrl = `https://author-p34570-e1263228.adobeaemcloud.com/adobe/sites/cf/fragments?path=${fragmentPath}`;
-      const response = await fetch(apiUrl);
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    const response = await fetch(apiUrl);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
-      data = await response.json();
-      const item = data.items?.[0];
-      if (!item) return null;
+    const data = await response.json();
+    const item = isAuthorMode ? data.items?.[0] : data?.data?.offerByPath?.item;
+    if (!item) return null;
 
-      // Transform fields array into object
-      const fields = {};
-      item.fields?.forEach(field => {
-        fields[field.name] = field.values?.[0] || '';
-      });
-
-      return {
-        title: fields.title || '',
-        description: fields.description || '',
-        buttonText: fields.buttonText || '',
-        buttonLink: fields.buttonLink || '#',
-        image: fields.image || null,
-        imageDescription: fields.imageDescription || '',
-      };
-    } else {
-      // Publish mode: Use GraphQL
-      apiUrl = `https://publish-p34570-e1263228.adobeaemcloud.com/graphql/execute.json/3ds/offer-by-path;offerPath=${fragmentPath}`;
-      const response = await fetch(apiUrl);
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-      data = await response.json();
-      const item = data?.data?.offerByPath?.item;
-      if (!item) return null;
-
-      return {
-        title: item.title || '',
-        description: item.description?.html || item.description || '',
-        buttonText: item.buttonText || '',
-        buttonLink: item.buttonLink || '#',
-        image: item.image?._path || null,
-        imageDescription: item.imageDescription || '',
-      };
-    }
+    return {
+      title: item.title || '',
+      description: item.description?.html || item.description || '',
+      buttonText: item.buttonText || '',
+      buttonLink: item.buttonLink || '#',
+      image: item.image || null,
+      imageDescription: item.imageDescription || '',
+    };
   } catch (error) {
     console.error('Error fetching content fragment:', error);
     return null;
@@ -190,4 +163,34 @@ export function createPlaceholderSVG(type = 'image', aspectRatio = '4:3') {
       <text x="${centerX}" y="${textY}" text-anchor="middle" fill="#9ca3af" font-family="system-ui, -apple-system, sans-serif" font-size="16">${label}</text>
     </svg>
   `;
+}
+
+export function createDynamicMediaPicture(
+  assetId,
+  alt = '',
+  eager = false,
+  smartCrop,
+  breakpoints = [{ media: '(min-width: 600px)', width: '1500' }, { width: '500' }],
+) {
+  const picture = document.createElement('picture');
+  const baseUrl = `${DELIVERY_DOMAIN}/adobe/assets/urn:aaid:aem:${assetId}/as`;
+  const smartCropParam = smartCrop ? `&smartcrop=${smartCrop}` : '';
+
+  // webp sources
+  breakpoints.forEach((br) => {
+    const source = document.createElement('source');
+    if (br.media) source.setAttribute('media', br.media);
+    source.setAttribute('srcset', `${baseUrl}/image.webp?width=${br.width}${smartCropParam}`);
+    picture.appendChild(source);
+  });
+
+  // fallback img
+  const lastBreakpoint = breakpoints[breakpoints.length - 1];
+  const img = document.createElement('img');
+  img.setAttribute('loading', eager ? 'eager' : 'lazy');
+  img.setAttribute('alt', alt);
+  img.setAttribute('src', `${baseUrl}/image.jpg?width=${lastBreakpoint.width}${smartCropParam}`);
+  picture.appendChild(img);
+
+  return picture;
 }

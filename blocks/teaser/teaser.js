@@ -1,5 +1,5 @@
-import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
-import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode, getButtonIcon, fetchContentFragmentByPath } from '../../scripts/utils.js';
+import { readBlockConfig } from '../../scripts/aem.js';
+import { createDynamicMediaPicture, createPlaceholderSVG, isAuthorMode, getButtonIcon, fetchContentFragmentByPath } from '../../scripts/utils.js';
 
 function updateTeaserContent(source, elements, showButtonIcon = false) {
   if (!source) return;
@@ -13,22 +13,18 @@ function updateTeaserContent(source, elements, showButtonIcon = false) {
     elements.description.innerHTML = description;
   }
 
-  const buttonText = source.buttonText || source.buttontext;
-  const buttonLink = source.buttonLink || source.buttonlink;
+  const buttonText = source.buttonText;
+  const buttonLink = source.buttonLink;
   if (elements.button) {
     const icon = showButtonIcon ? getButtonIcon() : '';
     if (buttonText) elements.button.innerHTML = buttonText + icon;
     if (buttonLink) elements.button.href = buttonLink;
   }
 
-  let imagePath = source.image?._path || source.image;
-  if (elements.image && imagePath) {
-    if (imagePath.includes('/content/dam/')) {
-      const siteName = getSiteNameFromDAM(imagePath);
-      imagePath = imagePath.substring(`/content/dam/${siteName}`.length);
-    }
-    const imageDescription = source.imageDescription || source.imagedescription || 'Teaser image';
-    const picture = createOptimizedPicture(imagePath, imageDescription, true);
+  let imageId = source.image?.['_id'];
+  if (elements.image && imageId) {
+    const imageDescription = source.imageDescription || 'Teaser image';
+    const picture = createDynamicMediaPicture(imageId, imageDescription, true, '730x438');
     elements.image.innerHTML = picture.outerHTML;
     applyImageStyling(elements.image);
   }

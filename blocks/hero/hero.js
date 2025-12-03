@@ -1,5 +1,5 @@
-import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
-import { getSiteNameFromDAM, createPlaceholderSVG, isAuthorMode, getButtonIcon, fetchContentFragmentByPath } from '../../scripts/utils.js';
+import { readBlockConfig } from '../../scripts/aem.js';
+import { createDynamicMediaPicture, createPlaceholderSVG, isAuthorMode, getButtonIcon, fetchContentFragmentByPath } from '../../scripts/utils.js';
 
 function updateHeroContent(source, elements, showButtonIcon = false) {
   if (!source) return;
@@ -21,14 +21,10 @@ function updateHeroContent(source, elements, showButtonIcon = false) {
     if (buttonLink) elements.button.href = buttonLink;
   }
 
-  let imagePath = source.image?._path || source.image;
-  if (elements.image && imagePath) {
-    if (imagePath.includes('/content/dam/')) {
-      const siteName = getSiteNameFromDAM(imagePath);
-      imagePath = imagePath.substring(`/content/dam/${siteName}`.length);
-    }
+  let imageId = source.image?.['_id'];
+  if (elements.image && imageId) {
     const imageDescription = source.imageDescription || source.imagedescription || 'Hero image';
-    const picture = createOptimizedPicture(imagePath, imageDescription, true);
+    const picture = createDynamicMediaPicture(imageId, imageDescription, true, '1500x450');
     elements.image.innerHTML = picture.outerHTML;
     applyBackgroundImageStyling(elements.image);
   }
