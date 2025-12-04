@@ -243,6 +243,7 @@
         "label": "Image Aspect Ratio",
         "name": "imageAspectRatio",
         "valueType": "string",
+        "defaultValue": "landscape",
         "options": [
           { "name": "Landscape", "value": "landscape" },
           { "name": "Square", "value": "square" }

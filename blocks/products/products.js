@@ -43,16 +43,18 @@ function extractProductsFromBlock(block) {
   return products;
 }
 
-function buildProductCard(product, showPrice = false) {
+function buildProductCard(product, showPrice = false, imageAspectRatio = '5/3') {
   const blockId = `product-${product.index}`;
 
   const priceHTML = showPrice
     ? `<span id="${blockId}-price" class="text-2xl font-bold text-brand-600">${product.price}</span>`
     : '';
 
+  const aspectClass = imageAspectRatio === 'square' ? 'aspect-square' : 'aspect-[5/3]';
+
   return `
     <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col h-full">
-      <div id="${blockId}-image" class="relative aspect-[5/3] overflow-hidden bg-gray-100">
+      <div id="${blockId}-image" class="relative ${aspectClass} overflow-hidden bg-gray-100">
         ${product.picture}
       </div>
       <div class="p-6 flex flex-col flex-grow">
@@ -70,6 +72,7 @@ function buildProductCard(product, showPrice = false) {
 export default async function decorate(block) {
   const config = readBlockConfig(block);
   const showPrice = config.showprice === 'true' || config.showprice === true;
+  const imageAspectRatio = config.imageaspectratio || '5/3';
   const products = extractProductsFromBlock(block);
 
   if (products.length === 0) {
@@ -89,7 +92,7 @@ export default async function decorate(block) {
   const lang = getLanguageFromUrl();
   const resultsText = await getTranslation('Results', lang);
 
-  const productsHTML = products.map(product => buildProductCard(product, showPrice)).join('');
+  const productsHTML = products.map(product => buildProductCard(product, showPrice, imageAspectRatio)).join('');
 
   const content = document.createRange().createContextualFragment(`
     <section class="py-20 bg-white">
