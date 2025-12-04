@@ -227,7 +227,14 @@
   },
   {
     "id": "articles",
-    "fields": []
+    "fields": [
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "truncateDescription",
+        "label": "Truncate Description"
+      }
+    ]
   },
   {
     "id": "products",
