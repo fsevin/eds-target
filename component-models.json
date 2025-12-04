@@ -239,6 +239,16 @@
         "valueType": "string"
       },
       {
+        "component": "select",
+        "label": "Image Aspect Ratio",
+        "name": "imageAspectRatio",
+        "valueType": "string",
+        "options": [
+          { "name": "Landscape", "value": "landscape" },
+          { "name": "Square", "value": "square" }
+        ]
+      },
+      {
         "component": "boolean",
         "valueType": "boolean",
         "name": "showPrice",
