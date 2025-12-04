@@ -15,11 +15,19 @@ function extractArticlesFromBlock(block) {
       const lastModified = children[4]?.querySelector('p')?.textContent.trim() || '';
       const picture = children[5]?.querySelector('picture');
 
+      // Resize picture to use width=650 instead of 750/2000
+      let pictureHTML = '';
+      if (picture) {
+        pictureHTML = picture.outerHTML
+          .replace(/width=750/g, 'width=650')
+          .replace(/width=2000/g, 'width=650');
+      }
+
       articles.push({
         title,
         category,
         description,
-        picture: picture ? picture.outerHTML : '',
+        picture: pictureHTML,
         lastModifiedLabel,
         lastModified,
         index

@@ -17,12 +17,14 @@ function extractProductsFromBlock(block) {
       const price = priceElement ? priceElement.textContent.trim() : children[3]?.textContent.trim() || '';
 
       const viewDetailsLabel = children[4]?.querySelector('p')?.textContent.trim() || '';
-
-      // Picture can be direct <picture> or wrapped in <p>
       let picture = children[5]?.querySelector('picture');
-      if (!picture) {
-        const pictureWrapper = children[5]?.querySelector('p');
-        picture = pictureWrapper?.querySelector('picture');
+
+      // Resize picture to use width=500 instead of 750/2000
+      let pictureHTML = '';
+      if (picture) {
+        pictureHTML = picture.outerHTML
+          .replace(/width=750/g, 'width=500')
+          .replace(/width=2000/g, 'width=500');
       }
 
       products.push({
@@ -31,7 +33,7 @@ function extractProductsFromBlock(block) {
         description,
         price,
         viewDetailsLabel,
-        picture: picture ? picture.outerHTML : '',
+        picture: pictureHTML,
         index
       });
     }
