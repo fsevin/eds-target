@@ -1,3 +1,4 @@
+import { readBlockConfig } from '../../scripts/aem.js';
 import { getTranslation, getLanguageFromUrl } from '../../scripts/utils.js';
 
 function extractProductsFromBlock(block) {
@@ -42,8 +43,12 @@ function extractProductsFromBlock(block) {
   return products;
 }
 
-function buildProductCard(product) {
+function buildProductCard(product, showPrice = false) {
   const blockId = `product-${product.index}`;
+
+  const priceHTML = showPrice
+    ? `<span id="${blockId}-price" class="text-2xl font-bold text-brand-600">${product.price}</span>`
+    : '';
 
   return `
     <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col h-full">
@@ -53,8 +58,8 @@ function buildProductCard(product) {
       <div class="p-6 flex flex-col flex-grow">
         <h3 id="${blockId}-title" class="text-xl font-bold text-gray-900 mb-2">${product.title}</h3>
         ${product.description ? `<p id="${blockId}-description" class="text-gray-600 leading-relaxed mb-4 flex-grow">${product.description}</p>` : ''}
-        <div class="flex items-center justify-between pt-4 border-t border-gray-200">
-          <span id="${blockId}-price" class="text-2xl font-bold text-brand-600">${product.price}</span>
+        <div class="flex items-center ${showPrice ? 'justify-between' : 'justify-end'} pt-4 border-t border-gray-200">
+          ${priceHTML}
           <button class="px-6 py-3 bg-brand-600 text-white font-semibold rounded-lg hover:bg-brand-700 transition shadow-md hover:shadow-lg" data-sku="${product.sku}">${product.viewDetailsLabel}</button>
         </div>
       </div>
@@ -63,6 +68,8 @@ function buildProductCard(product) {
 }
 
 export default async function decorate(block) {
+  const config = readBlockConfig(block);
+  const showPrice = config.showprice === 'true' || config.showprice === true;
   const products = extractProductsFromBlock(block);
 
   if (products.length === 0) {
@@ -82,7 +89,7 @@ export default async function decorate(block) {
   const lang = getLanguageFromUrl();
   const resultsText = await getTranslation('Results', lang);
 
-  const productsHTML = products.map(product => buildProductCard(product)).join('');
+  const productsHTML = products.map(product => buildProductCard(product, showPrice)).join('');
 
   const content = document.createRange().createContextualFragment(`
     <section class="py-20 bg-white">
