@@ -1,3 +1,4 @@
+import { readBlockConfig } from '../../scripts/aem.js';
 import { getTranslation, getLanguageFromUrl } from '../../scripts/utils.js';
 
 function extractArticlesFromBlock(block) {
@@ -38,8 +39,14 @@ function extractArticlesFromBlock(block) {
   return articles;
 }
 
-function buildArticleCard(article) {
+function truncateText(text, maxLength = 150) {
+  if (!text || text.length <= maxLength) return text;
+  return `${text.substring(0, maxLength).trim()}...`;
+}
+
+function buildArticleCard(article, truncateDescription = false) {
   const blockId = `article-${article.index}`;
+  const description = truncateDescription ? truncateText(article.description) : article.description;
 
   return `
     <div class="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 h-full flex flex-col">
@@ -55,7 +62,7 @@ function buildArticleCard(article) {
       <!-- Content -->
       <div class="p-6 flex flex-col flex-grow">
         <h3 id="${blockId}-title" class="text-2xl font-bold text-gray-900 mb-3 group-hover:text-brand-600 transition-colors">${article.title}</h3>
-        ${article.description ? `<p id="${blockId}-description" class="text-gray-600 leading-relaxed mb-6 flex-grow">${article.description}</p>` : ''}
+        ${description ? `<p id="${blockId}-description" class="text-gray-600 leading-relaxed mb-6 flex-grow">${description}</p>` : ''}
 
         <!-- Date -->
         ${article.lastModified ? `<div class="pt-4 border-t border-gray-200">
@@ -68,6 +75,7 @@ function buildArticleCard(article) {
 }
 
 export default async function decorate(block) {
+  const config = readBlockConfig(block);
   let articles = extractArticlesFromBlock(block);
 
   // Fetch translations
@@ -87,7 +95,8 @@ export default async function decorate(block) {
     return;
   }
 
-  const articlesHTML = articles.map(article => buildArticleCard(article)).join('');
+  const truncateDescription = config.truncatedescription === 'true' || config.truncatedescription === true;
+  const articlesHTML = articles.map(article => buildArticleCard(article, truncateDescription)).join('');
 
   const content = document.createRange().createContextualFragment(`
     <section class="py-20 bg-white">
