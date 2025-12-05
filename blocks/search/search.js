@@ -19,7 +19,7 @@ export default async function decorate(block) {
       <div class="container mx-auto px-4">
         <div class="max-w-4xl mx-auto text-center">
           <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4" data-aue-label="Title" data-aue-prop="title" data-aue-type="text">${title}</h2>
-          <p class="text-xl text-gray-600 mb-8" data-aue-label="Description" data-aue-prop="description" data-aue-type="text">${description}</p>
+          <p class="text-xl text-gray-600 mb-8" data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext">${description}</p>
 
           <form class="mb-8" role="search">
             <div class="relative max-w-2xl mx-auto">
