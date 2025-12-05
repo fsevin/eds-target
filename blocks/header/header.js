@@ -28,16 +28,16 @@ function buildLanguageSwitcherHTML(currentLang) {
   const currentLanguage = languages.find(lang => lang.code === currentLang) || languages[0];
   const otherLanguages = languages.filter(lang => lang.code !== currentLang);
 
-  const dropdownItems = otherLanguages.map(lang => 
-    `<a href="${getLocaleUrl(lang.code)}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-brand-600 transition">${lang.flag} ${lang.label}</a>`
+  const dropdownItems = otherLanguages.map(lang =>
+    `<a href="${getLocaleUrl(lang.code)}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-brand-600 transition">${lang.flag} ${lang.label}</a>`
   ).join('');
 
   return `
     <div class="relative language-dropdown">
-      <button type="button" class="flex items-center gap-1 text-sm px-6 py-2 h-10 border border-brand-600 text-brand-600 rounded-md hover:bg-brand-50 transition" aria-expanded="false" aria-haspopup="true">
+      <button type="button" class="flex items-center gap-1 text-sm px-3 py-2 h-10 border border-brand-600 text-brand-600 rounded-md hover:bg-brand-50 transition" aria-expanded="false" aria-haspopup="true">
         <span>${currentLanguage.flag} ${currentLanguage.label}</span>
       </button>
-      <div class="absolute right-0 mt-1 w-28 bg-white rounded-md shadow-lg border border-gray-200 py-1 hidden z-50 language-dropdown-menu">
+      <div class="absolute right-0 mt-1 w-20 bg-white rounded-md shadow-lg border border-gray-200 py-1 hidden z-50 language-dropdown-menu">
         ${dropdownItems}
       </div>
     </div>
