@@ -6,6 +6,7 @@ export default {
     './head.html',
     './nav.html',
     './footer.html',
+    './404.html',
   ],
   theme: {
     extend: {
