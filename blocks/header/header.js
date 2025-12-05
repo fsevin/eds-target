@@ -1,10 +1,23 @@
 import { loadFragment } from '../fragment/fragment.js';
 import { isAuthorMode, getPagePath, getIconPath, getCurrentLocale } from '../../scripts/utils.js';
 
-function switchLocale(targetLocale) {
+function switchLocale(targetLang) {
   const currentLocale = getCurrentLocale();
   const currentPath = window.location.pathname;
-  const newPath = currentPath.replace(`/${currentLocale}/`, `/${targetLocale}/`);
+
+  const currentCountry = currentLocale.split('/')[0];
+
+  let newLocale;
+  // If current is language-masters, keep it and only change the language
+  if (currentCountry === 'language-masters') {
+    newLocale = `language-masters/${targetLang}`;
+  }
+  // Otherwise, build locale from language (en -> us/en, fr -> fr/fr, es -> es/es)
+  else {
+    newLocale = targetLang === 'en' ? `us/${targetLang}` : `${targetLang}/${targetLang}`;
+  }
+
+  const newPath = currentPath.replace(`/${currentLocale}/`, `/${newLocale}/`);
   window.location.href = newPath;
 }
 
@@ -83,6 +96,7 @@ export default async function decorate(block) {
   const fragment = await loadFragment(headerPath);
 
   const currentLocale = getCurrentLocale();
+  const currentLang = currentLocale.split('/')[1];
   const menuItems = extractMenuItems(fragment);
   const navigationHTML = buildNavigationHTML(menuItems);
   const loginModalData = extractLoginModalData(fragment);
@@ -105,9 +119,9 @@ export default async function decorate(block) {
         <!-- Right Section -->
         <div class="hidden md:flex items-center space-x-4">
           <select class="px-4 py-2 h-10 border border-gray-300 rounded-md text-gray-700 text-sm focus:outline-none focus:border-brand-600 appearance-none cursor-pointer" id="localeSelect" aria-label="Select language">
-            <option value="us/en" ${currentLocale === 'us/en' ? 'selected' : ''}>🇺🇸 EN</option>
-            <option value="fr/fr" ${currentLocale === 'fr/fr' ? 'selected' : ''}>🇫🇷 FR</option>
-            <option value="es/es" ${currentLocale === 'es/es' ? 'selected' : ''}>🇪🇸 ES</option>
+            <option value="en" ${currentLang === 'en' ? 'selected' : ''}>🇺🇸 EN</option>
+            <option value="fr" ${currentLang === 'fr' ? 'selected' : ''}>🇫🇷 FR</option>
+            <option value="es" ${currentLang === 'es' ? 'selected' : ''}>🇪🇸 ES</option>
           </select>
           <button class="px-6 py-2 h-10 text-white bg-brand-600 rounded-md hover:bg-brand-700 transition flex items-center gap-2" id="loginBtn">
             Login
@@ -127,9 +141,9 @@ export default async function decorate(block) {
         <div class="flex flex-col space-y-4">
           ${navigationHTML}
           <select class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 text-sm cursor-pointer" id="localeSelectMobile" aria-label="Select language">
-            <option value="us/en" ${currentLocale === 'us/en' ? 'selected' : ''}>🇺🇸 EN</option>
-            <option value="fr/fr" ${currentLocale === 'fr/fr' ? 'selected' : ''}>🇫🇷 FR</option>
-            <option value="es/es" ${currentLocale === 'es/es' ? 'selected' : ''}>🇪🇸 ES</option>
+            <option value="en" ${currentLang === 'en' ? 'selected' : ''}>🇺🇸 EN</option>
+            <option value="fr" ${currentLang === 'fr' ? 'selected' : ''}>🇫🇷 FR</option>
+            <option value="es" ${currentLang === 'es' ? 'selected' : ''}>🇪🇸 ES</option>
           </select>
         </div>
       </div>
@@ -245,17 +259,17 @@ export default async function decorate(block) {
 
   // Locale switcher (desktop)
   localeSelect.addEventListener('change', function() {
-    const targetLocale = this.value;
-    if (targetLocale !== currentLocale) {
-      switchLocale(targetLocale);
+    const targetLang = this.value;
+    if (targetLang !== currentLang) {
+      switchLocale(targetLang);
     }
   });
 
   // Locale switcher (mobile)
   localeSelectMobile.addEventListener('change', function() {
-    const targetLocale = this.value;
-    if (targetLocale !== currentLocale) {
-      switchLocale(targetLocale);
+    const targetLang = this.value;
+    if (targetLang !== currentLang) {
+      switchLocale(targetLang);
     }
   });
 }
