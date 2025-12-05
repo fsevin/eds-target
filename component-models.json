@@ -265,6 +265,38 @@
     ]
   },
   {
+    "id": "search",
+    "fields": [
+      {
+        "component": "tab",
+        "label": "Fields",
+        "name": "fields"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "description",
+        "label": "Description"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "filters",
+        "label": "Filters",
+        "multi": true
+      },
+      {
+        "component": "tab",
+        "label": "Layout",
+        "name": "layout"
+
+  {
     "id": "title-and-description",
     "fields": [
       {
