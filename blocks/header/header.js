@@ -1,10 +1,9 @@
 import { loadFragment } from '../fragment/fragment.js';
 import { isAuthorMode, getPagePath, getIconPath, getCurrentLocale } from '../../scripts/utils.js';
 
-function switchLocale(targetLang) {
+function getLocaleUrl(targetLang) {
   const currentLocale = getCurrentLocale();
   const currentPath = window.location.pathname;
-
   const currentCountry = currentLocale.split('/')[0];
 
   let newLocale;
@@ -17,8 +16,21 @@ function switchLocale(targetLang) {
     newLocale = targetLang === 'en' ? `us/${targetLang}` : `${targetLang}/${targetLang}`;
   }
 
-  const newPath = currentPath.replace(`/${currentLocale}/`, `/${newLocale}/`);
-  window.location.assign(newPath);
+  return currentPath.replace(`/${currentLocale}/`, `/${newLocale}/`);
+}
+
+function buildLanguageSwitcherHTML(currentLang) {
+  const languages = [
+    { code: 'en', flag: '🇺🇸', label: 'EN' },
+    { code: 'fr', flag: '🇫🇷', label: 'FR' },
+    { code: 'es', flag: '🇪🇸', label: 'ES' }
+  ];
+
+  return languages.map(lang => {
+    const isActive = currentLang === lang.code;
+    const activeClass = isActive ? 'text-brand-600 font-semibold' : 'text-gray-700 hover:text-brand-600';
+    return `<a href="${getLocaleUrl(lang.code)}" class="${activeClass} transition text-sm">${lang.flag} ${lang.label}</a>`;
+  }).join('');
 }
 
 function extractMenuItems(fragment) {
@@ -118,11 +130,9 @@ export default async function decorate(block) {
 
         <!-- Right Section -->
         <div class="hidden md:flex items-center space-x-4">
-          <select class="px-4 py-2 h-10 border border-gray-300 rounded-md text-gray-700 text-sm focus:outline-none focus:border-brand-600 appearance-none cursor-pointer" id="localeSelect" aria-label="Select language">
-            <option value="en" ${currentLang === 'en' ? 'selected' : ''}>🇺🇸 EN</option>
-            <option value="fr" ${currentLang === 'fr' ? 'selected' : ''}>🇫🇷 FR</option>
-            <option value="es" ${currentLang === 'es' ? 'selected' : ''}>🇪🇸 ES</option>
-          </select>
+          <div class="flex items-center space-x-3" aria-label="Select language">
+            ${buildLanguageSwitcherHTML(currentLang)}
+          </div>
           <button class="px-6 py-2 h-10 text-white bg-brand-600 rounded-md hover:bg-brand-700 transition flex items-center gap-2" id="loginBtn">
             Login
           </button>
@@ -140,11 +150,9 @@ export default async function decorate(block) {
       <div class="hidden md:hidden mt-4 pb-4" id="mobileMenu">
         <div class="flex flex-col space-y-4">
           ${navigationHTML}
-          <select class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 text-sm cursor-pointer" id="localeSelectMobile" aria-label="Select language">
-            <option value="en" ${currentLang === 'en' ? 'selected' : ''}>🇺🇸 EN</option>
-            <option value="fr" ${currentLang === 'fr' ? 'selected' : ''}>🇫🇷 FR</option>
-            <option value="es" ${currentLang === 'es' ? 'selected' : ''}>🇪🇸 ES</option>
-          </select>
+          <div class="flex items-center space-x-3" aria-label="Select language">
+            ${buildLanguageSwitcherHTML(currentLang)}
+          </div>
         </div>
       </div>
     </nav>
@@ -202,8 +210,6 @@ export default async function decorate(block) {
   const cancelBtn = document.getElementById('cancelBtn');
   const mobileMenuBtn = document.getElementById('mobileMenuBtn');
   const mobileMenu = document.getElementById('mobileMenu');
-  const localeSelect = document.getElementById('localeSelect');
-  const localeSelectMobile = document.getElementById('localeSelectMobile');
 
   const username = localStorage.getItem('username');
   if (username) {
@@ -255,21 +261,5 @@ export default async function decorate(block) {
     localStorage.setItem('profileType', profileType);
     loginBtn.innerHTML = `<span>${username}</span>`;
     closeLoginModal();
-  });
-
-  // Locale switcher (desktop)
-  localeSelect.addEventListener('change', function() {
-    const targetLang = this.value;
-    if (targetLang !== currentLang) {
-      switchLocale(targetLang);
-    }
-  });
-
-  // Locale switcher (mobile)
-  localeSelectMobile.addEventListener('change', function() {
-    const targetLang = this.value;
-    if (targetLang !== currentLang) {
-      switchLocale(targetLang);
-    }
   });
 }
