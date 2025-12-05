@@ -22,8 +22,7 @@ function getLocaleUrl(targetLang) {
 function buildLanguageSwitcherHTML(currentLang) {
   const languages = [
     { code: 'en', flag: '🇺🇸', label: 'EN' },
-    { code: 'fr', flag: '🇫🇷', label: 'FR' },
-    { code: 'es', flag: '🇪🇸', label: 'ES' }
+    { code: 'fr', flag: '🇫🇷', label: 'FR' }
   ];
 
   const currentLanguage = languages.find(lang => lang.code === currentLang) || languages[0];
