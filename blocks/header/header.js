@@ -108,6 +108,12 @@ function extractLoginModalData(fragment) {
 
   const profileOptions = optionsText.split(',').map(option => {
     const trimmedOption = option.trim();
+    // Check if format is "Label=value"
+    if (trimmedOption.includes('=')) {
+      const [label, value] = trimmedOption.split('=').map(s => s.trim());
+      return { value, label };
+    }
+    // Otherwise use the old format (label and value are the same)
     return { value: trimmedOption.toLowerCase(), label: trimmedOption };
   }).filter(opt => opt.value);
 
@@ -144,8 +150,10 @@ export default async function decorate(block) {
           <div class="flex items-center space-x-3" aria-label="Select language">
             ${buildLanguageSwitcherHTML(currentLang)}
           </div>
-          <button class="px-6 py-2 h-10 text-white bg-brand-600 rounded-md hover:bg-brand-700 transition flex items-center gap-2" id="loginBtn">
-            Login
+          <button class="px-3 py-2 h-10 text-white bg-brand-600 rounded-md hover:bg-brand-700 transition flex items-center justify-center" id="loginBtn" aria-label="Login">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
           </button>
         </div>
 
@@ -161,8 +169,15 @@ export default async function decorate(block) {
       <div class="hidden md:hidden mt-4 pb-4" id="mobileMenu">
         <div class="flex flex-col space-y-4">
           ${navigationHTML}
-          <div class="flex items-center space-x-3" aria-label="Select language">
-            ${buildLanguageSwitcherHTML(currentLang)}
+          <div class="flex items-center gap-3">
+            <div class="flex items-center space-x-3 flex-1" aria-label="Select language">
+              ${buildLanguageSwitcherHTML(currentLang)}
+            </div>
+            <button class="px-3 py-2 h-10 text-white bg-brand-600 rounded-md hover:bg-brand-700 transition flex items-center justify-center" id="loginBtnMobile" aria-label="Login">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+              </svg>
+            </button>
           </div>
         </div>
       </div>
@@ -216,29 +231,40 @@ export default async function decorate(block) {
   block.append(content);
 
   const loginBtn = document.getElementById('loginBtn');
+  const loginBtnMobile = document.getElementById('loginBtnMobile');
   const loginModal = document.getElementById('loginModal');
   const closeModal = document.getElementById('closeModal');
   const cancelBtn = document.getElementById('cancelBtn');
   const mobileMenuBtn = document.getElementById('mobileMenuBtn');
   const mobileMenu = document.getElementById('mobileMenu');
 
+  const userIconSVG = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+  </svg>`;
+
   const username = localStorage.getItem('username');
   if (username) {
-      loginBtn.innerHTML = `<span>${username}</span>`;
+    loginBtn.innerHTML = `<span class="text-sm">${username}</span>`;
+    loginBtnMobile.innerHTML = `<span class="text-sm">${username}</span>`;
   }
 
-  // Open modal
-  loginBtn.addEventListener('click', function() {
+  // Open modal function
+  function openLoginModal() {
     if (localStorage.getItem('logged')) {
-        localStorage.removeItem('logged');
-        localStorage.removeItem('username');
-        localStorage.removeItem('profileType');
-        loginBtn.innerHTML = `<span>Login</span>`;
+      localStorage.removeItem('logged');
+      localStorage.removeItem('username');
+      localStorage.removeItem('profileType');
+      loginBtn.innerHTML = userIconSVG;
+      loginBtnMobile.innerHTML = userIconSVG;
     } else {
       loginModal.classList.remove('hidden');
       loginModal.classList.add('flex');
     }
-  });
+  }
+
+  // Open modal
+  loginBtn.addEventListener('click', openLoginModal);
+  loginBtnMobile.addEventListener('click', openLoginModal);
 
   // Close modal methods
   function closeLoginModal() {
@@ -270,7 +296,8 @@ export default async function decorate(block) {
     localStorage.setItem('logged', true);
     localStorage.setItem('username', username);
     localStorage.setItem('profileType', profileType);
-    loginBtn.innerHTML = `<span>${username}</span>`;
+    loginBtn.innerHTML = `<span class="text-sm">${username}</span>`;
+    loginBtnMobile.innerHTML = `<span class="text-sm">${username}</span>`;
     closeLoginModal();
   });
 
