@@ -16,7 +16,7 @@
         const { origin, pathname } = new URL(document.referrer);
         if (origin === window.location.origin) {
           const backBtn = document.createElement('a');
-          backBtn.classList.add('button', 'error-button-back');
+          backBtn.className = 'px-6 py-3 bg-white text-brand-600 border-2 border-brand-600 rounded-lg hover:bg-brand-50 transition font-semibold';
           backBtn.href = pathname;
           backBtn.textContent = 'Go back';
           backBtn.title = 'Go back';
@@ -30,36 +30,33 @@
     import { sampleRUM } from '/scripts/aem.js';
     sampleRUM('404', { source: document.referrer });
   </script>
-  <link rel="stylesheet" href="/styles/styles.css">
-  <style>
-    main.error {
-      min-height: calc(100vh - var(--nav-height));
-      display: flex;
-      align-items: center;
-    }
 
-    main.error .error-number {
-      width: 100%;
-    }
-
-    main.error .error-number text {
-      font-family: monospace;
-    }
-  </style>
-  <link rel="stylesheet" href="/styles/lazy-styles.css">
+  <link rel="stylesheet" href="/styles/tailwind-output.css"/>
 </head>
 
-<body>
+<body class="bg-gray-50">
   <header></header>
-  <main class="error">
-    <div class="section">
-      <svg viewBox="1 0 38 18" class="error-number">
-        <text x="0" y="17">404</text>
-      </svg>
-      <h2 class="error-message">Page Not Found</h2>
-      <p class="button-container">
-        <a href="/" class="button secondary error-button-home">Go home</a>
-      </p>
+  <main class="min-h-screen flex items-center justify-center px-8 md:px-12 lg:px-16 py-20 md:py-24 lg:py-32">
+    <div class="max-w-4xl w-full text-center my-12 md:my-16 lg:my-20">
+      <!-- Error Code -->
+      <div class="mb-8">
+        <h1 class="text-[24rem] md:text-[32rem] lg:text-[40rem] font-bold text-brand-600 tracking-tight leading-none">404</h1>
+      </div>
+
+      <!-- Error Message -->
+      <div class="mb-8">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Page Not Found</h2>
+        <p class="text-lg text-gray-600 max-w-md mx-auto">
+          Sorry, we couldn't find the page you're looking for.
+        </p>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="button-container flex flex-wrap gap-4 justify-center items-center">
+        <a href="/" class="px-8 py-3 bg-brand-600 text-white rounded-lg hover:bg-brand-700 transition font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+          Go Home
+        </a>
+      </div>
     </div>
   </main>
   <footer></footer>
