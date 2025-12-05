@@ -265,51 +265,6 @@
     ]
   },
   {
-    "id": "search",
-    "fields": [
-      {
-        "component": "tab",
-        "label": "Fields",
-        "name": "fields"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "title",
-        "label": "Title"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "subtitle",
-        "label": "Subtitle"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "filters",
-        "label": "Filters",
-        "multi": true
-      },
-      {
-        "component": "tab",
-        "label": "Layout",
-        "name": "layout"
-      },
-      {
-        "component": "multiselect",
-        "name": "style",
-        "label": "Style",
-        "options": [
-          {
-            "name": "Highlight",
-            "value": "highlight"
-          }
-        ]
-      }
-    ]
-  },
-  {
     "id": "title-and-description",
     "fields": [
       {
