@@ -1,5 +1,5 @@
 import { readBlockConfig } from '../../scripts/aem.js';
-import { getTranslation, getLanguageFromUrl } from '../../scripts/utils.js';
+import { getTranslation, getLanguageFromUrl, parseConfigBoolean, applyImageStyling } from '../../scripts/utils.js';
 
 function extractProductsFromBlock(block) {
   const products = [];
@@ -71,7 +71,7 @@ function buildProductCard(product, showPrice = false, imageAspectRatio = '5/3') 
 
 export default async function decorate(block) {
   const config = readBlockConfig(block);
-  const showPrice = config.showprice === 'true' || config.showprice === true;
+  const showPrice = parseConfigBoolean(config.showprice);
   const imageAspectRatio = config.imageaspectratio || '5/3';
   const products = extractProductsFromBlock(block);
 
@@ -154,22 +154,8 @@ export default async function decorate(block) {
   });
 
   // Apply image styling to fill containers
-  allProductCards.forEach(card => {
-    const picture = card.querySelector('picture');
-    const img = card.querySelector('img');
-
-    if (picture) {
-      picture.style.width = '100%';
-      picture.style.height = '100%';
-      picture.style.display = 'block';
-    }
-
-    if (img) {
-      img.style.width = '100%';
-      img.style.height = '100%';
-      img.style.objectFit = 'cover';
-      img.style.objectPosition = 'center';
-      img.style.display = 'block';
-    }
+  allProductCards.forEach((card) => {
+    const imageContainer = card.querySelector('[id$="-image"]');
+    applyImageStyling(imageContainer);
   });
 }

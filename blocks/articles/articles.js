@@ -1,5 +1,5 @@
 import { readBlockConfig } from '../../scripts/aem.js';
-import { getTranslation, getLanguageFromUrl } from '../../scripts/utils.js';
+import { getTranslation, getLanguageFromUrl, parseConfigBoolean, applyImageStyling } from '../../scripts/utils.js';
 
 function extractArticlesFromBlock(block) {
   const articles = [];
@@ -95,7 +95,7 @@ export default async function decorate(block) {
     return;
   }
 
-  const truncateDescription = config.truncatedescription === 'true' || config.truncatedescription === true;
+  const truncateDescription = parseConfigBoolean(config.truncatedescription);
   const articlesHTML = articles.map(article => buildArticleCard(article, truncateDescription)).join('');
 
   const content = document.createRange().createContextualFragment(`
@@ -160,22 +160,8 @@ export default async function decorate(block) {
   });
 
   // Apply image styling to fill containers as backgrounds
-  allArticleCards.forEach(card => {
-    const picture = card.querySelector('picture');
-    const img = card.querySelector('img');
-
-    if (picture) {
-      picture.style.width = '100%';
-      picture.style.height = '100%';
-      picture.style.display = 'block';
-    }
-
-    if (img) {
-      img.style.width = '100%';
-      img.style.height = '100%';
-      img.style.objectFit = 'cover';
-      img.style.objectPosition = 'center';
-      img.style.display = 'block';
-    }
+  allArticleCards.forEach((card) => {
+    const imageContainer = card.querySelector('[id$="-image"]');
+    applyImageStyling(imageContainer);
   });
 }

@@ -1,5 +1,13 @@
 import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
-import { createDynamicMediaPicture, createPlaceholderSVG, isAuthorMode, getButtonIcon, fetchContentFragmentByPath } from '../../scripts/utils.js';
+import {
+  createDynamicMediaPicture,
+  createPlaceholderSVG,
+  isAuthorMode,
+  getButtonIcon,
+  fetchContentFragmentByPath,
+  parseConfigBoolean,
+  applyImageStyling,
+} from '../../scripts/utils.js';
 
 function updateHeroContent(source, elements, showButtonIcon = false, useDynamicMedia = true) {
   if (!source) return;
@@ -28,44 +36,11 @@ function updateHeroContent(source, elements, showButtonIcon = false, useDynamicM
   if (elements.image && useDynamicMedia && imageId) {
     const picture = createDynamicMediaPicture(imageId, imageDescription, true, '1500x450');
     elements.image.innerHTML = picture.outerHTML;
-    applyBackgroundImageStyling(elements.image);
+    applyImageStyling(elements.image, { absolute: true });
   } else if (elements.image && imagePath) {
     const picture = createOptimizedPicture(imagePath, imageDescription, true);
     elements.image.innerHTML = picture.outerHTML;
-    applyBackgroundImageStyling(elements.image);
-  }
-}
-
-function applyBackgroundImageStyling(imageContainer) {
-  if (!imageContainer) return;
-
-  const picture = imageContainer.querySelector('picture');
-  const img = picture?.querySelector('img');
-
-  if (picture) {
-    Object.assign(picture.style, {
-      position: 'absolute',
-      top: '0',
-      left: '0',
-      width: '100%',
-      height: '100%',
-      margin: '0',
-      padding: '0',
-      display: 'block',
-    });
-  }
-
-  if (img) {
-    Object.assign(img.style, {
-      width: '100%',
-      height: '100%',
-      objectFit: 'cover',
-      objectPosition: 'center',
-      margin: '0',
-      padding: '0',
-      display: 'block',
-      verticalAlign: 'top',
-    });
+    applyImageStyling(elements.image, { absolute: true });
   }
 }
 
@@ -88,8 +63,8 @@ export default async function decorate(block) {
   const buttontext = 'Get Started';
   const descriptionHTML = '<p>Add your hero description here.</p>';
   const pictureHTML = createPlaceholderSVG('image', '16:9');
-  const showButtonIcon = config.showbuttonicon === 'true' || config.showbuttonicon === true;
-  const useDynamicMedia = config.dynamicmediadelivery === 'true' || config.dynamicmediadelivery === true;
+  const showButtonIcon = parseConfigBoolean(config.showbuttonicon);
+  const useDynamicMedia = parseConfigBoolean(config.dynamicmediadelivery);
 
   const icon = showButtonIcon ? getButtonIcon() : '';
 
@@ -133,7 +108,7 @@ export default async function decorate(block) {
     image: document.getElementById(`${blockId}-image`),
   };
 
-  applyBackgroundImageStyling(elements.image);
+  applyImageStyling(elements.image, { absolute: true });
 
   // Update with fragment data if available
   if (fragmentData) {

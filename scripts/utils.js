@@ -36,11 +36,62 @@ export function getDeliveryUrl(url, smartCrop) {
   const processedUrl = url
     .replace(/original\//g, '')
     .replace(/jpeg|jpg|png/g, 'webp');
-  
-  return `${processedUrl}?format=webply&optimize=high&smartcrop=${smartCrop}&timestamp=${Date.now()}`;
+
+  return `${processedUrl}?format=webply&optimize=high&smartcrop=${smartCrop}`;
 }
 
 export const isAuthorMode = window.location.href.includes('.html');
+
+/**
+ * Parse a config value as boolean (handles 'true' string and boolean true)
+ * @param {string|boolean} value - The config value
+ * @returns {boolean}
+ */
+export function parseConfigBoolean(value) {
+  return value === 'true' || value === true;
+}
+
+/**
+ * Apply standard image styling for picture elements in containers
+ * @param {HTMLElement} imageContainer - Container with picture element
+ * @param {Object} options - Styling options
+ * @param {boolean} options.cover - Use object-fit: cover (default: true)
+ * @param {boolean} options.absolute - Use absolute positioning (default: false)
+ */
+export function applyImageStyling(imageContainer, { cover = true, absolute = false } = {}) {
+  if (!imageContainer) return;
+
+  const picture = imageContainer.querySelector('picture');
+  const img = picture?.querySelector('img');
+
+  if (picture) {
+    Object.assign(picture.style, {
+      width: '100%',
+      height: '100%',
+      display: 'block',
+      ...(absolute && {
+        position: 'absolute',
+        top: '0',
+        left: '0',
+        margin: '0',
+        padding: '0',
+      }),
+    });
+  }
+
+  if (img) {
+    Object.assign(img.style, {
+      width: '100%',
+      height: '100%',
+      objectFit: cover ? 'cover' : 'contain',
+      objectPosition: 'center',
+      display: 'block',
+      margin: '0',
+      padding: '0',
+      ...(absolute && { verticalAlign: 'top' }),
+    });
+  }
+}
 
 export function getLanguageFromUrl() {
   const path = window.location.pathname;
@@ -53,7 +104,7 @@ export async function getTranslation(key, lang) {
     const response = await fetch('/i18n.json');
     const data = await response.json();
 
-    const item = data.data.find(entry => entry.key === key);
+    const item = data.data.find((entry) => entry.key === key);
     if (item) {
       return item[lang] || item.en || key;
     }

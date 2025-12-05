@@ -1,5 +1,13 @@
 import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
-import { createDynamicMediaPicture, createPlaceholderSVG, isAuthorMode, getButtonIcon, fetchContentFragmentByPath } from '../../scripts/utils.js';
+import {
+  createDynamicMediaPicture,
+  createPlaceholderSVG,
+  isAuthorMode,
+  getButtonIcon,
+  fetchContentFragmentByPath,
+  parseConfigBoolean,
+  applyImageStyling,
+} from '../../scripts/utils.js';
 
 function updateTeaserContent(source, elements, showButtonIcon = false, useDynamicMedia = true) {
   if (!source) return;
@@ -36,32 +44,6 @@ function updateTeaserContent(source, elements, showButtonIcon = false, useDynami
   }
 }
 
-function applyImageStyling(imageContainer) {
-  if (!imageContainer) return;
-
-  const picture = imageContainer?.querySelector('picture');
-  const img = picture?.querySelector('img');
-
-  if (picture) {
-    Object.assign(picture.style, {
-      width: '100%',
-      height: '100%',
-      display: 'block',
-    });
-  }
-
-  if (img) {
-    Object.assign(img.style, {
-      width: '100%',
-      height: '100%',
-      objectFit: 'cover',
-      objectPosition: 'center',
-      display: 'block',
-      margin: '0',
-    });
-  }
-}
-
 export default async function decorate(block) {
   const config = readBlockConfig(block);
   const blockId = `teaser-${Math.random().toString(36).substr(2, 9)}`;
@@ -82,9 +64,9 @@ export default async function decorate(block) {
   const descriptionHTML = '<p>Add your teaser description here.</p>';
   const pictureHTML = createPlaceholderSVG('image', '4:3');
 
-  const flipLayout = config.fliplayout === 'true' || config.fliplayout === true;
-  const showButtonIcon = config.showbuttonicon === 'true' || config.showbuttonicon === true;
-  const useDynamicMedia = config.dynamicmediadelivery === 'true' || config.dynamicmediadelivery === true;
+  const flipLayout = parseConfigBoolean(config.fliplayout);
+  const showButtonIcon = parseConfigBoolean(config.showbuttonicon);
+  const useDynamicMedia = parseConfigBoolean(config.dynamicmediadelivery);
 
   const icon = showButtonIcon ? getButtonIcon() : '';
 
