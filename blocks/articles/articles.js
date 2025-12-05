@@ -1,5 +1,5 @@
 import { readBlockConfig } from '../../scripts/aem.js';
-import { getTranslation, getLanguageFromUrl, parseConfigBoolean, applyImageStyling } from '../../scripts/utils.js';
+import { getTranslation, getLanguageFromUrl, parseConfigBoolean, applyImageStyling, isAuthorMode } from '../../scripts/utils.js';
 
 function extractArticlesFromBlock(block) {
   const articles = [];
@@ -75,14 +75,7 @@ function buildArticleCard(article, truncateDescription = false) {
 }
 
 export default async function decorate(block) {
-  const config = readBlockConfig(block);
-  let articles = extractArticlesFromBlock(block);
-
-  // Fetch translations
-  const lang = getLanguageFromUrl();
-  const resultsText = await getTranslation('Results', lang);
-
-  if (articles.length === 0) {
+  if (isAuthorMode) {
     const emptyContent = document.createRange().createContextualFragment(`
       <section class="py-20 bg-white">
         <div class="container mx-auto px-4">
@@ -94,6 +87,13 @@ export default async function decorate(block) {
     block.append(emptyContent);
     return;
   }
+
+  const config = readBlockConfig(block);
+  let articles = extractArticlesFromBlock(block);
+
+  // Fetch translations
+  const lang = getLanguageFromUrl();
+  const resultsText = await getTranslation('Results', lang);
 
   const truncateDescription = parseConfigBoolean(config.truncatedescription);
   const articlesHTML = articles.map(article => buildArticleCard(article, truncateDescription)).join('');
