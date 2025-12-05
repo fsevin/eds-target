@@ -295,7 +295,20 @@
         "component": "tab",
         "label": "Layout",
         "name": "layout"
-
+      },
+      {
+        "component": "multiselect",
+        "name": "style",
+        "label": "Style",
+        "options": [
+          {
+            "name": "Highlight",
+            "value": "highlight"
+          }
+        ]
+      }
+    ]
+  },
   {
     "id": "title-and-description",
     "fields": [
