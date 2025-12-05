@@ -282,7 +282,7 @@
         "component": "richtext",
         "valueType": "string",
         "name": "description",
-        "label": "Description"
+        "label": "Description2"
       },
       {
         "component": "text",
