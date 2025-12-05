@@ -18,7 +18,7 @@ function switchLocale(targetLang) {
   }
 
   const newPath = currentPath.replace(`/${currentLocale}/`, `/${newLocale}/`);
-  window.location.href = newPath;
+  window.location.assign(newPath);
 }
 
 function extractMenuItems(fragment) {
