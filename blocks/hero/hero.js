@@ -7,6 +7,7 @@ import {
   fetchContentFragmentByPath,
   parseConfigBoolean,
   applyImageStyling,
+  getLanguageFromUrl
 } from '../../scripts/utils.js';
 
 function updateHeroContent(source, elements, showButtonIcon = false, useDynamicMedia = true) {
@@ -115,6 +116,8 @@ export default async function decorate(block) {
     updateHeroContent(fragmentData, elements, showButtonIcon, useDynamicMedia);
   }
 
+  const lang = getLanguageFromUrl();
+
   if (config.offerzone && !isAuthorMode) {
     alloy('sendEvent', {
       decisionScopes: [config.offerzone],
@@ -123,6 +126,7 @@ export default async function decorate(block) {
           target: {
             logged: localStorage.getItem('logged'),
             profileType: localStorage.getItem('profileType'),
+            lang: lang
           }
         }
       },
