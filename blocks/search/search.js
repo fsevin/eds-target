@@ -7,7 +7,7 @@ export default async function decorate(block) {
   const sectionClasses = style.includes('highlight') ? 'py-20 bg-gray-50' : 'py-20 bg-white';
 
   const title = config.title || 'Search';
-  const subtitle = config.subtitle || 'Enter keywords to find what you\'re looking for';
+  const description = config.description || 'Enter keywords to find what you\'re looking for';
 
   const filters = config.filters ? config.filters.split(',').map(f => f.trim()).filter(f => f) : [];
   const filterButtons = filters.map((filter, index) =>
@@ -19,7 +19,7 @@ export default async function decorate(block) {
       <div class="container mx-auto px-4">
         <div class="max-w-4xl mx-auto text-center">
           <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4" data-aue-label="Title" data-aue-prop="title" data-aue-type="text">${title}</h2>
-          <p class="text-xl text-gray-600 mb-8" data-aue-label="Subtitle" data-aue-prop="subtitle" data-aue-type="text">${subtitle}</p>
+          <p class="text-xl text-gray-600 mb-8" data-aue-label="Description" data-aue-prop="description" data-aue-type="text">${description}</p>
 
           <form class="mb-8" role="search">
             <div class="relative max-w-2xl mx-auto">
