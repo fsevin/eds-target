@@ -7,7 +7,7 @@ import {
   fetchContentFragmentByPath,
   parseConfigBoolean,
   applyImageStyling,
-  getLanguageFromUrl
+  getLanguageFromPath
 } from '../../scripts/utils.js';
 
 function updateHeroContent(source, elements, showButtonIcon = false, useDynamicMedia = true) {
@@ -119,7 +119,7 @@ export default async function decorate(block) {
     }
   }
 
-  const lang = getLanguageFromUrl();
+  const lang = getLanguageFromPath();
 
   if (config.offerzone && !isAuthorMode) {
     alloy('sendEvent', {
