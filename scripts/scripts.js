@@ -1,5 +1,4 @@
 import {
-  sampleRUM,
   loadHeader,
   loadFooter,
   decorateButtons,
@@ -7,12 +6,18 @@ import {
   decorateSections,
   decorateBlocks,
   decorateTemplateAndTheme,
-  waitForLCP,
-  loadBlocks,
+  waitForFirstImage,
+  loadSection,
+  loadSections,
   loadCSS,
 } from './aem.js';
 
-const LCP_BLOCKS = []; // add your LCP blocks to the list
+import {
+  initMartech,
+  martechEager,
+  martechLazy,
+  martechDelayed,
+} from '../plugins/martech/src/index.js';
 
 /**
  * Moves all the attributes from a given elmenet to another given element.
@@ -27,7 +32,7 @@ export function moveAttributes(from, to, attributes) {
   attributes.forEach((attr) => {
     const value = from.getAttribute(attr);
     if (value) {
-      to.setAttribute(attr, value);
+      to?.setAttribute(attr, value);
       from.removeAttribute(attr);
     }
   });
@@ -92,13 +97,44 @@ export function decorateMain(main) {
  * @param {Element} doc The container element
  */
 async function loadEager(doc) {
+  // Hook in your consent check to determine if personalization can run.
+  const isConsentGiven = true; /* your consent logic here */
+
+  const martechLoadedPromise = initMartech(
+    // 1. WebSDK Configuration
+    // Docs: https://experienceleague.adobe.com/en/docs/experience-platform/web-sdk/commands/configure/overview#configure-js
+    {
+      datastreamId: '0035fa61-7654-42b3-91e9-1922c8f20d22',
+      orgId: 'E96F8BE15694F5C97F000101@AdobeOrg',
+      // The `debugEnabled` flag is automatically set to true on localhost and .page URLs.
+      // The `defaultConsent` is automatically set to "pending".
+      defaultConsent: 'in',
+      onBeforeEventSend: (payload) => {
+        // This callback allows you to modify the payload before it's sent.
+        // Return false to prevent the event from being sent.
+      },
+      edgeConfigOverrides: {
+        // Optional datastream overrides for different environments.
+      },
+    },
+    // 2. Library Configuration
+    {
+      personalization: true,
+      launchUrls: ['https://assets.adobedtm.com/c1644a0e3882/a453c3050f2e/launch-f70f280c810e.min.js'],
+      // See the API Reference for all available options.
+    },
+  );
+  
   document.documentElement.lang = 'en';
   decorateTemplateAndTheme();
   const main = doc.querySelector('main');
   if (main) {
     decorateMain(main);
     document.body.classList.add('appear');
-    await waitForLCP(LCP_BLOCKS);
+    await Promise.all([
+      martechLoadedPromise.then(martechEager),
+      loadSection(main.querySelector('.section'), waitForFirstImage),
+    ]);
   }
 
   try {
@@ -117,7 +153,7 @@ async function loadEager(doc) {
  */
 async function loadLazy(doc) {
   const main = doc.querySelector('main');
-  await loadBlocks(main);
+  await loadSections(main);
 
   const { hash } = window.location;
   const element = hash ? doc.getElementById(hash.substring(1)) : false;
@@ -125,13 +161,10 @@ async function loadLazy(doc) {
 
   loadHeader(doc.querySelector('header'));
   loadFooter(doc.querySelector('footer'));
+  await martechLazy();
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();
-
-  sampleRUM('lazy');
-  sampleRUM.observe(main.querySelectorAll('div[data-block-name]'));
-  sampleRUM.observe(main.querySelectorAll('picture > img'));
 }
 
 /**
@@ -140,7 +173,10 @@ async function loadLazy(doc) {
  */
 function loadDelayed() {
   // eslint-disable-next-line import/no-cycle
-  window.setTimeout(() => import('./delayed.js'), 3000);
+  window.setTimeout(() => {
+    martechDelayed();
+    import('./delayed.js');
+  }, 3000);
   // load anything that can be postponed to the latest here
 }
 
