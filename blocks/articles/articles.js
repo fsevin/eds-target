@@ -89,7 +89,7 @@ export default async function decorate(block) {
   }
 
   const config = readBlockConfig(block);
-  let articles = extractArticlesFromBlock(block);
+  const articles = extractArticlesFromBlock(block);
 
   // Fetch translations
   const lang = getLanguageFromUrl();
