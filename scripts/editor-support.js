@@ -5,8 +5,7 @@ import {
   decorateIcons,
   decorateSections,
   loadBlock,
-  loadScript,
-  loadSections,
+  loadBlocks,
 } from './aem.js';
 import { decorateRichtext } from './editor-support-rte.js';
 import { decorateMain } from './scripts.js';
@@ -24,11 +23,7 @@ async function applyChanges(event) {
   const { content } = updates[0];
   if (!content) return false;
 
-  // load dompurify
-  await loadScript(`${window.hlx.codeBasePath}/scripts/dompurify.min.js`);
-
-  const sanitizedContent = window.DOMPurify.sanitize(content, { USE_PROFILES: { html: true } });
-  const parsedUpdate = new DOMParser().parseFromString(sanitizedContent, 'text/html');
+  const parsedUpdate = new DOMParser().parseFromString(content, 'text/html');
   const element = document.querySelector(`[data-aue-resource="${resource}"]`);
 
   if (element) {
@@ -38,7 +33,7 @@ async function applyChanges(event) {
       element.insertAdjacentElement('afterend', newMain);
       decorateMain(newMain);
       decorateRichtext(newMain);
-      await loadSections(newMain);
+      await loadBlocks(newMain);
       element.remove();
       newMain.style.display = null;
       // eslint-disable-next-line no-use-before-define
@@ -76,7 +71,7 @@ async function applyChanges(event) {
           decorateRichtext(newSection);
           decorateSections(parentElement);
           decorateBlocks(parentElement);
-          await loadSections(parentElement);
+          await loadBlocks(parentElement);
           element.remove();
           newSection.style.display = null;
         } else {
@@ -100,7 +95,6 @@ function attachEventListners(main) {
     'aue:content-add',
     'aue:content-move',
     'aue:content-remove',
-    'aue:content-copy',
   ].forEach((eventType) => main?.addEventListener(eventType, async (event) => {
     event.stopPropagation();
     const applied = await applyChanges(event);
@@ -109,45 +103,3 @@ function attachEventListners(main) {
 }
 
 attachEventListners(document.querySelector('main'));
-
-// decorate rich text
-// this has to happen after decorateMain(), and everythime decorateBlocks() is called
-decorateRichtext();
-// in cases where the block decoration is not done in one synchronous iteration we need to listen
-// for new richtext-instrumented elements. this happens for example when using experimentation.
-const observer = new MutationObserver(() => decorateRichtext());
-observer.observe(document, { attributeFilter: ['data-richtext-prop'], subtree: true });
-
-
-const url = new URL(window.location.href).pathname; 
-if (!url.includes('/master/')) {
-  /*const meta = document.createElement('meta');
-  meta.name = 'urn:adobe:aue:config:disable';
-  meta.content = 'duplicate,copy';
-  document.getElementsByTagName('head')[0].appendChild(meta);*/
-
-  const metaPreview = document.createElement('meta');
-  metaPreview.name = 'urn:adobe:aue:config:preview';
-
-  const siteName = url.match(/\/content\/([^\/]+)/)[1];
-
-  const path = url
-    .replace(/\/content\/[^\/]+/, '')
-    .replace('/templates/', '/pages/')
-    .replace('.html', '');
-
-  metaPreview.content = `http://main--${siteName}--fornacif.aem.page${path}`;
-  document.head.appendChild(metaPreview);
-
-  document.querySelectorAll('[data-aue-type]').forEach((el) => {
-    if (el.tagName.toLowerCase() === 'body' || el.getAttribute('data-aue-type') === 'container' || el.getAttribute('data-aue-type') === 'column') {
-      //el.removeAttribute('data-aue-resource');
-      //el.removeAttribute('data-aue-type');
-    }
-  });
-}
-
-
-
-
-
