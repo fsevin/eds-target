@@ -143,6 +143,9 @@ export const SERVICE_ICONS = {
 };
 
 export async function fetchContentFragmentByPath(fragmentPath) {
+  // sleep 1000ms to simulate network delay
+  await new Promise(resolve => setTimeout(resolve, 1000)); 
+
   try {
     const apiUrl = isAuthorMode
       ? `${AUTHOR_DOMAIN}${fragmentPath}/jcr:content/data/master.json`
