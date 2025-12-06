@@ -104,7 +104,7 @@ function attachEventListners(main) {
   ].forEach((eventType) => main?.addEventListener(eventType, async (event) => {
     event.stopPropagation();
     const applied = await applyChanges(event);
-    if (!applied) window.location.reload();
+    //if (!applied) window.location.reload();
   }));
 }
 
@@ -119,7 +119,12 @@ const observer = new MutationObserver(() => decorateRichtext());
 observer.observe(document, { attributeFilter: ['data-richtext-prop'], subtree: true });
 
 
-
+const url = new URL(window.location.href).pathname; 
+if (url.includes('/language-masters/')) {
+  /*const meta = document.createElement('meta');
+  meta.name = 'urn:adobe:aue:config:disable';
+  meta.content = 'duplicate,copy';
+  do
 
 
 
