@@ -89,12 +89,12 @@ export default async function decorate(block) {
   }
 
   const config = readBlockConfig(block);
-  const articles = extractArticlesFromBlock(block);
 
-  // Fetch translations
+  // Start fetching translation as early as possible (non-blocking)
   const lang = getLanguageFromPath();
-  const resultsText = await getTranslation('Results', lang);
+  const translationPromise = getTranslation('Results', lang);
 
+  const articles = extractArticlesFromBlock(block);
   const truncateDescription = parseConfigBoolean(config.truncatedescription);
   const articlesHTML = articles.map(article => buildArticleCard(article, truncateDescription)).join('');
 
@@ -116,6 +116,9 @@ export default async function decorate(block) {
   const articlesGrid = block.querySelector('[data-articles-grid]');
   const allArticleCards = [...articlesGrid.children];
   const resultsCount = block.querySelector('[data-results-count]');
+
+  // Wait for translation before updating results count
+  const resultsText = await translationPromise;
 
   // Function to update results count
   function updateResultsCount(count) {

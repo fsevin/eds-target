@@ -73,6 +73,11 @@ export default async function decorate(block) {
   const config = readBlockConfig(block);
   const showPrice = parseConfigBoolean(config.showprice);
   const imageAspectRatio = config.imageaspectratio || '5/3';
+
+  // Start fetching translation as early as possible (non-blocking)
+  const lang = getLanguageFromUrl();
+  const translationPromise = getTranslation('Results', lang);
+
   const products = extractProductsFromBlock(block);
 
   if (products.length === 0) {
@@ -87,10 +92,6 @@ export default async function decorate(block) {
     block.append(emptyContent);
     return;
   }
-
-  // Fetch translation for "Results"
-  const lang = getLanguageFromUrl();
-  const resultsText = await getTranslation('Results', lang);
 
   const productsHTML = products.map(product => buildProductCard(product, showPrice, imageAspectRatio)).join('');
 
@@ -112,6 +113,9 @@ export default async function decorate(block) {
   const productsGrid = block.querySelector('[data-products-grid]');
   const allProductCards = [...productsGrid.children];
   const resultsCount = block.querySelector('[data-results-count]');
+
+  // Wait for translation before updating results count
+  const resultsText = await translationPromise;
 
   // Function to update results count
   function updateResultsCount(count) {
