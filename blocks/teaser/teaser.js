@@ -109,13 +109,7 @@ export default async function decorate(block) {
   </div>`;
 
   const content = document.createRange().createContextualFragment(`
-    <section class="py-20 py-20 bg-white">
-      <div class="container mx-auto px-4">
-        <div class="grid lg:grid-cols-5 gap-12 items-center">
-          ${flipLayout ? textBlock + imageBlock : imageBlock + textBlock}
-        </div>
-      </div>
-    </section>
+
     <div class="teaser-wrapper"><div data-aue-resource="urn:aemconnection:/content/3ds/language-masters/en/pages/test/jcr:content/root/section/teaser" data-aue-type="component" data-aue-behavior="component" data-aue-model="teaser" data-aue-label="Teaser" class="teaser block" data-block-name="teaser" data-block-status="loaded">
     <section class="py-20 py-20 bg-white" data-aue-resource="urn:aemconnection:/content/dam/3ds/fragments/en/offers/3ds-sustainable-innovation/jcr:content/data/master" data-aue-type="reference" data-aue-filter="cf" data-aue-label="Content Fragment">
       <div class="container mx-auto px-4">
