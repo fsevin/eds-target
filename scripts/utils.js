@@ -143,8 +143,9 @@ export const SERVICE_ICONS = {
 };
 
 export async function fetchContentFragmentByPath(fragmentPath) {
-  // sleep 1000ms to simulate network delay
-  await new Promise(resolve => setTimeout(resolve, 1000)); 
+  if (isAuthorMode) {
+    await new Promise(resolve => setTimeout(resolve, 500)); 
+  } 
 
   try {
     const apiUrl = isAuthorMode
