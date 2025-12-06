@@ -10,6 +10,38 @@ import {
   getLanguageFromPath
 } from '../../scripts/utils.js';
 
+function setAueAttributes(elements, fragmentPath) {
+  if (!fragmentPath) return;
+
+  if (aueContainer) {
+    elements.section.setAttribute('data-aue-resource', `urn:aemconnection:${fragmentPath}/jcr:content/data/master`);
+    elements.section.setAttribute('data-aue-type', 'reference');
+    elements.section.setAttribute('data-aue-filter', 'cf');
+    elements.section.setAttribute('data-aue-label', 'Content Fragment');
+  }
+
+  if (elements.image) {
+    elements.image.setAttribute('data-aue-label', 'Image');
+    elements.image.setAttribute('data-aue-prop', 'image');
+    elements.image.setAttribute('data-aue-type', 'media');
+  }
+  if (elements.title) {
+    elements.title.setAttribute('data-aue-label', 'Title');
+    elements.title.setAttribute('data-aue-prop', 'title');
+    elements.title.setAttribute('data-aue-type', 'text');
+  }
+  if (elements.description) {
+    elements.description.setAttribute('data-aue-label', 'Description');
+    elements.description.setAttribute('data-aue-prop', 'description');
+    elements.description.setAttribute('data-aue-type', 'richtext');
+  }
+  if (elements.button) {
+    elements.button.setAttribute('data-aue-label', 'Call to Action');
+    elements.button.setAttribute('data-aue-prop', 'buttonText');
+    elements.button.setAttribute('data-aue-type', 'text');
+  }
+}
+
 function updateHeroContent(source, elements, showButtonIcon = false, useDynamicMedia = true) {
   if (!source) return;
 
@@ -87,31 +119,24 @@ export default async function decorate(block) {
 
   const icon = showButtonIcon ? getButtonIcon() : '';
 
-  // Build AUE attributes for section if using content fragment
-  const aueAttrs = fragmentPath
-    ? `data-aue-resource="urn:aemconnection:${fragmentPath}/jcr:content/data/master" data-aue-type="reference" data-aue-filter="cf" data-aue-label="Content Fragment"`
-    : '';
-
   const content = document.createRange().createContextualFragment(`
     <section class="relative py-12 md:py-20 bg-cover bg-center bg-no-repeat" >
-      <div ${aueAttrs}>
       <div id="${blockId}-image" class="absolute inset-0 z-0">${pictureHTML}</div>
       <div class="absolute inset-0 bg-black/50 z-10"></div>
       <div class="container mx-auto px-4 relative z-20">
         <div class="max-w-4xl mx-auto text-center">
-          <h1 id="${blockId}-title" data-aue-label="Title" data-aue-prop="title" data-aue-type="text" class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+          <h1 id="${blockId}-title" class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
             ${title}
           </h1>
-          <div id="${blockId}-description" data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext" class="text-lg md:text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
+          <div id="${blockId}-description" class="text-lg md:text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
             ${descriptionHTML}
           </div>
           <div class="flex items-center justify-center">
-            <a id="${blockId}-button" data-aue-label="Call to Action" data-aue-prop="buttonText" data-aue-type="text" href="${buttonlink}" class="px-8 py-4 bg-brand-600 text-white font-semibold rounded-2xl hover:bg-brand-700 transition shadow-lg hover:shadow-xl">
+            <a id="${blockId}-button" href="${buttonlink}" class="px-8 py-4 bg-brand-600 text-white font-semibold rounded-2xl hover:bg-brand-700 transition shadow-lg hover:shadow-xl">
               ${buttontext}${icon}
             </a>
           </div>
         </div>
-      </div>
       </div>
     </section>
   `);
@@ -140,11 +165,13 @@ export default async function decorate(block) {
 
   // Update with alloy content first (personalization takes priority)
   if (alloyContent) {
+    setAueAttributes(elements, fragmentPath);
     updateHeroContent(alloyContent, elements, showButtonIcon, useDynamicMedia);
   } else if (fragmentPromise) {
     // Fall back to fragment data if no alloy content
     const fragmentData = await fragmentPromise;
     if (fragmentData) {
+      setAueAttributes(elements, fragmentPath);
       updateHeroContent(fragmentData, elements, showButtonIcon, useDynamicMedia);
     }
   }
