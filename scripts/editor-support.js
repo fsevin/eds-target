@@ -105,7 +105,18 @@ function attachEventListners(main) {
   ].forEach((eventType) => main?.addEventListener(eventType, async (event) => {
     event.stopPropagation();
     const applied = await applyChanges(event);
-    if (!applied) window.location.reload();
+    
+    if (!applied) {
+      // If path is a content fragment, wait 1s before reloading
+      const resource = event.detail?.request?.target?.resource
+        || event.detail?.request?.target?.container?.resource
+        || event.detail?.request?.to?.container?.resource;
+      if (resource && resource.includes('/content/dam/')) {
+        setTimeout(() => window.location.reload(), 1000);
+      } else {
+        window.location.reload();
+      }
+    }
   }));
 }
 
