@@ -120,7 +120,7 @@ observer.observe(document, { attributeFilter: ['data-richtext-prop'], subtree: t
 
 
 const url = new URL(window.location.href).pathname; 
-if (!url.includes('/master/')) {
+if (!url.includes('/language-masters2/')) {
   /*const meta = document.createElement('meta');
   meta.name = 'urn:adobe:aue:config:disable';
   meta.content = 'duplicate,copy';
