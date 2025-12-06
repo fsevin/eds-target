@@ -144,7 +144,7 @@ export const SERVICE_ICONS = {
 
 export async function fetchContentFragmentByPath(fragmentPath) {
   if (isAuthorMode) {
-    await new Promise(resolve => setTimeout(resolve, 200)); 
+    await new Promise(resolve => setTimeout(resolve, 1000)); 
   } 
 
   try {
