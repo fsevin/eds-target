@@ -158,10 +158,11 @@ export const SERVICE_ICONS = {
 };
 
 export async function fetchContentFragmentByPath(fragmentPath) {
+  const siteName = getSiteName();
   try {
     const apiUrl = isAuthorMode
       ? `${AUTHOR_DOMAIN}/adobe/sites/cf/fragments?path=${fragmentPath}&references=direct`
-      : `${PUBLISH_DOMAIN}/graphql/execute.json/3ds/offer-by-path;offerPath=${fragmentPath}`;
+      : `${PUBLISH_DOMAIN}/graphql/execute.json/${siteName}/offer-by-path;offerPath=${fragmentPath}`;
 
     const response = await fetch(apiUrl);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
