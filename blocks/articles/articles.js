@@ -1,5 +1,5 @@
 import { readBlockConfig } from '../../scripts/aem.js';
-import { getTranslation, getLanguageFromUrl, parseConfigBoolean, applyImageStyling, isAuthorMode } from '../../scripts/utils.js';
+import { getTranslation, getLanguageFromPath, parseConfigBoolean, applyImageStyling, isAuthorMode } from '../../scripts/utils.js';
 
 function extractArticlesFromBlock(block) {
   const articles = [];
@@ -92,7 +92,7 @@ export default async function decorate(block) {
   const articles = extractArticlesFromBlock(block);
 
   // Fetch translations
-  const lang = getLanguageFromUrl();
+  const lang = getLanguageFromPath();
   const resultsText = await getTranslation('Results', lang);
 
   const truncateDescription = parseConfigBoolean(config.truncatedescription);

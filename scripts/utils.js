@@ -2,6 +2,24 @@ const AUTHOR_DOMAIN = 'https://author-p34570-e1263228.adobeaemcloud.com';
 const PUBLISH_DOMAIN = 'https://publish-p34570-e1263228.adobeaemcloud.com';
 const DELIVERY_DOMAIN = 'https://delivery-p34570-e1263228.adobeaemcloud.com';
 
+export function getCurrentLocale() {
+  const path = window.location.pathname;
+  const parts = path.split('/').filter(part => part !== '');
+
+  const countryIndex = isAuthorMode ? 2 : 0;
+  const langIndex = isAuthorMode ? 3 : 1;
+
+  return `${parts[countryIndex]}/${parts[langIndex]}`;
+}
+
+export function getPagePath(path){
+  return isAuthorMode ? `/content/${getSiteName()}${path}.html` : path;
+};
+
+export function getIconPath(imageName) {
+  return `${isAuthorMode ? `/content/${getSiteName()}.resource/icons/` : '/icons/'}${imageName}`;
+}
+
 function getSiteNameFromDamPath(fragmentPath) {
   const match = fragmentPath.match(/^\/content\/dam\/([^/]+)\//);
   return match ? match[1] : '/';
@@ -17,6 +35,22 @@ export const isAuthorMode = window.location.href.includes('.html');
 
 export function parseConfigBoolean(value) {
   return value === 'true' || value === true;
+}
+
+export function extractFieldFromBlock(block, fieldName) {
+  const rows = block.querySelectorAll(':scope > div');
+
+  for (const row of rows) {
+    const firstDiv = row.querySelector('div:first-child');
+    if (firstDiv && firstDiv.textContent.trim().toLowerCase() === fieldName.toLowerCase()) {
+      const contentDiv = row.querySelector('div:nth-child(2)');
+      if (contentDiv) {
+        return contentDiv.innerHTML;
+      }
+    }
+  }
+
+  return '';
 }
 
 export function applyImageStyling(imageContainer, { cover = true, absolute = false } = {}) {
