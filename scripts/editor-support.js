@@ -104,7 +104,7 @@ function attachEventListners(main) {
   ].forEach((eventType) => main?.addEventListener(eventType, async (event) => {
     event.stopPropagation();
     const applied = await applyChanges(event);
-    const resource = detail?.request?.target?.resource
+    const resource = event?.detail?.request?.target?.resource
     const isContentFragment = resource?.endsWith('/data/master');
     if (!isContentFragment || !applied) window.location.reload();
   }));
