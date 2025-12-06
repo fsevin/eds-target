@@ -109,10 +109,10 @@ export default async function decorate(block) {
   }
 
   // Initialize with empty values (will be populated by content sources)
-  const title = '';
-  const buttonlink = '';
-  const buttontext = '';
-  const descriptionHTML = '';
+  const title = 'Hero Title';
+  const buttonlink = '#';
+  const buttontext = 'Learn More';
+  const descriptionHTML = '<p>Add your teaser description here.</p>';
   const pictureHTML = createPlaceholderSVG('image', '16:9');
   const showButtonIcon = parseConfigBoolean(config.showbuttonicon);
   const useDynamicMedia = parseConfigBoolean(config.dynamicmediadelivery);
