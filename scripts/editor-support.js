@@ -21,6 +21,7 @@ async function applyChanges(event) {
   if (!resource) return false;
   const updates = detail?.response?.updates;
   if (!updates.length) return false;
+  
   const { content } = updates[0];
   if (!content) return false;
 
@@ -104,16 +105,7 @@ function attachEventListners(main) {
   ].forEach((eventType) => main?.addEventListener(eventType, async (event) => {
     event.stopPropagation();
     const applied = await applyChanges(event);
-    if (!applied) {
-      // Don't reload if the resource is a content fragment
-      const resource = event.detail?.request?.target?.resource
-        || event.detail?.request?.target?.container?.resource
-        || event.detail?.request?.to?.container?.resource;
-      if (resource && resource.includes('/content/dam/')) {
-        return;
-      }
-      window.location.reload();
-    }
+    if (!applied) window.location.reload();
   }));
 }
 
