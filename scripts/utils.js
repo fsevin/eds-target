@@ -2,6 +2,12 @@ const AUTHOR_DOMAIN = 'https://author-p34570-e1263228.adobeaemcloud.com';
 const PUBLISH_DOMAIN = 'https://publish-p34570-e1263228.adobeaemcloud.com';
 const DELIVERY_DOMAIN = 'https://delivery-p34570-e1263228.adobeaemcloud.com';
 
+function getSiteName() {
+  const path = window.location.pathname;
+  const match = path.match(/^\/content\/([^/]+)\//);
+  return match ? match[1] : '/';
+}
+
 export function getCurrentLocale() {
   const path = window.location.pathname;
   const parts = path.split('/').filter(part => part !== '');
