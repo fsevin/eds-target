@@ -153,6 +153,8 @@ export async function fetchContentFragmentByPath(fragmentPath) {
 
     const data = await response.json();
 
+    console.log('Content Fragment Data:', data);
+
     if (isAuthorMode) {
       return {
         title: data.title || '',
