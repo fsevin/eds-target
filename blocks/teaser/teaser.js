@@ -10,6 +10,39 @@ import {
   getLanguageFromPath
 } from '../../scripts/utils.js';
 
+function setAueAttributes(elements, fragmentPath) {
+  if (!fragmentPath) return;
+
+  const aueContainer = elements.title?.closest('[data-aue-resource]')?.parentElement?.querySelector(':scope > div:first-child') || elements.title?.closest('section')?.querySelector(':scope > div:first-child');
+  if (aueContainer && !aueContainer.hasAttribute('data-aue-resource')) {
+    aueContainer.setAttribute('data-aue-resource', `urn:aemconnection:${fragmentPath}/jcr:content/data/master`);
+    aueContainer.setAttribute('data-aue-type', 'reference');
+    aueContainer.setAttribute('data-aue-filter', 'cf');
+    aueContainer.setAttribute('data-aue-label', 'Content Fragment');
+  }
+
+  if (elements.image) {
+    elements.image.setAttribute('data-aue-label', 'Image');
+    elements.image.setAttribute('data-aue-prop', 'image');
+    elements.image.setAttribute('data-aue-type', 'media');
+  }
+  if (elements.title) {
+    elements.title.setAttribute('data-aue-label', 'Title');
+    elements.title.setAttribute('data-aue-prop', 'title');
+    elements.title.setAttribute('data-aue-type', 'text');
+  }
+  if (elements.description) {
+    elements.description.setAttribute('data-aue-label', 'Description');
+    elements.description.setAttribute('data-aue-prop', 'description');
+    elements.description.setAttribute('data-aue-type', 'richtext');
+  }
+  if (elements.button) {
+    elements.button.setAttribute('data-aue-label', 'Call to Action');
+    elements.button.setAttribute('data-aue-prop', 'buttonText');
+    elements.button.setAttribute('data-aue-type', 'text');
+  }
+}
+
 function updateTeaserContent(source, elements, showButtonIcon = false, useDynamicMedia = true) {
   if (!source) return;
 
@@ -89,24 +122,19 @@ export default async function decorate(block) {
 
   const icon = showButtonIcon ? getButtonIcon() : '';
 
-  // Build AUE attributes for section if using content fragment
-  const aueAttrs = fragmentPath
-    ? `data-aue-resource="urn:aemconnection:${fragmentPath}/jcr:content/data/master" data-aue-type="reference" data-aue-filter="cf" data-aue-label="Content Fragment"`
-    : '';
-
-  const imageBlock = `<div id="${blockId}-image" data-aue-label="Image" data-aue-prop="image" data-aue-type="media" class="relative rounded-2xl overflow-hidden shadow-2xl lg:col-span-3">
+  const imageBlock = `<div id="${blockId}-image" class="relative rounded-2xl overflow-hidden shadow-2xl lg:col-span-3">
     ${pictureHTML}
   </div>`;
 
   const textBlock = `<div class="space-y-6 lg:col-span-2">
-    <h2 id="${blockId}-title" data-aue-label="Title" data-aue-prop="title" data-aue-type="text" class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
+    <h2 id="${blockId}-title" class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
       ${title}
     </h2>
-    <div id="${blockId}-description" data-aue-label="Description" data-aue-prop="description" data-aue-type="richtext" class="text-lg text-gray-600 leading-relaxed">
+    <div id="${blockId}-description" class="text-lg text-gray-600 leading-relaxed">
       ${descriptionHTML}
     </div>
     <div>
-      <a id="${blockId}-button" data-aue-label="Call to Action" data-aue-prop="buttonText" data-aue-type="text" href="${buttonlink}" class="inline-flex items-center px-8 py-4 bg-brand-600 text-white font-semibold rounded-2xl hover:bg-brand-700 transition shadow-lg hover:shadow-xl">
+      <a id="${blockId}-button" href="${buttonlink}" class="inline-flex items-center px-8 py-4 bg-brand-600 text-white font-semibold rounded-2xl hover:bg-brand-700 transition shadow-lg hover:shadow-xl">
         ${buttontext}${icon}
       </a>
     </div>
@@ -114,7 +142,7 @@ export default async function decorate(block) {
 
   const content = document.createRange().createContextualFragment(`
     <section class="py-20 py-20 bg-white">
-      <div ${aueAttrs}>
+      <div>
       <div class="container mx-auto px-4">
         <div class="grid lg:grid-cols-5 gap-12 items-center">
           ${flipLayout ? textBlock + imageBlock : imageBlock + textBlock}
@@ -148,11 +176,13 @@ export default async function decorate(block) {
 
   // Update with alloy content first (personalization takes priority)
   if (alloyContent) {
+    setAueAttributes(elements, fragmentPath);
     updateTeaserContent(alloyContent, elements, showButtonIcon, useDynamicMedia);
   } else if (fragmentPromise) {
     // Fall back to fragment data if no alloy content
     const fragmentData = await fragmentPromise;
     if (fragmentData) {
+      setAueAttributes(elements, fragmentPath);
       updateTeaserContent(fragmentData, elements, showButtonIcon, useDynamicMedia);
     }
   }
