@@ -112,7 +112,7 @@ function attachEventListners(main) {
         || event.detail?.request?.target?.container?.resource
         || event.detail?.request?.to?.container?.resource;
       if (resource && resource.includes('/content/dam/')) {
-        setTimeout(() => window.location.reload(), 1500);
+        setTimeout(() => window.location.reload(), 1000);
       } else {
         window.location.reload();
       }

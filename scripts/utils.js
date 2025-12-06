@@ -143,36 +143,26 @@ export const SERVICE_ICONS = {
 };
 
 export async function fetchContentFragmentByPath(fragmentPath) {
-  const siteName = getSiteNameFromDamPath(fragmentPath);
   try {
     const apiUrl = isAuthorMode
-      ? `${AUTHOR_DOMAIN}/adobe/sites/cf/fragments?path=${fragmentPath}&references=direct`
-      : `${PUBLISH_DOMAIN}/graphql/execute.json/${siteName}/offer-by-path;offerPath=${fragmentPath}`;
+      ? `${AUTHOR_DOMAIN}${fragmentPath}/jcr:content/data/master.json`
+      : `${PUBLISH_DOMAIN}/graphql/execute.json/${getSiteNameFromDamPath(fragmentPath)}/offer-by-path;offerPath=${fragmentPath}`;
 
     const response = await fetch(apiUrl);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
     const data = await response.json();
 
+    console.log('Content Fragment Data:', data);
+
     if (isAuthorMode) {
-      const item = data.items?.[0];
-      if (!item) return null;
-
-      const fields = Object.fromEntries(
-        item.fields?.map(f => [f.name, f.values?.[0] || '']) || []
-      );
-      const imageRef = item.references?.find(ref => ref.path === fields.image);
-      const imageAssetId = imageRef?.assetId?.replace('urn:aaid:aem:', '') || null;
-
-      console.log('Content Fragment Title:', fields.title);
-
       return {
-        title: fields.title || '',
-        description: fields.description || '',
-        buttonText: fields.buttonText || '',
-        buttonLink: fields.buttonLink || '#',
-        image: { _id: imageAssetId, _path: fields.image } || null,
-        imageDescription: fields.imageDescription || '',
+        title: data.title || '',
+        description: data.description || '',
+        buttonText: data.buttonText || '',
+        buttonLink: data.buttonLink || '#',
+        image: { _path: data.image } || null,
+        imageDescription: data.imageDescription || '',
       };
     }
 
