@@ -2,28 +2,9 @@ const AUTHOR_DOMAIN = 'https://author-p34570-e1263228.adobeaemcloud.com';
 const PUBLISH_DOMAIN = 'https://publish-p34570-e1263228.adobeaemcloud.com';
 const DELIVERY_DOMAIN = 'https://delivery-p34570-e1263228.adobeaemcloud.com';
 
-function getSiteName() {
-  const path = window.location.pathname;
-  const match = path.match(/^\/content\/([^/]+)\//);
+function getSiteNameFromDamPath(fragmentPath) {
+  const match = fragmentPath.match(/^\/content\/dam\/([^/]+)\//);
   return match ? match[1] : '/';
-}
-
-export function getCurrentLocale() {
-  const path = window.location.pathname;
-  const parts = path.split('/').filter(part => part !== '');
-
-  const countryIndex = isAuthorMode ? 2 : 0;
-  const langIndex = isAuthorMode ? 3 : 1;
-
-  return `${parts[countryIndex]}/${parts[langIndex]}`;
-}
-
-export function getPagePath(path){
-  return isAuthorMode ? `/content/${getSiteName()}${path}.html` : path;
-};
-
-export function getIconPath(imageName) {
-  return `${isAuthorMode ? `/content/${getSiteName()}.resource/icons/` : '/icons/'}${imageName}`;
 }
 
 export function getButtonIcon() {
@@ -32,32 +13,12 @@ export function getButtonIcon() {
   </svg>`;
 }
 
-export function getDeliveryUrl(url, smartCrop) {
-  const processedUrl = url
-    .replace(/original\//g, '')
-    .replace(/jpeg|jpg|png/g, 'webp');
-
-  return `${processedUrl}?format=webply&optimize=high&smartcrop=${smartCrop}`;
-}
-
 export const isAuthorMode = window.location.href.includes('.html');
 
-/**
- * Parse a config value as boolean (handles 'true' string and boolean true)
- * @param {string|boolean} value - The config value
- * @returns {boolean}
- */
 export function parseConfigBoolean(value) {
   return value === 'true' || value === true;
 }
 
-/**
- * Apply standard image styling for picture elements in containers
- * @param {HTMLElement} imageContainer - Container with picture element
- * @param {Object} options - Styling options
- * @param {boolean} options.cover - Use object-fit: cover (default: true)
- * @param {boolean} options.absolute - Use absolute positioning (default: false)
- */
 export function applyImageStyling(imageContainer, { cover = true, absolute = false } = {}) {
   if (!imageContainer) return;
 
@@ -93,42 +54,10 @@ export function applyImageStyling(imageContainer, { cover = true, absolute = fal
   }
 }
 
-export function getLanguageFromUrl() {
+export function getLanguageFromPath() {
   const path = window.location.pathname;
   const parts = path.split('/').filter(part => part !== '');
   return parts.length >= 2 ? parts[1] : 'en';
-}
-
-export async function getTranslation(key, lang) {
-  try {
-    const response = await fetch('/i18n.json');
-    const data = await response.json();
-
-    const item = data.data.find((entry) => entry.key === key);
-    if (item) {
-      return item[lang] || item.en || key;
-    }
-    return key;
-  } catch (error) {
-    console.error('Error fetching translation:', error);
-    return key;
-  }
-}
-
-export function extractFieldFromBlock(block, fieldName) {
-  const rows = block.querySelectorAll(':scope > div');
-
-  for (const row of rows) {
-    const firstDiv = row.querySelector('div:first-child');
-    if (firstDiv && firstDiv.textContent.trim().toLowerCase() === fieldName.toLowerCase()) {
-      const contentDiv = row.querySelector('div:nth-child(2)');
-      if (contentDiv) {
-        return contentDiv.innerHTML;
-      }
-    }
-  }
-
-  return '';
 }
 
 export const SERVICE_ICONS = {
@@ -158,7 +87,7 @@ export const SERVICE_ICONS = {
 };
 
 export async function fetchContentFragmentByPath(fragmentPath) {
-  const siteName = getSiteName();
+  const siteName = getSiteNameFromDamPath(fragmentPath);
   try {
     const apiUrl = isAuthorMode
       ? `${AUTHOR_DOMAIN}/adobe/sites/cf/fragments?path=${fragmentPath}&references=direct`
