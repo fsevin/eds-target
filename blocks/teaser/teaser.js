@@ -49,13 +49,13 @@ export default async function decorate(block) {
   const config = readBlockConfig(block);
   const blockId = `teaser-${Math.random().toString(36).substr(2, 9)}`;
 
-  // Fetch content fragment if specified
-  let fragmentData = null;
+  // Start fetching content fragment as early as possible (non-blocking)
+  let fragmentPromise = null;
   let fragmentPath = null;
   if (config.contentfragment) {
     fragmentPath = config.contentfragment.replace(/^https?:\/\/[^/]+/, '');
     fragmentPath = fragmentPath.replace(/\.(html|json)$/, '');
-    fragmentData = await fetchContentFragmentByPath(fragmentPath);
+    fragmentPromise = fetchContentFragmentByPath(fragmentPath);
   }
 
   // Initialize with default values
@@ -119,9 +119,12 @@ export default async function decorate(block) {
 
   applyImageStyling(elements.image);
 
-  // Update with fragment data if available
-  if (fragmentData) {
-    updateTeaserContent(fragmentData, elements, showButtonIcon, useDynamicMedia);
+  // Wait for fragment data and update content if available
+  if (fragmentPromise) {
+    const fragmentData = await fragmentPromise;
+    if (fragmentData) {
+      updateTeaserContent(fragmentData, elements, showButtonIcon, useDynamicMedia);
+    }
   }
 
   const lang = getLanguageFromUrl();
