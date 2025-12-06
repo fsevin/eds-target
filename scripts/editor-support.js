@@ -102,11 +102,15 @@ function attachEventListners(main) {
     'aue:content-remove',
     'aue:content-copy',
   ].forEach((eventType) => main?.addEventListener(eventType, async (event) => {
+    const resource = event?.detail?.request?.target?.resource;
+    const isContentFragment = resource?.endsWith('/data/master');
+    if (isContentFragment) {
+      await applyChanges(event);
+      return;
+    }
     event.stopPropagation();
     const applied = await applyChanges(event);
-    const resource = event?.detail?.request?.target?.resource
-    const isContentFragment = resource?.endsWith('/data/master');
-    if (!isContentFragment && !applied) window.location.reload();
+    if (!applied) window.location.reload();
   }));
 }
 
