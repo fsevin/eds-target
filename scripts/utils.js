@@ -255,3 +255,35 @@ export function createDynamicMediaPicture(
 
   return picture;
 }
+
+export function setAueAttributes(elements, fragmentPath) {
+  if (!fragmentPath) return;
+
+  if (elements.section) {
+    elements.section.setAttribute('data-aue-resource', `urn:aemconnection:${fragmentPath}/jcr:content/data/master`);
+    elements.section.setAttribute('data-aue-type', 'reference');
+    elements.section.setAttribute('data-aue-filter', 'cf');
+    elements.section.setAttribute('data-aue-label', 'Content Fragment');
+  }
+
+  if (elements.image) {
+    elements.image.setAttribute('data-aue-label', 'Image');
+    elements.image.setAttribute('data-aue-prop', 'image');
+    elements.image.setAttribute('data-aue-type', 'media');
+  }
+  if (elements.title) {
+    elements.title.setAttribute('data-aue-label', 'Title');
+    elements.title.setAttribute('data-aue-prop', 'title');
+    elements.title.setAttribute('data-aue-type', 'text');
+  }
+  if (elements.description) {
+    elements.description.setAttribute('data-aue-label', 'Description');
+    elements.description.setAttribute('data-aue-prop', 'description');
+    elements.description.setAttribute('data-aue-type', 'richtext');
+  }
+  if (elements.button) {
+    elements.button.setAttribute('data-aue-label', 'Call to Action');
+    elements.button.setAttribute('data-aue-prop', 'buttonText');
+    elements.button.setAttribute('data-aue-type', 'text');
+  }
+}
