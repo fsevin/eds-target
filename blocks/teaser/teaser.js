@@ -13,12 +13,11 @@ import {
 function setAueAttributes(elements, fragmentPath) {
   if (!fragmentPath) return;
 
-  const aueContainer = elements.title?.closest('[data-aue-resource]')?.parentElement?.querySelector(':scope > div:first-child') || elements.title?.closest('section')?.querySelector(':scope > div:first-child');
-  if (aueContainer && !aueContainer.hasAttribute('data-aue-resource')) {
-    aueContainer.setAttribute('data-aue-resource', `urn:aemconnection:${fragmentPath}/jcr:content/data/master`);
-    aueContainer.setAttribute('data-aue-type', 'reference');
-    aueContainer.setAttribute('data-aue-filter', 'cf');
-    aueContainer.setAttribute('data-aue-label', 'Content Fragment');
+  if (elements.section) {
+    elements.section.setAttribute('data-aue-resource', `urn:aemconnection:${fragmentPath}/jcr:content/data/master`);
+    elements.section.setAttribute('data-aue-type', 'reference');
+    elements.section.setAttribute('data-aue-filter', 'cf');
+    elements.section.setAttribute('data-aue-label', 'Content Fragment');
   }
 
   if (elements.image) {
@@ -141,7 +140,7 @@ export default async function decorate(block) {
   </div>`;
 
   const content = document.createRange().createContextualFragment(`
-    <section class="py-20 py-20 bg-white">
+    <section class="teaser-section py-20 py-20 bg-white">
       <div>
       <div class="container mx-auto px-4">
         <div class="grid lg:grid-cols-5 gap-12 items-center">
