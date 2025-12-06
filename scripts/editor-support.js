@@ -124,7 +124,30 @@ if (url.includes('/language-masters/')) {
   /*const meta = document.createElement('meta');
   meta.name = 'urn:adobe:aue:config:disable';
   meta.content = 'duplicate,copy';
-  do
+  document.getElementsByTagName('head')[0].appendChild(meta);*/
+
+  const metaPreview = document.createElement('meta');
+  metaPreview.name = 'urn:adobe:aue:config:preview';
+
+  const siteName = url.match(/\/content\/([^\/]+)/)[1];
+
+  const path = url
+    .replace(/\/content\/[^\/]+/, '')
+    .replace('/templates/', '/pages/')
+    .replace('.html', '');
+
+  metaPreview.content = `http://main--${siteName}--fornacif.aem.page${path}`;
+  document.head.appendChild(metaPreview);
+
+  document.querySelectorAll('[data-aue-type]').forEach((el) => {
+    if (el.tagName.toLowerCase() === 'body' || el.getAttribute('data-aue-type') === 'container' || el.getAttribute('data-aue-type') === 'column') {
+      //el.removeAttribute('data-aue-resource');
+      //el.removeAttribute('data-aue-type');
+    }
+  });
+}
+
+
 
 
 
