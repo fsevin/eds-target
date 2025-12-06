@@ -106,7 +106,7 @@ function attachEventListners(main) {
     const applied = await applyChanges(event);
     const resource = event?.detail?.request?.target?.resource
     const isContentFragment = resource?.endsWith('/data/master');
-    if (!isContentFragment || !applied) window.location.reload();
+    if (!isContentFragment && !applied) window.location.reload();
   }));
 }
 
