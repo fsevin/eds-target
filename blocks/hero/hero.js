@@ -13,7 +13,7 @@ import {
 function setAueAttributes(elements, fragmentPath) {
   if (!fragmentPath) return;
 
-  if (aueContainer) {
+  if (elements.section) {
     elements.section.setAttribute('data-aue-resource', `urn:aemconnection:${fragmentPath}/jcr:content/data/master`);
     elements.section.setAttribute('data-aue-type', 'reference');
     elements.section.setAttribute('data-aue-filter', 'cf');
