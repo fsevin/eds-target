@@ -30,8 +30,8 @@ function updateHeroContent(source, elements, showButtonIcon = false, useDynamicM
     if (buttonLink) elements.button.href = buttonLink;
   }
 
-  const imageId = source.image?.['_id'];
-  const imagePath = source.image?.['_path'];
+  const imageId = source.image?._id;
+  const imagePath = source.image?._path;
   const imageDescription = source.imageDescription || source.imagedescription || 'Hero image';
 
   if (elements.image && useDynamicMedia && imageId) {
@@ -58,11 +58,29 @@ export default async function decorate(block) {
     fragmentPromise = fetchContentFragmentByPath(fragmentPath);
   }
 
-  // Initialize with default values
-  const title = 'Hero Title';
-  const buttonlink = '#';
-  const buttontext = 'Get Started';
-  const descriptionHTML = '<p>Add your hero description here.</p>';
+  // Start alloy call as early as possible (non-blocking)
+  const lang = getLanguageFromPath();
+  let alloyPromise = null;
+  if (config.offerzone && !isAuthorMode) {
+    alloyPromise = alloy('sendEvent', {
+      decisionScopes: [config.offerzone],
+      data: {
+        "__adobe": {
+          target: {
+            logged: localStorage.getItem('logged'),
+            profileType: localStorage.getItem('profileType'),
+            lang: lang
+          }
+        }
+      },
+    });
+  }
+
+  // Initialize with empty values (will be populated by content sources)
+  const title = '';
+  const buttonlink = '';
+  const buttontext = '';
+  const descriptionHTML = '';
   const pictureHTML = createPlaceholderSVG('image', '16:9');
   const showButtonIcon = parseConfigBoolean(config.showbuttonicon);
   const useDynamicMedia = parseConfigBoolean(config.dynamicmediadelivery);
@@ -98,6 +116,15 @@ export default async function decorate(block) {
     </section>
   `);
 
+  // Wait for alloy result before rendering
+  let alloyContent = null;
+  if (alloyPromise) {
+    const result = await alloyPromise;
+    result.propositions?.forEach((proposition) => {
+      alloyContent = proposition.items[0]?.data?.content?.data?.offerByPath?.item;
+    });
+  }
+
   block.textContent = '';
   block.append(content);
 
@@ -111,33 +138,14 @@ export default async function decorate(block) {
 
   applyImageStyling(elements.image, { absolute: true });
 
-  // Wait for fragment data and update content if available
-  if (fragmentPromise) {
+  // Update with alloy content first (personalization takes priority)
+  if (alloyContent) {
+    updateHeroContent(alloyContent, elements, showButtonIcon, useDynamicMedia);
+  } else if (fragmentPromise) {
+    // Fall back to fragment data if no alloy content
     const fragmentData = await fragmentPromise;
     if (fragmentData) {
       updateHeroContent(fragmentData, elements, showButtonIcon, useDynamicMedia);
     }
-  }
-
-  const lang = getLanguageFromPath();
-
-  if (config.offerzone && !isAuthorMode) {
-    alloy('sendEvent', {
-      decisionScopes: [config.offerzone],
-      data: {
-        "__adobe": {
-          target: {
-            logged: localStorage.getItem('logged'),
-            profileType: localStorage.getItem('profileType'),
-            lang: lang
-          }
-        }
-      },
-    }).then((result) => {
-      result.propositions?.forEach((proposition) => {
-        const offerContent = proposition.items[0]?.data?.content?.data?.offerByPath?.item;
-        updateHeroContent(offerContent, elements, showButtonIcon, useDynamicMedia);
-      });
-    });
   }
 }
