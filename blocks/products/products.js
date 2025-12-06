@@ -1,5 +1,5 @@
 import { readBlockConfig } from '../../scripts/aem.js';
-import { getTranslation, getLanguageFromUrl, parseConfigBoolean, applyImageStyling } from '../../scripts/utils.js';
+import { getTranslation, getLanguageFromPath, parseConfigBoolean, applyImageStyling } from '../../scripts/utils.js';
 
 function extractProductsFromBlock(block) {
   const products = [];
@@ -75,7 +75,7 @@ export default async function decorate(block) {
   const imageAspectRatio = config.imageaspectratio || '5/3';
 
   // Start fetching translation as early as possible (non-blocking)
-  const lang = getLanguageFromUrl();
+  const lang = getLanguageFromPath();
   const translationPromise = getTranslation('Results', lang);
 
   const products = extractProductsFromBlock(block);
