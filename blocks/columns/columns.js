@@ -25,9 +25,9 @@ function handleParagraph(p, columnIndex) {
     );
     link.classList.remove('button');
 
-    p.removeAttribute('data-aue-behavior');
-    p.setAttribute('data-aue-prop', 'text');
-    p.setAttribute('data-aue-type', 'text');
+    link.setAttribute('data-aue-prop', 'text');
+    link.setAttribute('data-aue-type', 'text');
+    link.setAttribute('data-aue-label', 'Text');
   }
 
   p.classList.add('text-lg', 'text-gray-600', 'leading-relaxed', 'mb-4', 'mt-0');
