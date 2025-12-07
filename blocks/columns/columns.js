@@ -43,7 +43,7 @@ export default function decorate(block) {
 
       const buttons = col.querySelectorAll('a.button');
       buttons.forEach((button) => {
-        button.classList.add('inline-flex', 'items-center', 'px-8', 'py-4', 'bg-brand-600', 'text-white', 'font-semibold', 'rounded-2xl', 'hover:bg-brand-700', 'transition', 'shadow-lg', 'hover:shadow-xl');
+        button.classList.add('inline-flex', 'items-center', 'px-8', 'py-2', 'bg-brand-600', 'text-white', 'font-semibold', 'rounded-2xl', 'hover:bg-brand-700', 'transition', 'shadow-lg', 'hover:shadow-xl');
       });
 
       const h2 = col.querySelectorAll('h2');
