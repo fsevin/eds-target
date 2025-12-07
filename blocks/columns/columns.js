@@ -15,7 +15,12 @@ export default function decorate(block) {
       const emptyParagraphs = col.querySelectorAll('p');
       emptyParagraphs.forEach((p) => {
         if (p.textContent.trim() === '' && p.children.length === 0) {
-          p.textContent = `${index + 1}`;
+          const parent = p.parentElement;
+          if (parent && parent.getAttribute('data-aue-prop') === 'text') {
+            p.textContent = 'Insert texte here';
+          } else {
+            p.textContent = `Column ${index + 1}`;
+          }
         }
       });
 
