@@ -68,7 +68,7 @@ export default function decorate(block) {
         element.setAttribute('data-aue-prop', 'fileReference');
       });
 
-      const aueLinks = col.querySelectorAll('a[data-aue-model]');
+      const aueLinks = col.querySelectorAll('a');
       aueLinks.forEach((link) => {
         link.setAttribute('data-aue-prop', 'text');
       });
