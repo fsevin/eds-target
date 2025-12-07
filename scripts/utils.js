@@ -164,8 +164,6 @@ export async function fetchContentFragmentByPath(fragmentPath) {
       const imageRef = item.references?.find(ref => ref.path === fields.image);
       const imageAssetId = imageRef?.assetId?.replace('urn:aaid:aem:', '') || null;
 
-      console.log('Content Fragment Title:', fields.title);
-
       return {
         title: fields.title || '',
         description: fields.description || '',

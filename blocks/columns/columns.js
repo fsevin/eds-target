@@ -59,7 +59,8 @@ export default function decorate(block) {
         if (img) {
           // Replace invalid image with placeholder SVG
           p.innerHTML = createPlaceholderSVG('image', '4:3');
-          //p.setAttribute('data-aue-type', 'media');
+          p.removeAttribute('data-aue-behavior');
+          p.setAttribute('data-aue-type', 'media');
         } else {
           p.textContent = 'Add your content here.';
           p.classList.add('italic', 'text-gray-400');
