@@ -6,6 +6,17 @@
     ]
   },
   {
+    "id": "columns",
+    "components": []
+  },
+  {
+    "id": "column",
+    "components": [
+      "text",
+      "image"
+    ]
+  },
+  {
     "id": "section",
     "components": [
       "menu",
