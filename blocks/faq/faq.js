@@ -1,3 +1,5 @@
+import { isAuthorMode } from '../../scripts/utils.js';
+
 function extractFAQs(block) {
   const rows = [...block.children];
   const faqs = [];
@@ -96,6 +98,16 @@ export default async function decorate(block) {
 
   // Add click handlers for collapsible FAQ items
   block.querySelectorAll('.faq-toggle').forEach((toggle) => {
+    // Expand all by default in author mode
+    if (isAuthorMode) {
+      const answerId = toggle.getAttribute('aria-controls');
+      const answer = document.getElementById(answerId);
+      const icon = toggle.querySelector('.faq-icon');
+      toggle.setAttribute('aria-expanded', 'true');
+      answer.classList.remove('hidden');
+      icon.classList.add('rotate-180');
+    }
+
     toggle.addEventListener('click', () => {
       const expanded = toggle.getAttribute('aria-expanded') === 'true';
       const answerId = toggle.getAttribute('aria-controls');
