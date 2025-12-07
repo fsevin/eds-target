@@ -1,5 +1,7 @@
 
 export default function decorate(block) {
+
+      console.log(block);
   block.classList.add('py-20', 'bg-white');
 
   const container = document.createElement('div');
@@ -11,7 +13,6 @@ export default function decorate(block) {
 
     const columns = row.querySelectorAll(':scope > div');
     columns.forEach((col, index) => {
-      console.log(col.children);
       if (col.children.length === 0) {
         col.textContent = `Column ${index + 1}`;
       }
@@ -87,5 +88,7 @@ export default function decorate(block) {
     container.appendChild(row);
     block.innerHTML = '';
     block.appendChild(container);
+
+    console.log(block);
   }
 }
