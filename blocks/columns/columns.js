@@ -67,6 +67,11 @@ export default function decorate(block) {
         element.setAttribute('data-aue-type', 'media');
         element.setAttribute('data-aue-prop', 'fileReference');
       });
+
+      const aueLinks = col.querySelectorAll('a[data-aue-model]');
+      aueLinks.forEach((link) => {
+        link.setAttribute('data-aue-prop', 'text');
+      });
     });
 
     const images = block.querySelectorAll('img');
