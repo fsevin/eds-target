@@ -36,7 +36,6 @@ function handleParagraph(p, columnIndex) {
   const hasValidImage = img?.src?.trim() && !img.src.includes('about:error');
 
   if (img) {
-    p.removeAttribute('data-aue-behavior');
     p.setAttribute('data-aue-prop', 'fileReference');
     p.setAttribute('data-aue-type', 'media');
   }
