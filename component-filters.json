@@ -13,7 +13,8 @@
     "id": "column",
     "components": [
       "text",
-      "image"
+      "image",
+      "button"
     ]
   },
   {
