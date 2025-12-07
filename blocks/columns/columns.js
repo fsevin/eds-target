@@ -24,13 +24,11 @@ export default function decorate(block) {
   );
 
   // Apply Tailwind classes to each column
-  columns.forEach((column, index) => {
+  columns.forEach((column) => {
     column.classList.add(
       'flex-1',
       'min-w-0',
     );
-
-
 
     // Style headings within columns
     column.querySelectorAll('h2').forEach((h) => {
@@ -51,6 +49,11 @@ export default function decorate(block) {
 
     column.querySelectorAll('p').forEach((p) => {
       p.classList.add('text-base', 'text-gray-600', 'leading-relaxed', 'mb-4', 'mt-0');
+      // Add placeholder text if paragraph is empty
+      if (!p.textContent.trim() && !p.querySelector('img')) {
+        p.textContent = 'Add your content here.';
+        p.classList.add('italic', 'text-gray-400');
+      }
     });
 
     // Style images within columns
