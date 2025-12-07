@@ -27,17 +27,6 @@ export default function decorate(block) {
         picture.classList.add('h-full', 'w-full', 'block');
       });
 
-      const aueImages = col.querySelectorAll('[data-aue-model="image"]');
-      aueImages.forEach((element) => {
-        element.setAttribute('data-aue-type', 'media');
-        element.classList.add('relative', 'rounded-2xl', 'overflow-hidden', 'shadow-2xl', 'h-full');
-
-        const picture = element.querySelector('picture');
-        if (picture) {
-          picture.classList.add('h-full', 'w-full', 'block');
-        }
-      });
-
       const buttons = col.querySelectorAll('a.button');
       buttons.forEach((button) => {
         button.classList.add('inline-flex', 'items-center', 'px-8', 'py-4', 'bg-brand-600', 'text-white', 'font-semibold', 'rounded-2xl', 'hover:bg-brand-700', 'transition', 'shadow-lg', 'hover:shadow-xl');
@@ -71,6 +60,11 @@ export default function decorate(block) {
       const paragraphs = col.querySelectorAll('p');
       paragraphs.forEach((p) => {
         p.classList.add('text-lg', 'text-gray-600', 'leading-relaxed');
+      });
+
+      const aueImages = col.querySelectorAll('[data-aue-model="image"]');
+      aueImages.forEach((element) => {
+        element.setAttribute('data-aue-type', 'media');
       });
     });
 
