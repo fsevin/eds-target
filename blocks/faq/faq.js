@@ -10,6 +10,14 @@ function extractFAQs(block) {
     const question = cells[0]?.textContent?.trim() || 'FAQ Question';
     const answer = cells[1]?.innerHTML?.trim() || 'FAQ Answer';
 
+    // Extract all data-aue-* attributes dynamically from row element
+    const attributes = {};
+    Array.from(row.attributes).forEach(attr => {
+      if (attr.name.startsWith('data-aue-')) {
+        attributes[attr.name] = attr.value;
+      }
+    });
+
     faqs.push({
       question,
       answer,
