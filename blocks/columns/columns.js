@@ -1,3 +1,5 @@
+import { createPlaceholderSVG } from '../../scripts/utils.js';
+
 export default function decorate(block) {
   // Get the first child (row container)
   const row = block.querySelector(':scope > div');
@@ -51,10 +53,15 @@ export default function decorate(block) {
       p.classList.add('text-base', 'text-gray-600', 'leading-relaxed', 'mb-4', 'mt-0');
       // Add placeholder text if paragraph is empty or has image with empty src
       const img = p.querySelector('img');
-      const hasValidImage = img && img.src && img.src.trim() !== '';
+      const hasValidImage = img && img.src && img.src.trim() !== '' && !img.src.includes('about:error');
       if (!p.textContent.trim() && !hasValidImage) {
-        p.textContent = 'Add your content here.';
-        p.classList.add('italic', 'text-gray-400');
+        if (img) {
+          // Replace invalid image with placeholder SVG
+          p.innerHTML = createPlaceholderSVG('image', '4:3');
+        } else {
+          p.textContent = 'Add your content here.';
+          p.classList.add('italic', 'text-gray-400');
+        }
       }
     });
 
