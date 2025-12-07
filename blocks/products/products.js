@@ -98,7 +98,7 @@ export default async function decorate(block) {
   const content = document.createRange().createContextualFragment(`
     <section class="py-20 bg-white">
       <div class="container mx-auto px-4">
-        <div class="mb-6 text-lg font-semibold text-gray-700" data-results-count></div>
+        <div class="mb-6 text-lg font-semibold text-gray-700 border border-gray-300 rounded-lg px-4 py-2 inline-block" data-results-count></div>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" data-products-grid>
           ${productsHTML}
         </div>
