@@ -14,7 +14,6 @@ export default function decorate(block) {
       if (col.children.length === 0) {
         col.textContent = `Column ${index + 1}`;
       }
-
       const hasPicture = col.querySelector('picture');
 
       if (hasPicture) {
