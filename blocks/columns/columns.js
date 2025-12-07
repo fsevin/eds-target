@@ -11,7 +11,7 @@ export default function decorate(block) {
 
     const columns = row.querySelectorAll(':scope > div');
     columns.forEach((col, index) => {
-      if (col.children.length === 0 || col.textContent.trim() === '') {
+      if (col.children.length === 0) {
         col.textContent = `Column ${index + 1}`;
       }
 
