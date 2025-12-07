@@ -51,7 +51,6 @@ export default async function decorate(block) {
       .map(([key, value]) => `${key}="${value}"`)
       .join(' ');
 
-    // In author mode, expand all FAQ items by default
     const expandedByDefault = isAuthorMode;
     const hiddenClass = expandedByDefault ? '' : 'hidden';
     const rotateClass = expandedByDefault ? 'rotate-180' : '';
