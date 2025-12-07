@@ -49,8 +49,10 @@ export default function decorate(block) {
 
     column.querySelectorAll('p').forEach((p) => {
       p.classList.add('text-base', 'text-gray-600', 'leading-relaxed', 'mb-4', 'mt-0');
-      // Add placeholder text if paragraph is empty
-      if (!p.textContent.trim() && !p.querySelector('img')) {
+      // Add placeholder text if paragraph is empty or has image with empty src
+      const img = p.querySelector('img');
+      const hasValidImage = img && img.src && img.src.trim() !== '';
+      if (!p.textContent.trim() && !hasValidImage) {
         p.textContent = 'Add your content here.';
         p.classList.add('italic', 'text-gray-400');
       }
