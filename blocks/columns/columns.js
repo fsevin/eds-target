@@ -38,6 +38,9 @@ function handleParagraph(p, columnIndex) {
   if (img) {
     p.setAttribute('data-aue-prop', 'fileReference');
     p.setAttribute('data-aue-type', 'media');
+    // Make image container fit the image
+    p.classList.add('overflow-hidden', 'rounded-lg');
+    p.classList.remove('text-lg', 'text-gray-600', 'leading-relaxed', 'mb-4', 'mt-0');
   }
 
   if (!p.textContent.trim() && !hasValidImage) {
@@ -70,7 +73,7 @@ export default function decorate(block) {
     styleHeadings(column);
     column.querySelectorAll('p').forEach((p) => handleParagraph(p, columnIndex));
     column.querySelectorAll('img').forEach((img) => {
-      img.classList.add('w-full', 'h-auto', 'rounded-lg');
+      img.classList.add('w-full', 'h-full', 'object-cover', 'rounded-lg');
     });
   });
 
