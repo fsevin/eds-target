@@ -66,7 +66,7 @@ export default async function decorate(block) {
         </svg>
       </button>
       <div id="faq-answer-${index}" class="faq-answer ${hiddenClass} px-8 pb-8">
-        <p class="text-gray-600 leading-relaxed" data-aue-prop="answer" data-aue-type="text" data-aue-label="Answer">
+        <p class="text-gray-600 leading-relaxed" data-aue-prop="answer" data-aue-type="richtext" data-aue-label="Answer">
           ${faq.answer}
         </p>
       </div>
