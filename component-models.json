@@ -534,7 +534,7 @@
       {
         "component": "richtext",
         "name": "answer",
-        "label": "Answer",
+        "label": "Answer2",
         "valueType": "string"
       }
     ]
