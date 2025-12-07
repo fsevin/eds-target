@@ -152,7 +152,7 @@ if (url.includes('/language-masters/')) {
   meta.name = 'urn:adobe:aue:config:disable';
   meta.content = 'duplicate,copy';
   document.getElementsByTagName('head')[0].appendChild(meta);*/
-u
+
   document.querySelectorAll('[data-aue-type]').forEach((el) => {
     if (el.tagName.toLowerCase() === 'body' || el.getAttribute('data-aue-type') === 'container' || el.getAttribute('data-aue-type') === 'column') {
       //el.removeAttribute('data-aue-resource');
