@@ -42,7 +42,7 @@ function handleParagraph(p, columnIndex) {
 
   if (!p.textContent.trim() && !hasValidImage) {
     if (img) {
-      p.innerHTML = createPlaceholderSVG('image', '4:3');
+      p.innerHTML = createPlaceholderSVG('image', '5:3');
     } else {
       const placeholderText = p.getAttribute('data-aue-type') === 'container'
         ? `Column ${columnIndex + 1}`

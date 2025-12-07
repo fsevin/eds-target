@@ -192,7 +192,12 @@ export async function fetchContentFragmentByPath(fragmentPath) {
 }
 
 export function createPlaceholderSVG(type = 'image', aspectRatio = '4:3') {
-  const dimensions = aspectRatio === '16:9' ? { width: 800, height: 450 } : { width: 800, height: 600 };
+  const dimensionsMap = {
+    '16:9': { width: 800, height: 450 },
+    '5:3': { width: 800, height: 480 },
+    '4:3': { width: 800, height: 600 },
+  };
+  const dimensions = dimensionsMap[aspectRatio] || dimensionsMap['4:3'];
   const centerX = dimensions.width / 2;
   const centerY = dimensions.height / 2;
 
