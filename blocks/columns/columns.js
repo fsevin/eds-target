@@ -60,6 +60,7 @@ export default function decorate(block) {
           // Replace invalid image with placeholder SVG
           p.innerHTML = createPlaceholderSVG('image', '4:3');
           p.removeAttribute('data-aue-behavior');
+          p.removeAttribute('data-aue-model');
           p.setAttribute('data-aue-type', 'media');
           p.setAttribute('data-aue-prop', 'image');
         } else {
