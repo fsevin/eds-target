@@ -18,7 +18,7 @@ export default function decorate(block) {
         if (p.textContent.trim() === '' && p.children.length === 0) {
           const parent = p.parentElement;
           if (parent && parent.getAttribute('data-aue-prop') === 'text') {
-            p.textContent = 'Insert texte here';
+            p.textContent = 'Insert text here';
           } else {
             p.textContent = `Column ${index + 1}`;
           }
