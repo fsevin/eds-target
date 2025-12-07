@@ -54,10 +54,12 @@ export default function decorate(block) {
       // Add placeholder text if paragraph is empty or has image with empty src
       const img = p.querySelector('img');
       const hasValidImage = img && img.src && img.src.trim() !== '' && !img.src.includes('about:error');
+      
       if (!p.textContent.trim() && !hasValidImage) {
         if (img) {
           // Replace invalid image with placeholder SVG
           p.innerHTML = createPlaceholderSVG('image', '4:3');
+          p.setAttribute('data-aue-type', 'media');
         } else {
           p.textContent = 'Add your content here.';
           p.classList.add('italic', 'text-gray-400');
