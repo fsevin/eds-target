@@ -35,7 +35,7 @@ export default async function decorate(block) {
 
   // Extract data from block with placeholders
   const title = rows[0]?.querySelector('div')?.textContent?.trim() || 'Frequently Asked Questions';
-  const description = rows[1]?.querySelector('div')?.innerHTML || '<p>Find answers to common questions about our services.</p>';
+  const description = rows[1]?.querySelector('div')?.children[0]?.innerHTML.trim() || '<p>Find answers to common questions about our services.</p>';
   const styleValue = rows[2]?.querySelector('div')?.textContent?.trim().toLowerCase() || '';
 
   // Determine background class based on style
