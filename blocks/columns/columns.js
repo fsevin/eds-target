@@ -1,7 +1,5 @@
 
 export default function decorate(block) {
-
-      console.log(block);
   block.classList.add('py-20', 'bg-white');
 
   const container = document.createElement('div');
@@ -13,9 +11,14 @@ export default function decorate(block) {
 
     const columns = row.querySelectorAll(':scope > div');
     columns.forEach((col, index) => {
-      if (col.children.length === 0) {
-        col.textContent = `Column ${index + 1}`;
-      }
+      // Check for empty p elements and display column index
+      const emptyParagraphs = col.querySelectorAll('p');
+      emptyParagraphs.forEach((p) => {
+        if (p.textContent.trim() === '' && p.children.length === 0) {
+          p.textContent = `${index + 1}`;
+        }
+      });
+
       const hasPicture = col.querySelector('picture');
 
       if (hasPicture) {
@@ -88,7 +91,5 @@ export default function decorate(block) {
     container.appendChild(row);
     block.innerHTML = '';
     block.appendChild(container);
-
-    console.log(block);
   }
 }
