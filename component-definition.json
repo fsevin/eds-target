@@ -98,7 +98,7 @@
           }
         },
         {
-          "title": "FAQ",
+          "title": "FAQ Item",
           "id": "faq-item",
           "plugins": {
             "xwalk": {
