@@ -27,8 +27,9 @@ export default function decorate(block) {
         picture.classList.add('h-full', 'w-full', 'block');
       });
 
-      const aueImages = col.querySelectorAll('[data-aue-model="image"][data-aue-type="media"]');
+      const aueImages = col.querySelectorAll('[data-aue-model="image"]');
       aueImages.forEach((element) => {
+        element.setAttribute('data-aue-type', 'media');
         element.classList.add('relative', 'rounded-2xl', 'overflow-hidden', 'shadow-2xl', 'h-full');
 
         const picture = element.querySelector('picture');
