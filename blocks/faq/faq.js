@@ -74,7 +74,6 @@ export default async function decorate(block) {
   `;
   }).join('');
 
-  // Build complete HTML structure
   const content = document.createRange().createContextualFragment(`
     <section class="py-20 ${sectionClasses}">
       <div class="container mx-auto px-4">
