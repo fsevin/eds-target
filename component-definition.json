@@ -56,10 +56,6 @@
       "id": "blocks",
       "components": [
         {
-      "title": "Blocks",
-      "id": "blocks",
-      "components": [
-        {
           "title": "Columns",
           "id": "columns",
           "plugins": {
