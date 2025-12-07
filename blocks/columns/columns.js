@@ -10,7 +10,11 @@ export default function decorate(block) {
     row.classList.add('flex', 'flex-col', 'md:flex-row', 'gap-6');
 
     const columns = row.querySelectorAll(':scope > div');
-    columns.forEach((col) => {
+    columns.forEach((col, index) => {
+      if (col.children.length === 0 || col.textContent.trim() === '') {
+        col.textContent = `Column ${index + 1}`;
+      }
+
       const hasPicture = col.querySelector('picture');
 
       if (hasPicture) {
