@@ -1,94 +1,74 @@
 import { createPlaceholderSVG } from '../../scripts/utils.js';
 
+// Heading styles configuration
+const HEADING_STYLES = {
+  h2: ['text-3xl', 'md:text-4xl', 'font-bold', 'text-gray-900', 'mb-4', 'mt-0'],
+  h3: ['text-2xl', 'md:text-3xl', 'font-bold', 'text-gray-900', 'mb-3', 'mt-0'],
+  h4: ['text-xl', 'md:text-2xl', 'font-semibold', 'text-gray-900', 'mb-3', 'mt-0'],
+  h5: ['text-lg', 'md:text-xl', 'font-semibold', 'text-gray-900', 'mb-2', 'mt-0'],
+  h6: ['text-base', 'md:text-lg', 'font-semibold', 'text-gray-900', 'mb-2', 'mt-0'],
+};
+
+function styleHeadings(column) {
+  Object.entries(HEADING_STYLES).forEach(([tag, classes]) => {
+    column.querySelectorAll(tag).forEach((h) => h.classList.add(...classes));
+  });
+}
+
+function handleParagraph(p, columnIndex) {
+  p.classList.add('text-lg', 'text-gray-600', 'leading-relaxed', 'mb-4', 'mt-0');
+
+  const img = p.querySelector('img');
+  const hasValidImage = img?.src?.trim() && !img.src.includes('about:error');
+
+  if (img) {
+    p.removeAttribute('data-aue-behavior');
+    p.setAttribute('data-aue-prop', 'fileReference');
+    p.setAttribute('data-aue-type', 'media');
+  }
+
+  if (!p.textContent.trim() && !hasValidImage) {
+    if (img) {
+      p.innerHTML = createPlaceholderSVG('image', '4:3');
+    } else {
+      const placeholderText = p.getAttribute('data-aue-type') === 'container'
+        ? `Column ${columnIndex + 1}`
+        : 'Add your content here.';
+      p.textContent = placeholderText;
+      p.classList.add('italic', 'text-gray-400');
+    }
+  }
+}
+
 export default function decorate(block) {
-  // Get the first child (row container)
   const row = block.querySelector(':scope > div');
   if (!row) return;
 
-  // Get all columns (direct children divs of the row)
   const columns = row.querySelectorAll(':scope > div');
 
-  // Wrap content in section with container for consistent padding
+  // Setup row layout
+  row.classList.add('flex', 'flex-col', 'md:flex-row', 'items-start', 'gap-6', 'md:gap-8');
+
+  // Process each column
+  columns.forEach((column, columnIndex) => {
+    column.classList.add('flex-1', 'min-w-0');
+
+    // Style elements
+    styleHeadings(column);
+    column.querySelectorAll('p').forEach((p) => handleParagraph(p, columnIndex));
+    column.querySelectorAll('img').forEach((img) => {
+      img.classList.add('w-full', 'h-auto', 'rounded-lg');
+    });
+  });
+
+  // Build structure
   const wrapper = document.createElement('section');
   wrapper.className = 'py-20 bg-white';
 
   const container = document.createElement('div');
   container.className = 'container mx-auto px-4';
 
-  // Apply Tailwind classes to the row container for flex layout
-  row.classList.add(
-    'flex',
-    'flex-col',
-    'md:flex-row',
-    'items-start',
-    'gap-6',
-    'md:gap-8',
-  );
-
-  // Apply Tailwind classes to each column
-  columns.forEach((column, columnIndex) => {
-    column.classList.add(
-      'flex-1',
-      'min-w-0',
-    );
-
-    // Style headings within columns
-    column.querySelectorAll('h2').forEach((h) => {
-      h.classList.add('text-3xl', 'md:text-4xl', 'font-bold', 'text-gray-900', 'mb-4', 'mt-0');
-    });
-    column.querySelectorAll('h3').forEach((h) => {
-      h.classList.add('text-2xl', 'md:text-3xl', 'font-bold', 'text-gray-900', 'mb-3', 'mt-0');
-    });
-    column.querySelectorAll('h4').forEach((h) => {
-      h.classList.add('text-xl', 'md:text-2xl', 'font-semibold', 'text-gray-900', 'mb-3', 'mt-0');
-    });
-    column.querySelectorAll('h5').forEach((h) => {
-      h.classList.add('text-lg', 'md:text-xl', 'font-semibold', 'text-gray-900', 'mb-2', 'mt-0');
-    });
-    column.querySelectorAll('h6').forEach((h) => {
-      h.classList.add('text-base', 'md:text-lg', 'font-semibold', 'text-gray-900', 'mb-2', 'mt-0');
-    });
-
-    column.querySelectorAll('p').forEach((p) => {
-      p.classList.add('text-lg', 'text-gray-600', 'leading-relaxed', 'mb-4', 'mt-0');
-      // Add placeholder text if paragraph is empty or has image with empty src
-      const img = p.querySelector('img');
-      const hasValidImage = img && img.src && img.src.trim() !== '' && !img.src.includes('about:error');
-      
-      if (img) {
-          p.removeAttribute('data-aue-behavior');
-          p.setAttribute('data-aue-prop', 'fileReference');
-          p.setAttribute('data-aue-type', 'media');
-        }
-      
-      if (!p.textContent.trim() && !hasValidImage) {
-        if (img) {
-          // Replace invalid image with placeholder SVG
-          p.innerHTML = createPlaceholderSVG('image', '4:3');
-          p.removeAttribute('data-aue-behavior');
-          p.setAttribute('data-aue-prop', 'fileReference');
-          p.setAttribute('data-aue-type', 'media');
-        } else {
-          // Add column index if p is a container type
-          const placeholderText = p.getAttribute('data-aue-type') === 'container'
-            ? `Column ${columnIndex + 1}`
-            : 'Add your content here.';
-          p.textContent = placeholderText;
-          p.classList.add('italic', 'text-gray-400');
-        }
-      }
-    });
-
-    // Style images within columns
-    const images = column.querySelectorAll('img');
-    images.forEach((img) => {
-      img.classList.add('w-full', 'h-auto', 'rounded-lg');
-    });
-  });
-
-  // Build the structure
   container.appendChild(row);
   wrapper.appendChild(container);
-  block.textContent = '';
-  block.appendChild(wrapper);
+  block.replaceChildren(wrapper);
 }
