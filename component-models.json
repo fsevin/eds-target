@@ -532,7 +532,7 @@
         "label": "Question"
       },
       {
-        "component": "text",
+        "component": "richtext",
         "name": "answer",
         "label": "Answer",
         "valueType": "string"
