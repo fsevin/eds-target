@@ -10,7 +10,7 @@ function extractFAQs(block) {
     const cells = [...row.children];
 
     const question = cells[0]?.textContent?.trim() || 'FAQ Question';
-    const answer = cells[1]?.innerHTML?.trim() || 'FAQ Answer';
+    const answer = cells[1]?.children[0]?.innerHTML?.trim() || 'FAQ Answer';
 
     // Extract all data-aue-* attributes dynamically from row element
     const attributes = {};
