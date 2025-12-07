@@ -10,14 +10,6 @@ function extractFAQs(block) {
     const question = cells[0]?.textContent?.trim() || 'FAQ Question';
     const answer = cells[1]?.innerHTML?.trim() || 'FAQ Answer';
 
-    // Extract all data-aue-* attributes dynamically from row element
-    const attributes = {};
-    Array.from(row.attributes).forEach(attr => {
-      if (attr.name.startsWith('data-aue-')) {
-        attributes[attr.name] = attr.value;
-      }
-    });
-
     faqs.push({
       question,
       answer,
@@ -60,7 +52,7 @@ export default async function decorate(block) {
         </svg>
       </button>
       <div id="faq-answer-${index}" class="faq-answer hidden px-8 pb-8">
-        <p class="text-gray-600 leading-relaxed" data-aue-prop="answer" data-aue-type="text" data-aue-label="Answer">
+        <p class="text-gray-600 leading-relaxed" data-aue-prop="answer" data-aue-type="richtext" data-aue-label="Answer">
           ${faq.answer}
         </p>
       </div>
