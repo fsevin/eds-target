@@ -1,5 +1,3 @@
-import { isAuthorMode } from '../../scripts/utils.js';
-
 function extractFAQs(block) {
   const rows = [...block.children];
   const faqs = [];
@@ -96,36 +94,23 @@ export default async function decorate(block) {
   block.textContent = '';
   block.append(content);
 
-  // Add click handlers for collapsible FAQ items (only in non-author mode)
-  if (!isAuthorMode) {
-    block.querySelectorAll('.faq-toggle').forEach((toggle) => {
-      toggle.addEventListener('click', () => {
-        const expanded = toggle.getAttribute('aria-expanded') === 'true';
-        const answerId = toggle.getAttribute('aria-controls');
-        const answer = document.getElementById(answerId);
-        const icon = toggle.querySelector('.faq-icon');
-
-        toggle.setAttribute('aria-expanded', !expanded);
-
-        if (expanded) {
-          answer.classList.add('hidden');
-          icon.classList.remove('rotate-180');
-        } else {
-          answer.classList.remove('hidden');
-          icon.classList.add('rotate-180');
-        }
-      });
-    });
-  } else {
-    // In author mode, expand all and remove toggle UI
-    block.querySelectorAll('.faq-toggle').forEach((toggle) => {
+  // Add click handlers for collapsible FAQ items
+  block.querySelectorAll('.faq-toggle').forEach((toggle) => {
+    toggle.addEventListener('click', () => {
+      const expanded = toggle.getAttribute('aria-expanded') === 'true';
       const answerId = toggle.getAttribute('aria-controls');
       const answer = document.getElementById(answerId);
       const icon = toggle.querySelector('.faq-icon');
-      toggle.setAttribute('aria-expanded', 'true');
-      answer.classList.remove('hidden');
-      icon.classList.add('hidden');
-      toggle.style.cursor = 'default';
+
+      toggle.setAttribute('aria-expanded', !expanded);
+
+      if (expanded) {
+        answer.classList.add('hidden');
+        icon.classList.remove('rotate-180');
+      } else {
+        answer.classList.remove('hidden');
+        icon.classList.add('rotate-180');
+      }
     });
-  }
+  });
 }
