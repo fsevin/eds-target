@@ -86,6 +86,7 @@ export default function decorate(block) {
       aueLinks.forEach((link) => {
         link.setAttribute('data-aue-prop', 'text');
         link.setAttribute('data-aue-type', 'text');
+        link.setAttribute('data-aue-label', 'Text');
       });
     });
 
