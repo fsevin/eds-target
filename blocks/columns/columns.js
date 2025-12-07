@@ -64,7 +64,7 @@ export default function decorate(block) {
         } else {
           // Add column index if p is a container type
           const placeholderText = p.getAttribute('data-aue-type') === 'container'
-            ? `Add your content here (Column ${columnIndex + 1}).`
+            ? `Column ${columnIndex + 1}`
             : 'Add your content here.';
           p.textContent = placeholderText;
           p.classList.add('italic', 'text-gray-400');
