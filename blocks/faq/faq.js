@@ -43,20 +43,27 @@ export default async function decorate(block) {
   const faqs = extractFAQs(block);
 
   // Build FAQ items HTML
-  const faqsHTML = faqs.map((faq) => {
+  const faqsHTML = faqs.map((faq, index) => {
     // Convert attributes object to HTML attribute string
     const attributesStr = Object.entries(faq.attributes)
       .map(([key, value]) => `${key}="${value}"`)
       .join(' ');
 
     return `
-    <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-8 mb-6 last:mb-0" ${attributesStr}>
-      <h3 class="text-lg font-semibold text-gray-900 mb-3" data-aue-prop="question" data-aue-type="text" data-aue-label="Question">
-        ${faq.question}
-      </h3>
-      <p class="text-gray-600 leading-relaxed" data-aue-prop="answer" data-aue-type="text" data-aue-label="Answer">
-        ${faq.answer}
-      </p>
+    <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 mb-6 last:mb-0" ${attributesStr}>
+      <button type="button" class="faq-toggle w-full flex items-center justify-between p-8 text-left" aria-expanded="false" aria-controls="faq-answer-${index}">
+        <h3 class="text-lg font-semibold text-gray-900" data-aue-prop="question" data-aue-type="text" data-aue-label="Question">
+          ${faq.question}
+        </h3>
+        <svg class="faq-icon w-6 h-6 text-gray-500 transition-transform duration-300 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </button>
+      <div id="faq-answer-${index}" class="faq-answer hidden px-8 pb-8">
+        <p class="text-gray-600 leading-relaxed" data-aue-prop="answer" data-aue-type="text" data-aue-label="Answer">
+          ${faq.answer}
+        </p>
+      </div>
     </div>
   `;
   }).join('');
@@ -86,4 +93,24 @@ export default async function decorate(block) {
   // Replace block content with new structure
   block.textContent = '';
   block.append(content);
+
+  // Add click handlers for collapsible FAQ items
+  block.querySelectorAll('.faq-toggle').forEach((toggle) => {
+    toggle.addEventListener('click', () => {
+      const expanded = toggle.getAttribute('aria-expanded') === 'true';
+      const answerId = toggle.getAttribute('aria-controls');
+      const answer = document.getElementById(answerId);
+      const icon = toggle.querySelector('.faq-icon');
+
+      toggle.setAttribute('aria-expanded', !expanded);
+
+      if (expanded) {
+        answer.classList.add('hidden');
+        icon.classList.remove('rotate-180');
+      } else {
+        answer.classList.remove('hidden');
+        icon.classList.add('rotate-180');
+      }
+    });
+  });
 }
