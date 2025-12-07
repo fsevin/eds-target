@@ -111,7 +111,7 @@ export default async function decorate(block) {
   const content = document.createRange().createContextualFragment(`
     <section class="py-20 py-20 bg-white">
       <div class="container mx-auto px-4">
-        <div class="grid lg:grid-cols-5 gap-12 items-center">
+        <div class="grid lg:grid-cols-5 gap-12 items-center border border-gray-200 rounded-2xl p-8 bg-gray-50">
           ${flipLayout ? textBlock + imageBlock : imageBlock + textBlock}
         </div>
       </div>
