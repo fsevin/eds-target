@@ -27,9 +27,49 @@ export default function decorate(block) {
         picture.classList.add('h-full', 'w-full', 'block');
       });
 
+      const aueImages = col.querySelectorAll('[data-aue-model="image"][data-aue-type="media"]');
+      aueImages.forEach((element) => {
+        element.classList.add('relative', 'rounded-2xl', 'overflow-hidden', 'shadow-2xl', 'h-full');
+
+        const picture = element.querySelector('picture');
+        if (picture) {
+          picture.classList.add('h-full', 'w-full', 'block');
+        }
+      });
+
       const buttons = col.querySelectorAll('a.button');
       buttons.forEach((button) => {
         button.classList.add('inline-flex', 'items-center', 'px-8', 'py-4', 'bg-brand-600', 'text-white', 'font-semibold', 'rounded-2xl', 'hover:bg-brand-700', 'transition', 'shadow-lg', 'hover:shadow-xl');
+      });
+
+      const h2 = col.querySelectorAll('h2');
+      h2.forEach((heading) => {
+        heading.classList.add('text-4xl', 'md:text-5xl', 'font-bold', 'text-gray-900', 'leading-tight');
+      });
+
+      const h3 = col.querySelectorAll('h3');
+      h3.forEach((heading) => {
+        heading.classList.add('text-3xl', 'md:text-4xl', 'font-bold', 'text-gray-900', 'leading-tight');
+      });
+
+      const h4 = col.querySelectorAll('h4');
+      h4.forEach((heading) => {
+        heading.classList.add('text-2xl', 'md:text-3xl', 'font-bold', 'text-gray-900', 'leading-tight');
+      });
+
+      const h5 = col.querySelectorAll('h5');
+      h5.forEach((heading) => {
+        heading.classList.add('text-xl', 'md:text-2xl', 'font-bold', 'text-gray-900', 'leading-tight');
+      });
+
+      const h6 = col.querySelectorAll('h6');
+      h6.forEach((heading) => {
+        heading.classList.add('text-lg', 'md:text-xl', 'font-bold', 'text-gray-900', 'leading-tight');
+      });
+
+      const paragraphs = col.querySelectorAll('p');
+      paragraphs.forEach((p) => {
+        p.classList.add('text-lg', 'text-gray-600', 'leading-relaxed');
       });
     });
 
