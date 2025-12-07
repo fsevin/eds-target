@@ -59,6 +59,9 @@ export default function decorate(block) {
         if (img) {
           // Replace invalid image with placeholder SVG
           p.innerHTML = createPlaceholderSVG('image', '4:3');
+          p.removeAttribute('data-aue-behavior');
+          p.removeAttribute('data-aue-model');
+          p.setAttribute('data-aue-prop', 'fileReference');
         } else {
           // Add column index if p is a container type
           const placeholderText = p.getAttribute('data-aue-type') === 'container'
