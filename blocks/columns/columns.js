@@ -61,6 +61,7 @@ export default function decorate(block) {
           p.innerHTML = createPlaceholderSVG('image', '4:3');
           p.removeAttribute('data-aue-behavior');
           p.setAttribute('data-aue-type', 'media');
+          p.setAttribute('data-aue-prop', 'image');
         } else {
           // Add column index if p is a container type
           const placeholderText = p.getAttribute('data-aue-type') === 'container'
