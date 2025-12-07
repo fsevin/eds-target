@@ -30,11 +30,7 @@ export default function decorate(block) {
       'min-w-0',
     );
 
-    // Add placeholder if column is empty
-    if (!column.textContent.trim() && !column.querySelector('img, picture, video')) {
-      column.classList.add('p-8', 'text-center');
-      column.innerHTML = `<p class="text-gray-400 m-0">Column ${index + 1}</p>`;
-    }
+
 
     // Style headings within columns
     column.querySelectorAll('h2').forEach((h) => {
