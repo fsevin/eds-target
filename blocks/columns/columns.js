@@ -50,7 +50,7 @@ export default function decorate(block) {
     });
 
     column.querySelectorAll('p').forEach((p) => {
-      p.classList.add('text-base', 'text-gray-600', 'leading-relaxed', 'mb-4', 'mt-0');
+      p.classList.add('text-lg', 'text-gray-600', 'leading-relaxed', 'mb-4', 'mt-0');
       // Add placeholder text if paragraph is empty or has image with empty src
       const img = p.querySelector('img');
       const hasValidImage = img && img.src && img.src.trim() !== '' && !img.src.includes('about:error');
