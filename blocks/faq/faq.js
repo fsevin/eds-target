@@ -101,21 +101,6 @@ export default async function decorate(block) {
 
   // Add click handlers for collapsible FAQ items
   block.querySelectorAll('.faq-toggle').forEach((toggle) => {
-    toggle.addEventListener('click', () => {
-      const expanded = toggle.getAttribute('aria-expanded') === 'true';
-      const answerId = toggle.getAttribute('aria-controls');
-      const answer = document.getElementById(answerId);
-      const icon = toggle.querySelector('.faq-icon');
-
-      toggle.setAttribute('aria-expanded', !expanded);
-
-      if (expanded) {
-        answer.classList.add('hidden');
-        icon.classList.remove('rotate-180');
-      } else {
-        answer.classList.remove('hidden');
-        icon.classList.add('rotate-180');
-      }
-    });
+  
   });
 }
