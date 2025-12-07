@@ -84,7 +84,6 @@ export default function decorate(block) {
 
       const aueLinks = col.querySelectorAll('a');
       aueLinks.forEach((link) => {
-        link.setAttribute('data-aue-prop', 'text');
         link.setAttribute('data-aue-type', 'text');
         link.setAttribute('data-aue-label', 'Text');
       });
