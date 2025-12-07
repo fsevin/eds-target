@@ -16,6 +16,16 @@ function styleHeadings(column) {
 }
 
 function handleParagraph(p, columnIndex) {
+  const link = p.querySelector('a');
+  if (link) {
+    link.classList.add(
+      'inline-flex', 'items-center', 'px-6', 'py-2',
+      'bg-brand-600', 'text-white', 'font-semibold', 'rounded-xl',
+      'hover:bg-brand-700', 'transition', 'shadow-lg', 'hover:shadow-xl'
+    );
+    link.classList.remove('button');
+  }
+
   p.classList.add('text-lg', 'text-gray-600', 'leading-relaxed', 'mb-4', 'mt-0');
 
   const img = p.querySelector('img');
