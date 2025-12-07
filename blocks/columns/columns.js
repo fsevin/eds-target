@@ -26,7 +26,7 @@ export default function decorate(block) {
   );
 
   // Apply Tailwind classes to each column
-  columns.forEach((column) => {
+  columns.forEach((column, columnIndex) => {
     column.classList.add(
       'flex-1',
       'min-w-0',
@@ -62,7 +62,11 @@ export default function decorate(block) {
           p.removeAttribute('data-aue-behavior');
           p.setAttribute('data-aue-type', 'media');
         } else {
-          p.textContent = 'Add your content here.';
+          // Add column index if p is a container type
+          const placeholderText = p.getAttribute('data-aue-type') === 'container'
+            ? `Add your content here (Column ${columnIndex + 1}).`
+            : 'Add your content here.';
+          p.textContent = placeholderText;
           p.classList.add('italic', 'text-gray-400');
         }
       }
