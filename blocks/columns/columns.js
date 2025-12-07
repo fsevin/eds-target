@@ -1,3 +1,4 @@
+import { createPlaceholderSVG } from '../../scripts/utils.js';
 
 export default function decorate(block) {
   block.classList.add('py-20', 'bg-white');
@@ -91,6 +92,11 @@ export default function decorate(block) {
     const images = block.querySelectorAll('img');
     images.forEach((img) => {
       img.classList.add('w-full', 'h-full', 'object-cover');
+      // Set default SVG placeholder if img has no src attribute
+      if (!img.getAttribute('src')) {
+        img.src = `data:image/svg+xml,${encodeURIComponent(createPlaceholderSVG('image', '5:3'))}`;
+        img.alt = 'Placeholder image';
+      }
     });
 
     container.appendChild(row);
