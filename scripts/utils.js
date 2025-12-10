@@ -12,8 +12,11 @@ export function getCurrentLocale() {
   const path = window.location.pathname;
   const parts = path.split('/').filter(part => part !== '');
 
-  const countryIndex = isAuthorMode ? 2 : 0;
-  const langIndex = isAuthorMode ? 3 : 1;
+  const hasLaunches = path.includes('/launches/');
+  const launchOffset = (isAuthorMode && hasLaunches) ? 6 : 0;
+
+  const countryIndex = (isAuthorMode ? 2 : 0) + launchOffset;
+  const langIndex = (isAuthorMode ? 3 : 1) + launchOffset;
 
   return `${parts[countryIndex]}/${parts[langIndex]}`;
 }
