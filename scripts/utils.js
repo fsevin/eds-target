@@ -4,7 +4,9 @@ const DELIVERY_DOMAIN = 'https://delivery-p34570-e1263228.adobeaemcloud.com';
 
 function getSiteName() {
   const path = window.location.pathname;
-  const match = path.match(/^\/content\/([^/]+)\//);
+  const hasLaunches = path.startsWith('/content/launches/');
+  const launchPattern = hasLaunches ? /^\/content\/launches\/\d{4}\/\d{2}\/\d{2}\/[^/]+\/content\/([^/]+)\// : /^\/content\/([^/]+)\//;
+  const match = path.match(launchPattern);
   return match ? match[1] : '/';
 }
 
