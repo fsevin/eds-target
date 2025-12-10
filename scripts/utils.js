@@ -12,7 +12,7 @@ export function getCurrentLocale() {
   const path = window.location.pathname;
   const parts = path.split('/').filter(part => part !== '');
 
-  const hasLaunches = path.includes('/launches/');
+  const hasLaunches = path.startsWith('/content/launches/');
   const launchOffset = (isAuthorMode && hasLaunches) ? 6 : 0;
 
   const countryIndex = (isAuthorMode ? 2 : 0) + launchOffset;
