@@ -102,7 +102,7 @@ export default async function decorate(block) {
 
     // Overlay with title
     const overlay = document.createElement('div');
-    const overlayOpacity = isAuthorMode() ? 'opacity-100' : 'opacity-0 group-hover:opacity-100';
+    const overlayOpacity = isAuthorMode ? 'opacity-100' : 'opacity-0 group-hover:opacity-100';
     overlay.className = `absolute inset-0 bg-brand-900/80 ${overlayOpacity} transition-opacity duration-300 flex items-center justify-center p-6`;
 
     const titleElement = document.createElement('span');
