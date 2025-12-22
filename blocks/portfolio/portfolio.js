@@ -1,11 +1,11 @@
-import { isAuthorMode } from '../../scripts/utils.js';
+import { isAuthorMode, createPlaceholderSVG } from '../../scripts/utils.js';
 
 export default async function decorate(block) {
   const rows = [...block.children];
 
   // Extract header configuration from first 3 rows
   const title = rows[0]?.querySelector('div')?.textContent?.trim() || 'Our Portfolio';
-  const description = rows[1]?.querySelector('div')?.children[0]?.innerHTML.trim() || '';
+  const description = rows[1]?.querySelector('div')?.children[0]?.innerHTML.trim() || '<p>Explore our collection of creative projects and successful collaborations.</p>';
   const styleValue = rows[2]?.querySelector('div')?.textContent?.trim().toLowerCase() || '';
 
   // Determine background color based on style
@@ -55,7 +55,7 @@ export default async function decorate(block) {
 
     // Extract portfolio item data
     const imageElement = cells[0]?.querySelector('picture') || cells[0]?.querySelector('img');
-    const itemTitle = cells[1]?.querySelector('div')?.textContent?.trim() || '';
+    const itemTitle = cells[1]?.querySelector('div')?.textContent?.trim() || 'Portfolio Item Title';
     const linkHref = cells[2]?.querySelector('div')?.textContent?.trim() || '#';
 
     // Create portfolio item card
@@ -91,6 +91,13 @@ export default async function decorate(block) {
       }
 
       imageContainer.appendChild(clonedImage);
+    } else {
+      // Create placeholder image if no image is provided
+      const placeholderImg = document.createElement('img');
+      placeholderImg.src = `data:image/svg+xml,${encodeURIComponent(createPlaceholderSVG('image', '4:3'))}`;
+      placeholderImg.alt = 'Portfolio placeholder image';
+      placeholderImg.className = 'w-full h-full object-cover group-hover:scale-110 transition-transform duration-300';
+      imageContainer.appendChild(placeholderImg);
     }
 
     // Overlay with title
