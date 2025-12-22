@@ -36,7 +36,7 @@ export default async function decorate(block) {
 
   // Create portfolio grid
   const portfolioGrid = document.createElement('div');
-  portfolioGrid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8';
+  portfolioGrid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0';
 
   // Extract portfolio items from remaining rows (starting at row 3)
   for (let i = 3; i < rows.length; i += 1) {
@@ -60,7 +60,7 @@ export default async function decorate(block) {
 
     // Create portfolio item card
     const portfolioItem = document.createElement('div');
-    portfolioItem.className = 'group relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300';
+    portfolioItem.className = 'group relative overflow-hidden';
 
     // Apply AEM Universal Editor attributes
     Object.entries(attributes).forEach(([key, value]) => {
@@ -102,7 +102,7 @@ export default async function decorate(block) {
 
     // Overlay with title
     const overlay = document.createElement('div');
-    overlay.className = 'absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6';
+    overlay.className = 'absolute inset-0 bg-brand-900/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-6';
 
     const titleElement = document.createElement('span');
     titleElement.className = 'text-white font-semibold text-lg flex items-center gap-2';
