@@ -538,5 +538,29 @@
         "valueType": "string"
       }
     ]
+  },
+  {
+    "id": "portfolio-item",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "linkHref",
+        "label": "Link URL"
+      }
+    ]
   }
 ]

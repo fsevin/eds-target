@@ -33,7 +33,8 @@
       "faq",
       "video",
       "dropbox-media",
-      "3d-viewer"
+      "3d-viewer",
+      "portfolio"
     ]
   },
   {
@@ -52,6 +53,12 @@
     "id": "faq",
     "components": [
       "faq-item"
+    ]
+  },
+  {
+    "id": "portfolio",
+    "components": [
+      "portfolio-item"
     ]
   }
 ]
