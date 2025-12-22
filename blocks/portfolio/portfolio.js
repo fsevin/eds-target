@@ -67,14 +67,6 @@ export default async function decorate(block) {
       portfolioItem.setAttribute(key, value);
     });
 
-    // Create link wrapper
-    const link = document.createElement('a');
-    link.href = linkHref;
-    link.className = 'block relative';
-    link.setAttribute('aria-label', itemTitle);
-    link.setAttribute('data-aue-prop', 'title');
-    link.setAttribute('data-aue-type', 'text');
-
     // Image container
     const imageContainer = document.createElement('div');
     imageContainer.className = 'relative aspect-[4/3] overflow-hidden bg-gray-200';
@@ -105,16 +97,24 @@ export default async function decorate(block) {
     // Overlay with title
     const overlay = document.createElement('div');
     const overlayOpacity = isAuthorMode ? 'opacity-100' : 'opacity-0 group-hover:opacity-100';
-    overlay.className = `absolute inset-0 bg-brand-900/80 ${overlayOpacity} transition-opacity duration-300 flex items-center justify-center p-6`;
+    overlay.className = `absolute inset-0 bg-brand-900/80 ${overlayOpacity} transition-opacity duration-300 flex flex-col items-center justify-center p-6 gap-4 pointer-events-none`;
 
-    const titleElement = document.createElement('span');
-    titleElement.className = 'text-white font-semibold text-lg flex items-center gap-2';
-    titleElement.innerHTML = `${itemTitle} <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>`;
+    // Link icon button
+    const iconButton = document.createElement('a');
+    iconButton.href = linkHref;
+    iconButton.setAttribute('aria-label', itemTitle);
+    iconButton.className = 'w-8 h-8 border-2 border-white rounded-md flex items-center justify-center text-white hover:bg-white hover:text-brand-900 hover:border-brand-900 transition-colors duration-300 pointer-events-auto';
+    iconButton.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>`;
 
+    // Title element
+    const titleElement = document.createElement('h3');
+    titleElement.className = 'text-white font-semibold text-xl md:text-2xl text-center';
+    titleElement.textContent = itemTitle;
+
+    overlay.appendChild(iconButton);
     overlay.appendChild(titleElement);
-    link.appendChild(imageContainer);
-    link.appendChild(overlay);
-    portfolioItem.appendChild(link);
+    portfolioItem.appendChild(imageContainer);
+    portfolioItem.appendChild(overlay);
     portfolioGrid.appendChild(portfolioItem);
   }
 
