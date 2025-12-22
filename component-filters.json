@@ -20,21 +20,21 @@
   {
     "id": "section",
     "components": [
-      "menu",
-      "login-modal",
-      "heading",
-      "columns",
-      "hero",
-      "teaser",
+      "3d-viewer",
       "articles",
+      "columns",
+      "dropbox-media",
+      "faq",
+      "heading",
+      "hero",
+      "login-modal",
+      "menu",
+      "portfolio",
       "products",
       "search",
       "services",
-      "faq",
-      "video",
-      "dropbox-media",
-      "3d-viewer",
-      "portfolio"
+      "teaser",
+      "video"
     ]
   },
   {
