@@ -15,8 +15,8 @@ export default async function decorate(block) {
   const headerSection = document.createElement('div');
   headerSection.className = `${sectionClasses} py-12 md:py-16`;
 
-  const container = document.createElement('div');
-  container.className = 'container mx-auto px-4';
+  const headerContainer = document.createElement('div');
+  headerContainer.className = 'container mx-auto px-4';
 
   const headerContent = document.createElement('div');
   headerContent.className = 'text-center max-w-3xl mx-auto mb-12';
@@ -119,9 +119,9 @@ export default async function decorate(block) {
   }
 
   // Assemble the block
-  container.appendChild(headerContent);
-  container.appendChild(portfolioGrid);
-  headerSection.appendChild(container);
+  headerContainer.appendChild(headerContent);
+  headerSection.appendChild(headerContainer);
+  headerSection.appendChild(portfolioGrid);
 
   block.textContent = '';
   block.appendChild(headerSection);
