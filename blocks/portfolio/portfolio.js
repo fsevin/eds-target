@@ -55,8 +55,9 @@ export default async function decorate(block) {
 
     // Extract portfolio item data
     const imageElement = cells[0]?.querySelector('picture') || cells[0]?.querySelector('img');
-    const itemTitle = cells[1]?.querySelector('div')?.textContent?.trim() || 'Portfolio Item Title';
-    const linkHref = cells[2]?.querySelector('div')?.textContent?.trim() || '#';
+    const itemTitle = cells[1]?.querySelector('div > p')?.textContent?.trim() || 'Portfolio Item Title';
+    const linkHref = cells[2]?.querySelector('div > p > a')?.getAttribute('href')?.trim() || '#';
+    console.log(cells[2]);
 
     // Create portfolio item card
     const portfolioItem = document.createElement('div');
