@@ -57,8 +57,7 @@ export default async function decorate(block) {
     const imageElement = cells[0]?.querySelector('picture') || cells[0]?.querySelector('img');
     const itemTitle = cells[1]?.querySelector('div > p')?.textContent?.trim() || 'Portfolio Item Title';
     const linkHref = cells[2]?.querySelector('div > p > a')?.getAttribute('href')?.trim() || '#';
-    console.log(cells[2]);
-
+    
     // Create portfolio item card
     const portfolioItem = document.createElement('div');
     portfolioItem.className = 'group relative overflow-hidden';
@@ -73,6 +72,8 @@ export default async function decorate(block) {
     link.href = linkHref;
     link.className = 'block relative';
     link.setAttribute('aria-label', itemTitle);
+    link.setAttribute('data-aue-prop', 'title');
+    link.setAttribute('data-aue-type', 'text');
 
     // Image container
     const imageContainer = document.createElement('div');
