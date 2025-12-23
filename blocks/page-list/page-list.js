@@ -1,4 +1,4 @@
-import { applyImageStyling, createPlaceholderSVG } from '../../scripts/utils.js';
+import { applyImageStyling, createPlaceholderSVG, isAuthorMode } from '../../scripts/utils.js';
 
 /**
  * Fetches the headings index
@@ -56,8 +56,14 @@ function getChildPages(data, currentPath) {
 function createPictureFromUrl(imageUrl, alt = '') {
   if (!imageUrl) return '';
 
+  // Fix localhost protocol issue
+  let url = imageUrl;
+  if (url.includes('https://localhost')) {
+    url = url.replace('https://localhost', 'http://localhost');
+  }
+
   // Extract base URL without query parameters
-  const baseUrl = imageUrl.split('?')[0];
+  const baseUrl = url.split('?')[0];
 
   return `
     <picture>
@@ -97,6 +103,21 @@ function buildPageCard(page, index) {
 }
 
 export default async function decorate(block) {
+  // In author mode, show placeholder message
+  if (isAuthorMode) {
+    block.innerHTML = `
+      <section class="py-20 bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg">
+        <div class="container mx-auto px-4">
+          <div class="text-center text-xl text-gray-500">
+            <p class="font-semibold">Page List Block</p>
+            <p class="text-base mt-2">Child pages will be inserted here</p>
+          </div>
+        </div>
+      </section>
+    `;
+    return;
+  }
+
   // Show loading state
   block.innerHTML = `
     <section class="py-20 bg-white">
@@ -133,7 +154,6 @@ export default async function decorate(block) {
   const content = document.createRange().createContextualFragment(`
     <section class="py-20 bg-white">
       <div class="container mx-auto px-4">
-        ${childPages.length > 0 ? `<div class="mb-6 text-lg font-semibold text-gray-700 border border-gray-300 rounded-lg px-4 py-2 inline-block">${childPages.length} ${childPages.length === 1 ? 'Page' : 'Pages'}</div>` : ''}
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           ${pagesHTML}
         </div>
