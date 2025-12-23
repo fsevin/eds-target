@@ -9,7 +9,7 @@
         "label": "Title"
       },
       {
-        "component": "richtext",
+        "component": "text",
         "valueType": "string",
         "name": "jcr:description",
         "label": "Description"
