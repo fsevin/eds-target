@@ -12,7 +12,7 @@
         "component": "text",
         "valueType": "string",
         "name": "jcr:description",
-        "label": "Description"
+        "label": "Description 2"
       },
       {
         "component": "text",
