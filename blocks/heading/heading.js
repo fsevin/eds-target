@@ -6,23 +6,21 @@ function getMetaContent(name, attr = 'property') {
 }
 
 function getImageUrl(ogImage) {
-  if (!ogImage || ogImage.includes('default-meta-image.png')) return '';
-
-  let imageUrl = ogImage;
-
-  // In author mode, construct image URL from og:image domain and image meta path
+  // In author mode, check imagePath first to determine if there's an image
   if (isAuthorMode) {
+    const imagePath = getMetaContent('image', 'name');
+    if (!imagePath || imagePath.includes('default-meta-image.png')) return '';
+
     try {
-      const imagePath = getMetaContent('image', 'name');
-      if (imagePath) {
-        imageUrl = `${new URL(ogImage).origin}${imagePath}`;
-      }
+      return `${new URL(ogImage).origin}${imagePath}`.replace('https://localhost', 'http://localhost');
     } catch {
-      // Keep original ogImage if URL parsing fails
+      return '';
     }
   }
 
-  return imageUrl.replace('https://localhost', 'http://localhost');
+  if (!ogImage || ogImage.includes('default-meta-image.png')) return '';
+
+  return ogImage.replace('https://localhost', 'http://localhost');
 }
 
 export default async function decorate(block) {
