@@ -7,7 +7,6 @@ export default async function decorate(block) {
   const ogTitle = getOGMetaContent('og:title');
   const ogDescription = getOGMetaContent('og:description');
 
-
   const headingHTML = `
     <section class="w-full py-12 md:py-16 px-4 bg-white">
       <div class="container mx-auto max-w-7xl flex items-center min-h-[120px]">

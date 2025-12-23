@@ -78,10 +78,10 @@ export default async function decorate(block) {
       if (clonedImage.tagName === 'PICTURE') {
         const img = clonedImage.querySelector('img');
         if (img) {
-          img.className = 'w-full h-full object-cover';
+          img.className = 'w-full h-full object-cover group-hover:scale-110 transition-transform duration-300';
         }
       } else {
-        clonedImage.className = 'w-full h-full object-cover';
+        clonedImage.className = 'w-full h-full object-cover group-hover:scale-110 transition-transform duration-300';
       }
 
       imageContainer.appendChild(clonedImage);
@@ -90,7 +90,7 @@ export default async function decorate(block) {
       const placeholderImg = document.createElement('img');
       placeholderImg.src = `data:image/svg+xml,${encodeURIComponent(createPlaceholderSVG('image', '4:3'))}`;
       placeholderImg.alt = 'Portfolio placeholder image';
-      placeholderImg.className = 'w-full h-full object-cover';
+      placeholderImg.className = 'w-full h-full object-cover group-hover:scale-110 transition-transform duration-300';
       imageContainer.appendChild(placeholderImg);
     }
 
