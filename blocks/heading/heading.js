@@ -11,16 +11,22 @@ export default async function decorate(block) {
   const ogDescription = getHeadMetaContent('og:description');
   let ogImage = getHeadMetaContent('og:image');
 
+  // Extract domain from ogImage
+  let ogImageDomain = '';
+  if (ogImage) {
+    try {
+      const url = new URL(ogImage);
+      ogImageDomain = url.origin;
+    } catch {
+      // If URL parsing fails, keep empty
+    }
+  }
+
   // In author mode, construct image URL from og:image domain and image meta path
-  if (isAuthorMode && ogImage) {
+  if (isAuthorMode && ogImageDomain) {
     const imagePath = getHeadMetaContent('image');
     if (imagePath) {
-      try {
-        const url = new URL(ogImage);
-        ogImage = `${url.origin}${imagePath}`;
-      } catch {
-        // If URL parsing fails, keep original ogImage
-      }
+      ogImage = `${ogImageDomain}${imagePath}`;
     }
   }
 
