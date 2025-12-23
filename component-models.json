@@ -571,6 +571,24 @@
   },
   {
     "id": "page-list",
-    "fields": []
+    "fields": [
+      {
+        "component": "select",
+        "name": "variant",
+        "label": "Layout Variant",
+        "valueType": "string",
+        "defaultValue": "default",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          },
+          {
+            "name": "Overlay",
+            "value": "overlay"
+          }
+        ]
+      }
+    ]
   }
 ]

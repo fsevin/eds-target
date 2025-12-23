@@ -1,3 +1,4 @@
+import { readBlockConfig } from '../../scripts/aem.js';
 import { applyImageStyling, createPlaceholderSVG, isAuthorMode } from '../../scripts/utils.js';
 
 /**
@@ -76,7 +77,7 @@ function createPictureFromUrl(imageUrl, alt = '') {
 }
 
 /**
- * Builds a page card HTML
+ * Builds a page card HTML (default variant)
  */
 function buildPageCard(page, index) {
   const blockId = `page-${index}`;
@@ -97,6 +98,32 @@ function buildPageCard(page, index) {
       <div class="p-6 flex flex-col flex-grow">
         <h3 id="${blockId}-title" class="text-2xl font-bold text-gray-900 mb-3 group-hover:text-brand-600 transition-colors">${page.title}</h3>
         ${page.description ? `<p id="${blockId}-description" class="text-gray-600 leading-relaxed flex-grow">${page.description}</p>` : ''}
+      </div>
+    </a>
+  `;
+}
+
+/**
+ * Builds a page card HTML (overlay variant)
+ */
+function buildOverlayPageCard(page, index) {
+  const blockId = `page-${index}`;
+  const pictureHTML = page.image
+    ? createPictureFromUrl(page.image, page.title)
+    : `<img src="data:image/svg+xml,${encodeURIComponent(createPlaceholderSVG('image', '16:9'))}" alt="${page.title}" class="w-full h-full object-cover" />`;
+
+  return `
+    <a href="${page.path}" class="group relative overflow-hidden aspect-video block">
+      <!-- Image Container with Opacity -->
+      <div id="${blockId}-image" class="absolute inset-0">
+        ${pictureHTML}
+      </div>
+      <div class="absolute inset-0 bg-black opacity-40 group-hover:opacity-60 transition-opacity duration-300"></div>
+
+      <!-- Overlay Content -->
+      <div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
+        <h3 id="${blockId}-title" class="text-2xl md:text-3xl font-bold text-white mb-3 drop-shadow-lg">${page.title}</h3>
+        ${page.description ? `<p id="${blockId}-description" class="text-white text-sm md:text-base leading-relaxed max-w-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg">${page.description}</p>` : ''}
       </div>
     </a>
   `;
@@ -141,13 +168,20 @@ export default async function decorate(block) {
     return;
   }
 
+  // Read block configuration
+  const config = readBlockConfig(block);
+  const variant = config.variant?.toLowerCase() || 'default';
+
   // Get current path and child pages
   const currentPath = getCurrentPath();
   const childPages = getChildPages(indexData, currentPath);
 
+  // Choose the appropriate card builder based on variant
+  const cardBuilder = variant === 'overlay' ? buildOverlayPageCard : buildPageCard;
+
   // Build page cards HTML
   const pagesHTML = childPages.length > 0
-    ? childPages.map((page, index) => buildPageCard(page, index)).join('')
+    ? childPages.map((page, index) => cardBuilder(page, index)).join('')
     : '<div class="col-span-full text-center text-xl text-gray-600">No child pages found.</div>';
 
   // Create content
