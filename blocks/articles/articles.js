@@ -75,16 +75,18 @@ function buildArticleCard(article, truncateDescription = false) {
 }
 
 export default async function decorate(block) {
+  // In author mode, show placeholder message
   if (isAuthorMode) {
-    const emptyContent = document.createRange().createContextualFragment(`
-      <section class="py-20 bg-white">
+    block.innerHTML = `
+      <section class="py-20 bg-gray-100 rounded-lg">
         <div class="container mx-auto px-4">
-          <div class="text-center text-xl text-gray-600">Articles inserted here.</div>
+          <div class="text-center text-xl text-gray-500">
+            <p class="font-semibold">Articles Block</p>
+            <p class="text-base mt-2">Articles will be inserted here</p>
+          </div>
         </div>
       </section>
-    `);
-    block.textContent = '';
-    block.append(emptyContent);
+    `;
     return;
   }
 

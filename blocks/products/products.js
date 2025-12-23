@@ -1,5 +1,5 @@
 import { readBlockConfig } from '../../scripts/aem.js';
-import { getTranslation, getLanguageFromPath, parseConfigBoolean, applyImageStyling } from '../../scripts/utils.js';
+import { getTranslation, getLanguageFromPath, parseConfigBoolean, applyImageStyling, isAuthorMode } from '../../scripts/utils.js';
 
 function extractProductsFromBlock(block) {
   const products = [];
@@ -70,6 +70,21 @@ function buildProductCard(product, showPrice = false, imageAspectRatio = '5/3') 
 }
 
 export default async function decorate(block) {
+  // In author mode, show placeholder message
+  if (isAuthorMode) {
+    block.innerHTML = `
+      <section class="py-20 bg-gray-100 rounded-lg">
+        <div class="container mx-auto px-4">
+          <div class="text-center text-xl text-gray-500">
+            <p class="font-semibold">Products Block</p>
+            <p class="text-base mt-2">Products will be inserted here</p>
+          </div>
+        </div>
+      </section>
+    `;
+    return;
+  }
+
   const config = readBlockConfig(block);
   const showPrice = parseConfigBoolean(config.showprice);
   const imageAspectRatio = config.imageaspectratio || '5/3';
@@ -84,7 +99,7 @@ export default async function decorate(block) {
     const emptyContent = document.createRange().createContextualFragment(`
       <section class="py-20 bg-white">
         <div class="container mx-auto px-4">
-          <div class="text-center text-xl text-gray-600">Products inserted here.</div>
+          <div class="text-center text-xl text-gray-600">No products found.</div>
         </div>
       </section>
     `);
