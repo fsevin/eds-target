@@ -1,12 +1,28 @@
-function getOGMetaContent(property) {
+import { getMetadata } from '../../scripts/aem.js';
+import { isAuthorMode } from '../../scripts/utils.js';
+
+function getHeadMetaContent(property) {
   const meta = document.querySelector(`meta[property="${property}"]`);
   return meta ? meta.getAttribute('content') : '';
 }
 
 export default async function decorate(block) {
-  const ogTitle = getOGMetaContent('og:title');
-  const ogDescription = getOGMetaContent('og:description');
-  let ogImage = getOGMetaContent('og:image');
+  const ogTitle = getHeadMetaContent('og:title');
+  const ogDescription = getHeadMetaContent('og:description');
+  let ogImage = getHeadMetaContent('og:image');
+
+  // In author mode, construct image URL from og:image domain and image meta path
+  if (isAuthorMode && ogImage) {
+    const imagePath = getHeadMetaContent('image');
+    if (imagePath) {
+      try {
+        const url = new URL(ogImage);
+        ogImage = `${url.origin}${imagePath}`;
+      } catch {
+        // If URL parsing fails, keep original ogImage
+      }
+    }
+  }
 
   if (ogImage && ogImage.includes('default-meta-image.png')) {
     ogImage = '';

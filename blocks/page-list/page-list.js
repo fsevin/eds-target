@@ -77,16 +77,25 @@ function createPictureFromUrl(imageUrl, alt = '') {
 }
 
 /**
- * Builds a page card HTML (default variant)
+ * Generates common card elements
  */
-function buildPageCard(page, index) {
+function getCardElements(page, index) {
   const blockId = `page-${index}`;
   const pictureHTML = page.image
     ? createPictureFromUrl(page.image, page.title)
     : `<img src="data:image/svg+xml,${encodeURIComponent(createPlaceholderSVG('image', '16:9'))}" alt="${page.title}" class="w-full h-full object-cover" />`;
 
+  return { blockId, pictureHTML };
+}
+
+/**
+ * Builds a page card HTML (default variant)
+ */
+function buildPageCard(page, index) {
+  const { blockId, pictureHTML } = getCardElements(page, index);
+
   return `
-    <a href="${page.path}" class="group bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 h-full flex flex-col">
+    <a href="${page.path}" class="group bg-white rounded overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 h-full flex flex-col">
       <!-- Image Container -->
       <div class="relative aspect-video overflow-hidden">
         <div id="${blockId}-image" class="w-full h-full">
@@ -107,13 +116,10 @@ function buildPageCard(page, index) {
  * Builds a page card HTML (overlay variant)
  */
 function buildOverlayPageCard(page, index) {
-  const blockId = `page-${index}`;
-  const pictureHTML = page.image
-    ? createPictureFromUrl(page.image, page.title)
-    : `<img src="data:image/svg+xml,${encodeURIComponent(createPlaceholderSVG('image', '16:9'))}" alt="${page.title}" class="w-full h-full object-cover" />`;
+  const { blockId, pictureHTML } = getCardElements(page, index);
 
   return `
-    <a href="${page.path}" class="group relative overflow-hidden aspect-video block">
+    <a href="${page.path}" class="group relative overflow-hidden aspect-video block rounded">
       <!-- Image Container with Opacity -->
       <div id="${blockId}-image" class="absolute inset-0">
         ${pictureHTML}
@@ -130,6 +136,10 @@ function buildOverlayPageCard(page, index) {
 }
 
 export default async function decorate(block) {
+  // Read block configuration
+  const config = readBlockConfig(block);
+  const variant = config.variant || 'default';
+
   // In author mode, show placeholder message
   if (isAuthorMode) {
     block.innerHTML = `
@@ -167,10 +177,6 @@ export default async function decorate(block) {
     `;
     return;
   }
-
-  // Read block configuration
-  const config = readBlockConfig(block);
-  const variant = config.variant?.toLowerCase() || 'default';
 
   // Get current path and child pages
   const currentPath = getCurrentPath();
