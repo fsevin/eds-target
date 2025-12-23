@@ -15,7 +15,7 @@ export default async function decorate(block) {
   }
 
   const headingHTML = `
-    <section class="relative w-full py-12 md:py-16 px-4 bg-cover bg-center bg-no-repeat">
+    <section class="relative w-full py-12 md:py-16 px-4 bg-white bg-cover bg-center bg-no-repeat">
       ${ogImage ? `<div class="absolute inset-0 z-0">
         <img src="${ogImage}" alt="" class="w-full h-full object-cover" />
       </div>
