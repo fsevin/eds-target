@@ -15,12 +15,6 @@
         "label": "Description"
       },
       {
-        "component": "reference",
-        "valueType": "string",
-        "name": "image",
-        "label": "Image"
-      },
-      {
         "component": "text",
         "valueType": "string",
         "name": "keywords",
@@ -92,7 +86,14 @@
   },
   {
     "id": "heading",
-    "fields": []
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image"
+      },
+    ]
   },
   {
     "id": "login-modal",
