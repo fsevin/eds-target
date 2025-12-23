@@ -15,6 +15,12 @@
         "label": "Description"
       },
       {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image"
+      },
+      {
         "component": "text",
         "valueType": "string",
         "name": "keywords",

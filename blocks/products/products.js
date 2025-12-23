@@ -53,7 +53,7 @@ function buildProductCard(product, showPrice = false, imageAspectRatio = '5/3') 
   const aspectClass = imageAspectRatio === 'square' ? 'aspect-square' : 'aspect-[5/3]';
 
   return `
-    <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col h-full">
+    <div class="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col h-full">
       <div id="${blockId}-image" class="relative ${aspectClass} overflow-hidden bg-gray-100">
         ${product.picture}
       </div>

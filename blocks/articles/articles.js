@@ -49,14 +49,14 @@ function buildArticleCard(article, truncateDescription = false) {
   const description = truncateDescription ? truncateText(article.description) : article.description;
 
   return `
-    <div class="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 h-full flex flex-col">
+    <div class="group bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 h-full flex flex-col">
       <!-- Image Container -->
       <div class="relative aspect-video overflow-hidden">
         <div id="${blockId}-image" class="w-full h-full">
           ${article.picture}
         </div>
         <!-- Category Badge -->
-        ${article.category ? `<span id="${blockId}-category" class="absolute top-4 right-4 px-4 py-2 bg-brand-600 text-white rounded-full font-semibold text-sm">${article.category}</span>` : ''}
+        ${article.category ? `<span id="${blockId}-category" class="absolute top-4 right-4 px-4 py-2 bg-brand-600 text-white rounded-lg font-semibold text-sm">${article.category}</span>` : ''}
       </div>
 
       <!-- Content -->

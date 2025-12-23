@@ -58,7 +58,7 @@ export default async function decorate(block) {
       .join(' ');
 
     return `
-    <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300" ${attributesStr}>
+    <div class="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300" ${attributesStr}>
       <div class="text-brand-600 mb-4">
         ${service.icon || ''}
       </div>

@@ -101,7 +101,7 @@ export default async function decorate(block) {
             ${descriptionHTML}
           </div>
           <div class="flex items-center justify-center">
-            <a id="${blockId}-button" href="${buttonlink}" class="px-8 py-4 bg-brand-600 text-white font-semibold rounded-2xl hover:bg-brand-700 transition shadow-lg hover:shadow-xl">
+            <a id="${blockId}-button" href="${buttonlink}" class="px-8 py-4 bg-brand-600 text-white font-semibold rounded-lg hover:bg-brand-700 transition shadow-lg hover:shadow-xl">
               ${buttontext}${icon}
             </a>
           </div>

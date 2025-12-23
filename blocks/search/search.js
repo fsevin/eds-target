@@ -11,7 +11,7 @@ export default async function decorate(block) {
 
   const filters = config.filters ? config.filters.split(',').map(f => f.trim()).filter(f => f) : [];
   const filterButtons = filters.map((filter, index) =>
-    `<button type="button" class="px-6 py-3 rounded-2xl font-semibold transition-all duration-300 ${index === 0 ? 'bg-brand-600 text-white shadow-lg' : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'}" data-filter="${filter}">${filter}</button>`
+    `<button type="button" class="px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${index === 0 ? 'bg-brand-600 text-white shadow-lg' : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'}" data-filter="${filter}">${filter}</button>`
   ).join('');
 
   const searchHTML = `

@@ -90,7 +90,7 @@ export default async function decorate(block) {
 
   const icon = showButtonIcon ? getButtonIcon() : '';
 
-  const imageBlock = `<div id="${blockId}-image" class="relative rounded-2xl overflow-hidden shadow-2xl lg:col-span-3">
+  const imageBlock = `<div id="${blockId}-image" class="relative rounded-lg overflow-hidden shadow-2xl lg:col-span-3">
     ${pictureHTML}
   </div>`;
 
@@ -102,7 +102,7 @@ export default async function decorate(block) {
       ${descriptionHTML}
     </div>
     <div>
-      <a id="${blockId}-button" href="${buttonlink}" class="inline-flex items-center px-8 py-4 bg-brand-600 text-white font-semibold rounded-2xl hover:bg-brand-700 transition shadow-lg hover:shadow-xl">
+      <a id="${blockId}-button" href="${buttonlink}" class="inline-flex items-center px-8 py-4 bg-brand-600 text-white font-semibold rounded-lg hover:bg-brand-700 transition shadow-lg hover:shadow-xl">
         ${buttontext}${icon}
       </a>
     </div>
@@ -111,7 +111,7 @@ export default async function decorate(block) {
   const content = document.createRange().createContextualFragment(`
     <section class="py-20 py-20 bg-white">
       <div class="container mx-auto px-4">
-        <div class="grid lg:grid-cols-5 gap-12 items-center border border-gray-200 rounded-2xl p-8 bg-gray-50">
+        <div class="grid lg:grid-cols-5 gap-12 items-center border border-gray-200 p-8 bg-gray-50">
           ${flipLayout ? textBlock + imageBlock : imageBlock + textBlock}
         </div>
       </div>
