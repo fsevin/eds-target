@@ -1,15 +1,19 @@
-import { getMetadata } from '../../scripts/aem.js';
 import { isAuthorMode } from '../../scripts/utils.js';
 
-function getHeadMetaContent(property) {
+function getOGMetaContent(property) {
   const meta = document.querySelector(`meta[property="${property}"]`);
   return meta ? meta.getAttribute('content') : '';
 }
 
+function getMetaContent(name) {
+  const meta = document.querySelector(`meta[name="${name}"]`);
+  return meta ? meta.getAttribute('content') : '';
+}
+
 export default async function decorate(block) {
-  const ogTitle = getHeadMetaContent('og:title');
-  const ogDescription = getHeadMetaContent('og:description');
-  let ogImage = getHeadMetaContent('og:image');
+  const ogTitle = getOGMetaContent('og:title');
+  const ogDescription = getOGMetaContent('og:description');
+  let ogImage = getOGMetaContent('og:image');
 
   // Extract domain from ogImage
   let ogImageDomain = '';
@@ -24,7 +28,7 @@ export default async function decorate(block) {
 
   // In author mode, construct image URL from og:image domain and image meta path
   if (isAuthorMode && ogImageDomain) {
-    const imagePath = getHeadMetaContent('image');
+    const imagePath = getMetaContent('image');
     if (imagePath) {
       ogImage = `${ogImageDomain}${imagePath}`;
     }
