@@ -1,0 +1,152 @@
+import { applyImageStyling, createPlaceholderSVG } from '../../scripts/utils.js';
+
+/**
+ * Fetches the headings index
+ */
+async function fetchHeadingsIndex() {
+  try {
+    const response = await fetch('/headings-index.json');
+    if (!response.ok) throw new Error('Failed to fetch headings index');
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    console.error('Error fetching headings index:', error);
+    return null;
+  }
+}
+
+/**
+ * Gets the current page path
+ */
+function getCurrentPath() {
+  return window.location.pathname;
+}
+
+/**
+ * Filters pages to get direct children of the current path
+ */
+function getChildPages(data, currentPath) {
+  if (!data || !data.data) return [];
+
+  // Normalize current path (remove trailing slash)
+  const normalizedCurrentPath = currentPath.replace(/\/$/, '');
+
+  // Filter pages that are direct children of current path
+  const children = data.data.filter(page => {
+    const pagePath = page.path.replace(/\/$/, '');
+
+    // Check if page starts with current path
+    if (!pagePath.startsWith(normalizedCurrentPath)) return false;
+
+    // Get the remaining path after current path
+    const remainingPath = pagePath.substring(normalizedCurrentPath.length);
+
+    // Check if it's a direct child (only one more level deep)
+    // Should start with / and have no additional / after that
+    const parts = remainingPath.split('/').filter(p => p);
+    return parts.length === 1;
+  });
+
+  return children;
+}
+
+/**
+ * Creates an optimized picture element from image URL
+ */
+function createPictureFromUrl(imageUrl, alt = '') {
+  if (!imageUrl) return '';
+
+  // Extract base URL without query parameters
+  const baseUrl = imageUrl.split('?')[0];
+
+  return `
+    <picture>
+      <source type="image/webp" srcset="${baseUrl}?width=650&format=webply&optimize=medium" media="(min-width: 600px)">
+      <source type="image/webp" srcset="${baseUrl}?width=2000&format=webply&optimize=medium">
+      <source type="image/jpeg" srcset="${baseUrl}?width=650&format=pjpg&optimize=medium" media="(min-width: 600px)">
+      <img loading="lazy" alt="${alt}" src="${baseUrl}?width=2000&format=pjpg&optimize=medium" width="650" height="366">
+    </picture>
+  `;
+}
+
+/**
+ * Builds a page card HTML
+ */
+function buildPageCard(page, index) {
+  const blockId = `page-${index}`;
+  const pictureHTML = page.image
+    ? createPictureFromUrl(page.image, page.title)
+    : `<img src="data:image/svg+xml,${encodeURIComponent(createPlaceholderSVG('image', '16:9'))}" alt="${page.title}" class="w-full h-full object-cover" />`;
+
+  return `
+    <a href="${page.path}" class="group bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 h-full flex flex-col">
+      <!-- Image Container -->
+      <div class="relative aspect-video overflow-hidden">
+        <div id="${blockId}-image" class="w-full h-full">
+          ${pictureHTML}
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="p-6 flex flex-col flex-grow">
+        <h3 id="${blockId}-title" class="text-2xl font-bold text-gray-900 mb-3 group-hover:text-brand-600 transition-colors">${page.title}</h3>
+        ${page.description ? `<p id="${blockId}-description" class="text-gray-600 leading-relaxed flex-grow">${page.description}</p>` : ''}
+      </div>
+    </a>
+  `;
+}
+
+export default async function decorate(block) {
+  // Show loading state
+  block.innerHTML = `
+    <section class="py-20 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="text-center text-xl text-gray-600">Loading pages...</div>
+      </div>
+    </section>
+  `;
+
+  // Fetch headings index
+  const indexData = await fetchHeadingsIndex();
+
+  if (!indexData) {
+    block.innerHTML = `
+      <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+          <div class="text-center text-xl text-red-600">Failed to load pages.</div>
+        </div>
+      </section>
+    `;
+    return;
+  }
+
+  // Get current path and child pages
+  const currentPath = getCurrentPath();
+  const childPages = getChildPages(indexData, currentPath);
+
+  // Build page cards HTML
+  const pagesHTML = childPages.length > 0
+    ? childPages.map((page, index) => buildPageCard(page, index)).join('')
+    : '<div class="col-span-full text-center text-xl text-gray-600">No child pages found.</div>';
+
+  // Create content
+  const content = document.createRange().createContextualFragment(`
+    <section class="py-20 bg-white">
+      <div class="container mx-auto px-4">
+        ${childPages.length > 0 ? `<div class="mb-6 text-lg font-semibold text-gray-700 border border-gray-300 rounded-lg px-4 py-2 inline-block">${childPages.length} ${childPages.length === 1 ? 'Page' : 'Pages'}</div>` : ''}
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          ${pagesHTML}
+        </div>
+      </div>
+    </section>
+  `);
+
+  block.textContent = '';
+  block.append(content);
+
+  // Apply image styling to fill containers as backgrounds
+  const pageCards = block.querySelectorAll('[id$="-image"]');
+  pageCards.forEach(imageContainer => {
+    applyImageStyling(imageContainer);
+  });
+}

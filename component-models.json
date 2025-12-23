@@ -568,5 +568,9 @@
         "label": "Link URL"
       }
     ]
+  },
+  {
+    "id": "page-list",
+    "fields": []
   }
 ]

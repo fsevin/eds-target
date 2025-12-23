@@ -6,7 +6,11 @@ function getOGMetaContent(property) {
 export default async function decorate(block) {
   const ogTitle = getOGMetaContent('og:title');
   const ogDescription = getOGMetaContent('og:description');
-  const ogImage = getOGMetaContent('og:image');
+  let ogImage = getOGMetaContent('og:image');
+
+  if (ogImage.includes('https://localhost')) {
+    ogImage = ogImage.replace('https://localhost', 'http://localhost');
+  }
 
   const headingHTML = `
     <section class="relative w-full py-12 md:py-16 px-4 bg-cover bg-center bg-no-repeat">
