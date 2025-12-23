@@ -8,7 +8,9 @@ export default async function decorate(block) {
   const ogDescription = getOGMetaContent('og:description');
   let ogImage = getOGMetaContent('og:image');
 
-  if (ogImage && ogImage.includes('https://localhost')) {
+  if (ogImage && ogImage.includes('default-meta-image.png')) {
+    ogImage = '';
+  } else if (ogImage && ogImage.includes('https://localhost')) {
     ogImage = ogImage.replace('https://localhost', 'http://localhost');
   }
 
