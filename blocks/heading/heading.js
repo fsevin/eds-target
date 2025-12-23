@@ -1,4 +1,5 @@
-import { isAuthorMode } from '../../scripts/utils.js';
+import { isAuthorMode, parseConfigBoolean } from '../../scripts/utils.js';
+import { readBlockConfig } from '../../scripts/aem.js';
 
 function getMetaContent(name, attr = 'property') {
   const meta = document.querySelector(`meta[${attr}="${name}"]`);
@@ -24,11 +25,14 @@ function getImageUrl(ogImage) {
 }
 
 export default async function decorate(block) {
+  const config = readBlockConfig(block);
+  const showBackgroundImage = parseConfigBoolean(config.showbackgroundimage);
+
   const ogTitle = getMetaContent('og:title');
   const ogDescription = getMetaContent('og:description');
   const ogImage = getImageUrl(getMetaContent('og:image'));
 
-  const hasImage = !!ogImage;
+  const hasImage = showBackgroundImage && !!ogImage;
 
   const headingHTML = `
     <section class="relative w-full py-12 md:py-16 px-4 bg-white bg-cover bg-center bg-no-repeat">

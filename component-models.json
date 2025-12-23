@@ -92,7 +92,14 @@
   },
   {
     "id": "heading",
-    "fields": []
+    "fields": [
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "showBackgroundImage",
+        "label": "Show Background Image"
+      }
+    ]
   },
   {
     "id": "login-modal",
