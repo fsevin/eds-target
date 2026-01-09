@@ -20,6 +20,9 @@ export default async function decorate(block) {
   if (hasImage) {
     const picture = createOptimizedPicture(config.image, '', true);
     picture.querySelector('img')?.classList.add('w-full', 'h-full', 'object-cover');
+    picture.setAttribute('data-aue-label', 'Image');
+    picture.setAttribute('data-aue-prop', 'image');
+    picture.setAttribute('data-aue-type', 'media');
     pictureHTML = picture.outerHTML;
   }
 
