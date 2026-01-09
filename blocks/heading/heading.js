@@ -1,5 +1,5 @@
 import { parseConfigBoolean } from '../../scripts/utils.js';
-import { readBlockConfig } from '../../scripts/aem.js';
+import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
 
 function getMetaContent(name, attr = 'property') {
   const meta = document.querySelector(`meta[${attr}="${name}"]`);
@@ -15,10 +15,18 @@ export default async function decorate(block) {
 
   const hasImage = showBackgroundImage && !!config.image;
 
+  // Create optimized picture element if image exists
+  let pictureHTML = '';
+  if (hasImage) {
+    const picture = createOptimizedPicture(config.image, '', true);
+    picture.querySelector('img')?.classList.add('w-full', 'h-full', 'object-cover');
+    pictureHTML = picture.outerHTML;
+  }
+
   const headingHTML = `
     <section class="relative w-full py-12 md:py-16 px-4 bg-white bg-cover bg-center bg-no-repeat">
       ${hasImage ? `<div class="absolute inset-0 z-0">
-        <img src="${config.image}" alt="" class="w-full h-full object-cover" />
+        ${pictureHTML}
       </div>
       <div class="absolute inset-0 bg-black/50 z-10"></div>` : ''}
       <div class="container mx-auto max-w-7xl flex items-center min-h-[120px] relative z-20">
