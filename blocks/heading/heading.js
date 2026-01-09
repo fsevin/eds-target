@@ -6,24 +6,6 @@ function getMetaContent(name, attr = 'property') {
   return meta?.getAttribute('content') || '';
 }
 
-function getImageUrl(ogImage) {
-  // In author mode, check imagePath first to determine if there's an image
-  if (isAuthorMode) {
-    const imagePath = getMetaContent('image', 'name');
-    if (!imagePath || imagePath.includes('default-meta-image.png')) return '';
-
-    try {
-      return `${new URL(ogImage).origin}${imagePath}`.replace('https://localhost', 'http://localhost');
-    } catch {
-      return '';
-    }
-  }
-
-  if (!ogImage || ogImage.includes('default-meta-image.png')) return '';
-
-  return ogImage.replace('https://localhost', 'http://localhost');
-}
-
 export default async function decorate(block) {
   const config = readBlockConfig(block);
   const showBackgroundImage = parseConfigBoolean(config.showbackgroundimage);
