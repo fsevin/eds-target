@@ -30,9 +30,8 @@ export default async function decorate(block) {
 
   const ogTitle = getMetaContent('og:title');
   const ogDescription = getMetaContent('og:description');
-  const ogImage = getImageUrl(getMetaContent('og:image'));
 
-  const hasImage = showBackgroundImage && !!ogImage;
+  const hasImage = showBackgroundImage && !!config.image;
 
   const headingHTML = `
     <section class="relative w-full py-12 md:py-16 px-4 bg-white bg-cover bg-center bg-no-repeat">
