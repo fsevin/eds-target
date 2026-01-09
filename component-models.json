@@ -15,12 +15,6 @@
         "label": "Description"
       },
       {
-        "component": "reference",
-        "valueType": "string",
-        "name": "image",
-        "label": "Image"
-      },
-      {
         "component": "text",
         "valueType": "string",
         "name": "keywords",
@@ -93,6 +87,12 @@
   {
     "id": "heading",
     "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image"
+      },
       {
         "component": "boolean",
         "valueType": "boolean",
