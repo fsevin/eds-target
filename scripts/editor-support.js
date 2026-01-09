@@ -147,11 +147,11 @@ const path = url
 metaPreview.content = `http://main--${siteName}--fornacif.aem.page${path}`;
 document.head.appendChild(metaPreview);
 
-if (url.includes('/language-masters/')) {
-  /*const meta = document.createElement('meta');
+if (url.includes('/industries/')) {
+  const meta = document.createElement('meta');
   meta.name = 'urn:adobe:aue:config:disable';
-  meta.content = 'duplicate,copy';
-  document.getElementsByTagName('head')[0].appendChild(meta);*/
+  meta.content = 'publish-live';
+  document.getElementsByTagName('head')[0].appendChild(meta);
 
   document.querySelectorAll('[data-aue-type]').forEach((el) => {
     if (el.tagName.toLowerCase() === 'body' || el.getAttribute('data-aue-type') === 'container' || el.getAttribute('data-aue-type') === 'column') {
