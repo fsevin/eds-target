@@ -41,7 +41,7 @@ export default async function decorate(block) {
 
   // Extract data from block with placeholders
   const title = rows[0]?.querySelector('p')?.textContent?.trim() || 'Our Services';
-  const description = rows[1]?.querySelector('p')?.innerHTML || '<p>Discover our comprehensive range of professional services designed to meet your needs.</p>';
+  const description = rows[1]?.querySelector('p')?.innerHTML || '<p>Discover our comprehensive range of services designed to meet your needs.</p>';
   const styleValue = rows[2]?.querySelector('p')?.textContent?.trim().toLowerCase() || '';
 
   // Determine background class based on style
