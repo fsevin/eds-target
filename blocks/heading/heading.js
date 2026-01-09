@@ -1,4 +1,4 @@
-import { isAuthorMode, parseConfigBoolean } from '../../scripts/utils.js';
+import { parseConfigBoolean } from '../../scripts/utils.js';
 import { readBlockConfig } from '../../scripts/aem.js';
 
 function getMetaContent(name, attr = 'property') {
