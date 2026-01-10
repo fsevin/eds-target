@@ -61,9 +61,8 @@ function buildPageCard(page, index) {
       <div class="relative aspect-video overflow-hidden">
         <div id="${blockId}-image" class="w-full h-full">${pictureHTML}</div>
       </div>
-      <div class="p-6 flex flex-col flex-grow">
-        <h3 id="${blockId}-title" class="text-2xl font-bold text-gray-900 mb-3 group-hover:text-brand-600 transition-colors">${page.title}</h3>
-        ${page.description ? `<p id="${blockId}-description" class="text-gray-600 leading-relaxed flex-grow">${page.description}</p>` : ''}
+      <div class="p-6 flex flex-col justify-center flex-grow">
+        <h3 id="${blockId}-title" class="text-2xl font-bold text-gray-900 group-hover:text-brand-600 transition-colors">${page.title}</h3>
       </div>
     </a>
   `;
@@ -77,8 +76,7 @@ function buildOverlayPageCard(page, index) {
       <div id="${blockId}-image" class="absolute inset-0">${pictureHTML}</div>
       <div class="absolute inset-0 bg-black opacity-40 group-hover:opacity-60 transition-opacity duration-300"></div>
       <div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
-        <h3 id="${blockId}-title" class="text-2xl md:text-3xl font-bold text-white mb-3 drop-shadow-lg">${page.title}</h3>
-        ${page.description ? `<p id="${blockId}-description" class="text-white text-sm md:text-base leading-relaxed max-w-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg">${page.description}</p>` : ''}
+        <h3 id="${blockId}-title" class="text-2xl md:text-3xl font-bold text-white drop-shadow-lg">${page.title}</h3>
       </div>
     </a>
   `;
