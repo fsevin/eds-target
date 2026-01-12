@@ -1,3 +1,4 @@
+/* Use Tailwind CSS utility classes in priority. Only add custom CSS when necessary. */
 /* Fullscreen model viewer height */
 model-viewer:fullscreen,
 :fullscreen model-viewer {

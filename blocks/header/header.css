@@ -1,3 +1,4 @@
+/* Use Tailwind CSS utility classes in priority. Only add custom CSS when necessary. */
 /* Header - minimal CSS, using Tailwind for styling */
 header {
   position: sticky;
