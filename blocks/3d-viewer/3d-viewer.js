@@ -26,7 +26,7 @@ export default function decorate(block) {
   modelViewer.setAttribute('interaction-prompt', 'none');
   modelViewer.setAttribute('auto-rotate', '');
   modelViewer.setAttribute('auto-rotate-delay', '1000');
-  modelViewer.setAttribute('camera-orbit', '45deg 115deg 80%');
+  modelViewer.setAttribute('camera-orbit', '45deg 115deg 60%');
 
   container.appendChild(modelViewer);
   outerContainer.appendChild(container);
