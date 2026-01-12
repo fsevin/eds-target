@@ -1,0 +1,5 @@
+/* Fullscreen model viewer height */
+model-viewer:fullscreen,
+:fullscreen model-viewer {
+  height: 100vh;
+}

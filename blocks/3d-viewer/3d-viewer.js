@@ -5,15 +5,15 @@ export default function decorate(block) {
 
   // Create section wrapper matching teaser
   const section = document.createElement('section');
-  section.className = 'py-20 bg-white';
+  section.className = 'bg-white';
 
   // Create container matching teaser
   const outerContainer = document.createElement('div');
-  outerContainer.className = 'container mx-auto px-4';
+  outerContainer.className = 'container mx-auto';
 
   // Create inner container with border matching teaser
   const container = document.createElement('div');
-  container.className = 'relative overflow-hidden border border-gray-200 p-8 bg-gray-50';
+  container.className = 'relative overflow-hidden border border-gray-200 bg-gray-50';
 
   // Create model viewer
   const modelViewer = document.createElement('model-viewer');
