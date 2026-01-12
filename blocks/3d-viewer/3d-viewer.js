@@ -9,7 +9,7 @@ export default function decorate(block) {
 
   // Create container matching teaser
   const outerContainer = document.createElement('div');
-  outerContainer.className = 'container mx-auto';
+  outerContainer.className = 'container mx-auto px-4';
 
   // Create inner container with border matching teaser
   const container = document.createElement('div');
@@ -26,7 +26,7 @@ export default function decorate(block) {
   modelViewer.setAttribute('interaction-prompt', 'none');
   modelViewer.setAttribute('auto-rotate', '');
   modelViewer.setAttribute('auto-rotate-delay', '1000');
-  modelViewer.setAttribute('camera-orbit', '45deg 115deg 60%');
+  modelViewer.setAttribute('camera-orbit', '0deg 45deg 80%');
 
   container.appendChild(modelViewer);
   outerContainer.appendChild(container);
