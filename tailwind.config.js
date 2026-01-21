@@ -12,22 +12,17 @@ export default {
     extend: {
       colors: {
         brand: {
-          50: '#fef2f2',
-          100: '#fee2e2',
-          200: '#fecaca',
-          300: '#fca5a5',
-          400: '#f87171',
-          500: '#ef4444',
-          600: '#dc2626',
-          700: '#b91c1c',
-          800: '#991b1b',
-          900: '#7f1d1d'
+          50: '#e6f2f8',
+          100: '#cce5f1',
+          200: '#99cbe3',
+          300: '#66b1d5',
+          400: '#3397c7',
+          500: '#005285',
+          600: '#005285',
+          700: '#00426a',
+          800: '#003150',
+          900: '#002135'
         }
-      },
-      backgroundImage: {
-        'brand-gradient': 'linear-gradient(135deg, #ef4444 0%, #dc2626 50%, #b91c1c 100%)',
-        'brand-gradient-light': 'linear-gradient(135deg, #fca5a5 0%, #f87171 50%, #ef4444 100%)',
-        'brand-gradient-dark': 'linear-gradient(135deg, #dc2626 0%, #b91c1c 50%, #7f1d1d 100%)'
       }
     }
   },
