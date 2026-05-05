@@ -25,7 +25,7 @@ export default function decorate(block) {
     const autoplayParams = shouldAutoplay ? '?autoplay=1&mute=1' : '';
     finalVideoURL = `https://www.youtube.com/embed/${videoId}${autoplayParams}`;
   } else if (deliveryUrl) {
-    videoThumbnail = deliveryUrl.split('/play/')[0];
+    [videoThumbnail] = deliveryUrl.split('/play/');
     const autoplayParams = shouldAutoplay ? '?autoplay=1&muted=1' : '';
     finalVideoURL = `${videoUrl}${autoplayParams}`;
   }
@@ -37,10 +37,10 @@ export default function decorate(block) {
   // Create common iframe element
   const createIframe = (src = '', hidden = false) => {
     const isYouTube = src.includes('youtube.com/embed');
-    const allowAttribute = isYouTube 
-      ? "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      : "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-    
+    const allowAttribute = isYouTube
+      ? 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+      : 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+
     return `
       <iframe
         class="w-full h-full${hidden ? ' hidden' : ''}"
@@ -57,28 +57,27 @@ export default function decorate(block) {
     `;
   };
 
-  const videoContainerHTML = !videoUrl ? `
+  let videoContainerHTML;
+  if (!videoUrl) {
+    videoContainerHTML = `
     <!-- Video Placeholder -->
     <div class="relative rounded-lg overflow-hidden shadow-2xl">
       <div class="aspect-video bg-gray-900 relative">
         ${createPlaceholderSVG('video', '16:9')}
       </div>
     </div>
-  ` : youtubeUrl ? `
-    <!-- YouTube Video Container -->
+  `;
+  } else if (youtubeUrl || shouldAutoplay) {
+    videoContainerHTML = `
+    <!-- YouTube/Autoplay Video Container -->
     <div class="relative rounded-lg overflow-hidden shadow-2xl">
       <div class="aspect-video bg-gray-900">
         ${createIframe(finalVideoURL)}
       </div>
     </div>
-  ` : shouldAutoplay ? `
-    <!-- Video Container with Autoplay -->
-    <div class="relative rounded-lg overflow-hidden shadow-2xl">
-      <div class="aspect-video bg-gray-900">
-        ${createIframe(finalVideoURL)}
-      </div>
-    </div>
-  ` : `
+  `;
+  } else {
+    videoContainerHTML = `
     <!-- Video Container with Thumbnail -->
     <div class="relative rounded-lg overflow-hidden shadow-2xl group cursor-pointer" id="video-container">
       <div class="aspect-video bg-gray-900 relative">
@@ -104,6 +103,7 @@ export default function decorate(block) {
       </div>
     </div>
   `;
+  }
 
   const content = document.createRange().createContextualFragment(`
     <section class="${sectionClasses}">

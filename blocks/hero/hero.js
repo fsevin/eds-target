@@ -1,3 +1,4 @@
+/* global alloy */
 import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
 import {
   createDynamicMediaPicture,
@@ -8,7 +9,7 @@ import {
   parseConfigBoolean,
   applyImageStyling,
   getLanguageFromPath,
-  setAueAttributes
+  setAueAttributes,
 } from '../../scripts/utils.js';
 
 function updateHeroContent(source, elements, showButtonIcon = false, useDynamicMedia = true) {
@@ -31,7 +32,9 @@ function updateHeroContent(source, elements, showButtonIcon = false, useDynamicM
     if (buttonLink) elements.button.href = buttonLink;
   }
 
+  // eslint-disable-next-line no-underscore-dangle
   const imageId = source.image?._id;
+  // eslint-disable-next-line no-underscore-dangle
   const imagePath = source.image?._path;
   const imageDescription = source.imageDescription || source.imagedescription || 'Hero image';
 
@@ -66,13 +69,13 @@ export default async function decorate(block) {
     alloyPromise = alloy('sendEvent', {
       decisionScopes: [config.offerzone],
       data: {
-        "__adobe": {
+        __adobe: {
           target: {
             logged: localStorage.getItem('logged'),
             profileType: localStorage.getItem('profileType'),
-            lang: lang
-          }
-        }
+            lang,
+          },
+        },
       },
     });
   }

@@ -1,2 +1,7 @@
 helix-importer-ui
 dompurify.min.js
+plugins/martech/src/alloy.min.js
+plugins/martech/src/acdl.min.js
+plugins/martech/package-lock.json
+plugins/martech/package.json
+plugins/martech/renovate.json

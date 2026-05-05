@@ -1,3 +1,11 @@
+/* eslint-disable import/no-unresolved */
+import {
+  initMartech,
+  martechEager,
+  martechLazy,
+  martechDelayed,
+} from '@adobe/aem-martech/src/index.js';
+/* eslint-enable import/no-unresolved */
 import {
   loadHeader,
   loadFooter,
@@ -11,13 +19,6 @@ import {
   loadSections,
   loadCSS,
 } from './aem.js';
-
-import {
-  initMartech,
-  martechEager,
-  martechLazy,
-  martechDelayed,
-} from '../plugins/martech/src/index.js';
 
 /**
  * Moves all the attributes from a given elmenet to another given element.
@@ -97,9 +98,6 @@ export function decorateMain(main) {
  * @param {Element} doc The container element
  */
 async function loadEager(doc) {
-  // Hook in your consent check to determine if personalization can run.
-  const isConsentGiven = true; /* your consent logic here */
-
   const martechLoadedPromise = initMartech(
     // 1. WebSDK Configuration
     // Docs: https://experienceleague.adobe.com/en/docs/experience-platform/web-sdk/commands/configure/overview#configure-js
@@ -109,7 +107,7 @@ async function loadEager(doc) {
       // The `debugEnabled` flag is automatically set to true on localhost and .page URLs.
       // The `defaultConsent` is automatically set to "pending".
       defaultConsent: 'in',
-      onBeforeEventSend: (payload) => {
+      onBeforeEventSend: () => {
         // This callback allows you to modify the payload before it's sent.
         // Return false to prevent the event from being sent.
       },
@@ -124,7 +122,7 @@ async function loadEager(doc) {
       // See the API Reference for all available options.
     },
   );
-  
+
   document.documentElement.lang = 'en';
   decorateTemplateAndTheme();
   const main = doc.querySelector('main');

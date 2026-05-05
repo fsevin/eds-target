@@ -1,5 +1,7 @@
 import { loadFragment } from '../fragment/fragment.js';
-import { isAuthorMode, getPagePath, getIconPath, getCurrentLocale } from '../../scripts/utils.js';
+import {
+  isAuthorMode, getPagePath, getIconPath, getCurrentLocale,
+} from '../../scripts/utils.js';
 
 function getLocaleUrl(targetLang) {
   const currentLocale = getCurrentLocale();
@@ -10,9 +12,8 @@ function getLocaleUrl(targetLang) {
   // If current is language-masters, keep it and only change the language
   if (currentCountry === 'language-masters') {
     newLocale = `language-masters/${targetLang}`;
-  }
   // Otherwise, build locale from language (en -> us/en, fr -> fr/fr, es -> es/es)
-  else {
+  } else {
     newLocale = targetLang === 'en' ? `us/${targetLang}` : `${targetLang}/${targetLang}`;
   }
 
@@ -22,15 +23,13 @@ function getLocaleUrl(targetLang) {
 function buildLanguageSwitcherHTML(currentLang) {
   const languages = [
     { code: 'en', flag: '🇺🇸', label: 'EN' },
-    { code: 'fr', flag: '🇫🇷', label: 'FR' }
+    { code: 'fr', flag: '🇫🇷', label: 'FR' },
   ];
 
-  const currentLanguage = languages.find(lang => lang.code === currentLang) || languages[0];
-  const otherLanguages = languages.filter(lang => lang.code !== currentLang);
+  const currentLanguage = languages.find((lang) => lang.code === currentLang) || languages[0];
+  const otherLanguages = languages.filter((lang) => lang.code !== currentLang);
 
-  const dropdownItems = otherLanguages.map(lang =>
-    `<a href="${getLocaleUrl(lang.code)}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-brand-600 transition">${lang.flag} ${lang.label}</a>`
-  ).join('');
+  const dropdownItems = otherLanguages.map((lang) => `<a href="${getLocaleUrl(lang.code)}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-brand-600 transition">${lang.flag} ${lang.label}</a>`).join('');
 
   return `
     <div class="relative language-dropdown">
@@ -50,21 +49,21 @@ function extractMenuItems(fragment) {
 
   if (menuBlock) {
     const items = menuBlock.querySelectorAll(':scope > div');
-    items.forEach(item => {
+    items.forEach((item) => {
       const labelEl = item.querySelector('div:first-child');
       const linkEl = item.querySelector('div:nth-child(2) a');
 
       if (labelEl && linkEl) {
         menuItems.push({
           label: labelEl.textContent.trim(),
-          path: linkEl.getAttribute('href')
+          path: linkEl.getAttribute('href'),
         });
       }
     });
   }
 
   if (!isAuthorMode) {
-    menuItems.forEach(item => {
+    menuItems.forEach((item) => {
       item.path = item.path.replace(/\/templates\//, '/pages/');
     });
   }
@@ -75,8 +74,8 @@ function extractMenuItems(fragment) {
 function buildNavigationHTML(menuItems) {
   const currentPath = window.location.pathname;
 
-  return menuItems.map(item => {
-    const isActive = currentPath === item.path || currentPath.startsWith(item.path + '/');
+  return menuItems.map((item) => {
+    const isActive = currentPath === item.path || currentPath.startsWith(`${item.path}/`);
     const activeClass = isActive ? 'text-brand-600 font-semibold' : 'text-gray-700 hover:text-brand-600';
 
     return `
@@ -95,7 +94,7 @@ function extractLoginModalData(fragment) {
       usernameLabel: 'Username',
       profileTypeLabel: 'Profile Type',
       profileOptions: [],
-      cancelButtonLabel: 'Cancel'
+      cancelButtonLabel: 'Cancel',
     };
   }
 
@@ -106,18 +105,20 @@ function extractLoginModalData(fragment) {
   const optionsText = items[3]?.querySelector('div:nth-child(2)')?.textContent.trim() || '';
   const cancelButtonLabel = items[4]?.querySelector('div:nth-child(2)')?.textContent.trim() || 'Cancel';
 
-  const profileOptions = optionsText.split(',').map(option => {
+  const profileOptions = optionsText.split(',').map((option) => {
     const trimmedOption = option.trim();
     // Check if format is "Label=value"
     if (trimmedOption.includes('=')) {
-      const [label, value] = trimmedOption.split('=').map(s => s.trim());
+      const [label, value] = trimmedOption.split('=').map((s) => s.trim());
       return { value, label };
     }
     // Otherwise use the old format (label and value are the same)
     return { value: trimmedOption.toLowerCase(), label: trimmedOption };
-  }).filter(opt => opt.value);
+  }).filter((opt) => opt.value);
 
-  return { title, usernameLabel, profileTypeLabel, profileOptions, cancelButtonLabel };
+  return {
+    title, usernameLabel, profileTypeLabel, profileOptions, cancelButtonLabel,
+  };
 }
 
 export default async function decorate(block) {
@@ -212,7 +213,7 @@ export default async function decorate(block) {
                 class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-100 transition"
                 required
               >
-                ${loginModalData.profileOptions.map(opt => `<option value="${opt.value}">${opt.label}</option>`).join('')}
+                ${loginModalData.profileOptions.map((opt) => `<option value="${opt.value}">${opt.label}</option>`).join('')}
               </select>
             </div>
           </form>
@@ -276,33 +277,33 @@ export default async function decorate(block) {
   cancelBtn.addEventListener('click', closeLoginModal);
 
   // Close modal when clicking outside
-  loginModal.addEventListener('click', function(e) {
+  loginModal.addEventListener('click', (e) => {
     if (e.target === loginModal) {
       closeLoginModal();
     }
   });
 
   // Mobile menu toggle
-  mobileMenuBtn.addEventListener('click', function() {
+  mobileMenuBtn.addEventListener('click', () => {
     mobileMenu.classList.toggle('hidden');
   });
 
   // Form submission
-  document.getElementById('loginForm').addEventListener('submit', function(e) {
+  document.getElementById('loginForm').addEventListener('submit', (e) => {
     e.preventDefault();
-    const username = document.getElementById('username').value;
+    const loginUsername = document.getElementById('username').value;
     const profileType = document.getElementById('profileType').value;
 
     localStorage.setItem('logged', true);
-    localStorage.setItem('username', username);
+    localStorage.setItem('username', loginUsername);
     localStorage.setItem('profileType', profileType);
-    loginBtn.innerHTML = `<span class="text-sm">${username}</span>`;
-    loginBtnMobile.innerHTML = `<span class="text-sm">${username}</span>`;
+    loginBtn.innerHTML = `<span class="text-sm">${loginUsername}</span>`;
+    loginBtnMobile.innerHTML = `<span class="text-sm">${loginUsername}</span>`;
     closeLoginModal();
   });
 
   // Language dropdown toggle
-  document.querySelectorAll('.language-dropdown').forEach(dropdown => {
+  document.querySelectorAll('.language-dropdown').forEach((dropdown) => {
     const button = dropdown.querySelector('button');
     const menu = dropdown.querySelector('.language-dropdown-menu');
     const chevron = button.querySelector('svg');
@@ -310,11 +311,11 @@ export default async function decorate(block) {
     button.addEventListener('click', (e) => {
       e.stopPropagation();
       const isOpen = !menu.classList.contains('hidden');
-      
+
       // Close all other dropdowns first
-      document.querySelectorAll('.language-dropdown-menu').forEach(m => m.classList.add('hidden'));
-      document.querySelectorAll('.language-dropdown button svg').forEach(c => c.classList.remove('rotate-180'));
-      
+      document.querySelectorAll('.language-dropdown-menu').forEach((m) => m.classList.add('hidden'));
+      document.querySelectorAll('.language-dropdown button svg').forEach((c) => c.classList.remove('rotate-180'));
+
       if (!isOpen) {
         menu.classList.remove('hidden');
         chevron.classList.add('rotate-180');
@@ -327,8 +328,8 @@ export default async function decorate(block) {
 
   // Close dropdown when clicking outside
   document.addEventListener('click', () => {
-    document.querySelectorAll('.language-dropdown-menu').forEach(menu => menu.classList.add('hidden'));
-    document.querySelectorAll('.language-dropdown button svg').forEach(chevron => chevron.classList.remove('rotate-180'));
-    document.querySelectorAll('.language-dropdown button').forEach(btn => btn.setAttribute('aria-expanded', 'false'));
+    document.querySelectorAll('.language-dropdown-menu').forEach((menu) => menu.classList.add('hidden'));
+    document.querySelectorAll('.language-dropdown button svg').forEach((chevron) => chevron.classList.remove('rotate-180'));
+    document.querySelectorAll('.language-dropdown button').forEach((btn) => btn.setAttribute('aria-expanded', 'false'));
   });
 }

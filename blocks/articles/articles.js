@@ -1,5 +1,7 @@
 import { readBlockConfig } from '../../scripts/aem.js';
-import { getTranslation, getLanguageFromPath, parseConfigBoolean, applyImageStyling, isAuthorMode } from '../../scripts/utils.js';
+import {
+  getTranslation, getLanguageFromPath, parseConfigBoolean, applyImageStyling, isAuthorMode,
+} from '../../scripts/utils.js';
 
 function extractArticlesFromBlock(block) {
   const articles = [];
@@ -11,8 +13,8 @@ function extractArticlesFromBlock(block) {
     if (children.length >= 4) {
       const category = children[0]?.querySelector('p')?.textContent.trim() || '';
       const title = children[1]?.querySelector('p')?.textContent.trim() || '';
-      const description = children[2]?.querySelector('p')?.textContent.trim() || '';  
-      const lastModifiedLabel = children[3]?.querySelector('p')?.textContent.trim() || '';   
+      const description = children[2]?.querySelector('p')?.textContent.trim() || '';
+      const lastModifiedLabel = children[3]?.querySelector('p')?.textContent.trim() || '';
       const lastModified = children[4]?.querySelector('p')?.textContent.trim() || '';
       const picture = children[5]?.querySelector('picture');
 
@@ -31,7 +33,7 @@ function extractArticlesFromBlock(block) {
         picture: pictureHTML,
         lastModifiedLabel,
         lastModified,
-        index
+        index,
       });
     }
   });
@@ -98,7 +100,7 @@ export default async function decorate(block) {
 
   const articles = extractArticlesFromBlock(block);
   const truncateDescription = parseConfigBoolean(config.truncatedescription);
-  const articlesHTML = articles.map(article => buildArticleCard(article, truncateDescription)).join('');
+  const articlesHTML = articles.map((article) => buildArticleCard(article, truncateDescription)).join('');
 
   const content = document.createRange().createContextualFragment(`
     <section class="py-20 bg-white">
@@ -136,20 +138,20 @@ export default async function decorate(block) {
     const lowerCategory = category.toLowerCase();
     let visibleCount = 0;
 
-    allArticleCards.forEach(card => {
+    allArticleCards.forEach((card) => {
       const cardCategory = card.querySelector('span[id*="-category"]')?.textContent.toLowerCase() || '';
       const cardTitle = card.querySelector('h3')?.textContent.toLowerCase() || '';
       const cardDescription = card.querySelector('p')?.textContent.toLowerCase() || '';
 
       const matchesCategory = !lowerCategory || cardCategory.includes(lowerCategory);
-      const matchesSearch = !lowerSearchTerm ||
-        cardTitle.includes(lowerSearchTerm) ||
-        cardDescription.includes(lowerSearchTerm) ||
-        cardCategory.includes(lowerSearchTerm);
+      const matchesSearch = !lowerSearchTerm
+        || cardTitle.includes(lowerSearchTerm)
+        || cardDescription.includes(lowerSearchTerm)
+        || cardCategory.includes(lowerSearchTerm);
 
       if (matchesCategory && matchesSearch) {
         card.style.display = '';
-        visibleCount++;
+        visibleCount += 1;
       } else {
         card.style.display = 'none';
       }

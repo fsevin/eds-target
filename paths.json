@@ -1,11 +1,11 @@
 {
   "mappings": [
-    "/content/3ds/:/",
-    "/content/3ds/configuration:/.helix/config.json",
-    "/content/3ds/redirects:/redirects.json"
+    "/content/eds-target/:/",
+    "/content/eds-target/configuration:/.helix/config.json",
+    "/content/eds-target/redirects:/redirects.json"
   ],
   "includes": [
-    "/content/3ds",
-    "/content/dam/3ds/images/"
+    "/content/eds-target",
+    "/content/dam/eds-target/images/"
   ]
 }

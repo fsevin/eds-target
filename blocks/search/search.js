@@ -9,10 +9,8 @@ export default async function decorate(block) {
   const title = config.title || 'Search';
   const description = config.description || 'Enter keywords to find what you\'re looking for';
 
-  const filters = config.filters ? config.filters.split(',').map(f => f.trim()).filter(f => f) : [];
-  const filterButtons = filters.map((filter, index) =>
-    `<button type="button" class="px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${index === 0 ? 'bg-brand-600 text-white shadow-lg' : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'}" data-filter="${filter}">${filter}</button>`
-  ).join('');
+  const filters = config.filters ? config.filters.split(',').map((f) => f.trim()).filter((f) => f) : [];
+  const filterButtons = filters.map((filter, index) => `<button type="button" class="px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${index === 0 ? 'bg-brand-600 text-white shadow-lg' : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'}" data-filter="${filter}">${filter}</button>`).join('');
 
   const searchHTML = `
     <section class="${sectionClasses}">
@@ -52,9 +50,7 @@ export default async function decorate(block) {
 
   // Function to dispatch search event
   function dispatchSearchEvent() {
-    const activeFilter = Array.from(filterBtns).find(btn =>
-      btn.classList.contains('bg-brand-600')
-    );
+    const activeFilter = Array.from(filterBtns).find((btn) => btn.classList.contains('bg-brand-600'));
     const searchTerm = searchInput.value;
     const filterText = activeFilter ? activeFilter.textContent : '';
     const category = (activeFilter && activeFilter === filterBtns[0]) ? '' : filterText;
@@ -62,19 +58,19 @@ export default async function decorate(block) {
     const event = new CustomEvent('search-filter-change', {
       detail: {
         searchTerm,
-        category
+        category,
       },
-      bubbles: true
+      bubbles: true,
     });
     block.dispatchEvent(event);
   }
 
   // Handle filter selection only if filters exist
   if (filterBtns.length > 0) {
-    filterBtns.forEach(btn => {
+    filterBtns.forEach((btn) => {
       btn.addEventListener('click', () => {
         // Reset all buttons to inactive state
-        filterBtns.forEach(b => {
+        filterBtns.forEach((b) => {
           b.classList.remove('bg-brand-600', 'text-white', 'shadow-lg');
           b.classList.add('bg-white', 'text-gray-700', 'hover:bg-gray-100', 'border', 'border-gray-300');
         });
@@ -90,5 +86,4 @@ export default async function decorate(block) {
   searchInput.addEventListener('input', () => {
     dispatchSearchEvent();
   });
-
 }

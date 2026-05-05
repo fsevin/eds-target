@@ -14,11 +14,13 @@ function extractServices(block) {
     const description = cells[2]?.textContent?.trim() || 'Add your service description here.';
 
     // Get icon from config if available, otherwise use default 'ideas' icon
-    const icon = (iconValue && SERVICE_ICONS[iconValue]) ? SERVICE_ICONS[iconValue] : SERVICE_ICONS['ideas'];
+    const icon = (iconValue && SERVICE_ICONS[iconValue])
+      ? SERVICE_ICONS[iconValue]
+      : SERVICE_ICONS.ideas;
 
     // Extract all data-aue-* attributes dynamically from row element
     const attributes = {};
-    Array.from(row.attributes).forEach(attr => {
+    Array.from(row.attributes).forEach((attr) => {
       if (attr.name.startsWith('data-aue-')) {
         attributes[attr.name] = attr.value;
       }
@@ -30,7 +32,6 @@ function extractServices(block) {
       description,
       attributes,
     });
-
   }
 
   return services;
@@ -48,10 +49,10 @@ export default async function decorate(block) {
   const sectionClasses = styleValue.includes('highlight') ? 'bg-gray-50' : 'bg-white';
 
   // Extract services
-  let services = extractServices(block);
+  const services = extractServices(block);
 
   // Build service cards HTML
-  const servicesHTML = services.map(service => {
+  const servicesHTML = services.map((service) => {
     // Convert attributes object to HTML attribute string
     const attributesStr = Object.entries(service.attributes)
       .map(([key, value]) => `${key}="${value}"`)

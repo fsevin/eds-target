@@ -21,7 +21,7 @@ async function applyChanges(event) {
   if (!resource) return false;
   const updates = detail?.response?.updates;
   if (!updates.length) return false;
-  
+
   const { content } = updates[0];
   if (!content) return false;
 
@@ -105,7 +105,7 @@ function attachEventListners(main) {
   ].forEach((eventType) => main?.addEventListener(eventType, async (event) => {
     event.stopPropagation();
     const applied = await applyChanges(event);
-    
+
     if (!applied) {
       // If path is a content fragment, wait 1s before reloading
       const resource = event.detail?.request?.target?.resource
@@ -130,17 +130,15 @@ decorateRichtext();
 const observer = new MutationObserver(() => decorateRichtext());
 observer.observe(document, { attributeFilter: ['data-richtext-prop'], subtree: true });
 
-
-
-const url = new URL(window.location.href).pathname; 
+const url = new URL(window.location.href).pathname;
 
 const metaPreview = document.createElement('meta');
 metaPreview.name = 'urn:adobe:aue:config:preview';
 
-const siteName = url.match(/\/content\/([^\/]+)/)[1];
+const siteName = url.match(/\/content\/([^/]+)/)[1];
 
 const path = url
-  .replace(/\/content\/[^\/]+/, '')
+  .replace(/\/content\/[^/]+/, '')
   .replace('/templates/', '/pages/')
   .replace('.html', '');
 
@@ -155,13 +153,8 @@ if (url.includes('/industries/')) {
 
   document.querySelectorAll('[data-aue-type]').forEach((el) => {
     if (el.tagName.toLowerCase() === 'body' || el.getAttribute('data-aue-type') === 'container' || el.getAttribute('data-aue-type') === 'column') {
-      //el.removeAttribute('data-aue-resource');
-      //el.removeAttribute('data-aue-type');
+      // el.removeAttribute('data-aue-resource');
+      // el.removeAttribute('data-aue-type');
     }
   });
 }
-
-
-
-
-

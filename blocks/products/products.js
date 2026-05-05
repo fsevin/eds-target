@@ -1,5 +1,7 @@
 import { readBlockConfig } from '../../scripts/aem.js';
-import { getTranslation, getLanguageFromPath, parseConfigBoolean, applyImageStyling, isAuthorMode } from '../../scripts/utils.js';
+import {
+  getTranslation, getLanguageFromPath, parseConfigBoolean, applyImageStyling, isAuthorMode,
+} from '../../scripts/utils.js';
 
 function extractProductsFromBlock(block) {
   const products = [];
@@ -18,7 +20,7 @@ function extractProductsFromBlock(block) {
       const price = priceElement ? priceElement.textContent.trim() : children[3]?.textContent.trim() || '';
 
       const viewDetailsLabel = children[4]?.querySelector('p')?.textContent.trim() || '';
-      let picture = children[5]?.querySelector('picture');
+      const picture = children[5]?.querySelector('picture');
 
       // Resize picture to use width=500 instead of 750/2000
       let pictureHTML = '';
@@ -35,7 +37,7 @@ function extractProductsFromBlock(block) {
         price,
         viewDetailsLabel,
         picture: pictureHTML,
-        index
+        index,
       });
     }
   });
@@ -108,7 +110,7 @@ export default async function decorate(block) {
     return;
   }
 
-  const productsHTML = products.map(product => buildProductCard(product, showPrice, imageAspectRatio)).join('');
+  const productsHTML = products.map((product) => buildProductCard(product, showPrice, imageAspectRatio)).join('');
 
   const content = document.createRange().createContextualFragment(`
     <section class="py-20 bg-white">
@@ -145,19 +147,19 @@ export default async function decorate(block) {
     const lowerSearchTerm = searchTerm.toLowerCase();
     let visibleCount = 0;
 
-    allProductCards.forEach(card => {
+    allProductCards.forEach((card) => {
       const cardTitle = card.querySelector('h3')?.textContent.toLowerCase() || '';
       const cardDescription = card.querySelector('p')?.textContent.toLowerCase() || '';
       const cardPrice = card.querySelector('span')?.textContent.toLowerCase() || '';
 
-      const matchesSearch = !lowerSearchTerm ||
-        cardTitle.includes(lowerSearchTerm) ||
-        cardDescription.includes(lowerSearchTerm) ||
-        cardPrice.includes(lowerSearchTerm);
+      const matchesSearch = !lowerSearchTerm
+        || cardTitle.includes(lowerSearchTerm)
+        || cardDescription.includes(lowerSearchTerm)
+        || cardPrice.includes(lowerSearchTerm);
 
       if (matchesSearch) {
         card.style.display = '';
-        visibleCount++;
+        visibleCount += 1;
       } else {
         card.style.display = 'none';
       }

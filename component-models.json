@@ -125,7 +125,7 @@
       {
         "component": "text",
         "valueType": "string[]",
-        "name": "profile TypeOptions",
+        "name": "profileTypeOptions",
         "label": "Profile Type Options",
         "multi": true
       },
